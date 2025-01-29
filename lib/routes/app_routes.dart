@@ -1,8 +1,14 @@
+import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
+import 'package:e_learning_app/views/auth/login_screen.dart';
+import 'package:e_learning_app/views/auth/register_screen.dart';
+import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
+import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
   // Auth Routes
   static const String splash = '/splash';
+  static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
@@ -23,53 +29,25 @@ class AppRoutes {
 
   // Route list for GetX navigation
   static final List<GetPage> pages = [
-    // GetPage(
-    //   name: splash,
-    //   page: () => const SplashScreen(),
-    // ),
-    // GetPage(
-    //   name: login,
-    //   page: () => const LoginScreen(),
-    // ),
-    // GetPage(
-    //   name: register,
-    //   page: () => const RegisterScreen(),
-    // ),
-    // GetPage(
-    //   name: forgotPassword,
-    //   page: () => const ForgotPasswordScreen(),
-    // ),
-    // GetPage(
-    //   name: home,
-    //   page: () => const HomeScreen(),
-    // ),
-    // GetPage(
-    //   name: courseList,
-    //   page: () => const CourseListScreen(),
-    // ),
-    // GetPage(
-    //   name: courseDetail,
-    //   page: () => const CourseDetailScreen(),
-    // ),
-    // GetPage(
-    //   name: lesson,
-    //   page: () => const LessonScreen(),
-    // ),
-    // GetPage(
-    //   name: quizList,
-    //   page: () => const QuizListScreen(),
-    // ),
-    // GetPage(
-    //   name: quizAttempt,
-    //   page: () => const QuizAttemptScreen(),
-    // ),
-    // GetPage(
-    //   name: profile,
-    //   page: () => const ProfileScreen(),
-    // ),
-    // GetPage(
-    //   name: editProfile,
-    //   page: () => const EditProfileScreen(),
-    // ),
+    GetPage(
+      name: splash,
+      page: () => const SplashScreen(),
+    ),
+        GetPage(
+      name: onboarding,
+      page: () => const OnboardingScreen(),
+    ),
+      GetPage(
+    name: login,
+    page: () => const LoginScreen(),
+  ),
+  GetPage(
+    name: register,
+    page: () => const RegisterScreen(),
+  ),
+  GetPage(
+    name: forgotPassword,
+    page: () => const ForgotPasswordScreen(),
+  ),
   ];
 }

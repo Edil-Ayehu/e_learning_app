@@ -3,13 +3,13 @@ import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() async{
-    WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await FirebaseConfig.init();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget { 
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      initialRoute: AppRoutes.splash,
+      initialRoute: AppRoutes.login,
       getPages: AppRoutes.pages,
     );
   }
