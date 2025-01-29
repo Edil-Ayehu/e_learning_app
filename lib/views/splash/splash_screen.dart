@@ -61,6 +61,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -68,9 +70,9 @@ class _SplashScreenState extends State<SplashScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor.withOpacity(0.8),
-              Theme.of(context).colorScheme.secondary,
+              theme.colorScheme.primary,
+              theme.colorScheme.primary.withOpacity(0.8),
+              theme.colorScheme.secondary,
             ],
           ),
         ),
@@ -88,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen>
                       width: 150,
                       height: 150,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(30),
                         boxShadow: [
                           BoxShadow(
@@ -98,10 +100,10 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ],
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.school,
                         size: 80,
-                        color: Colors.blue,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
                   ),
@@ -112,23 +114,20 @@ class _SplashScreenState extends State<SplashScreen>
                   opacity: _fadeAnimation,
                   child: SlideTransition(
                     position: _slideAnimation,
-                    child: const Column(
+                    child: Column(
                       children: [
                         Text(
                           'EduLearn Pro',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                          style: theme.textTheme.displayMedium?.copyWith(
+                            color: theme.colorScheme.surface,
                             letterSpacing: 1.5,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           'Learn Anywhere, Achieve Everywhere',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white70,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.surface.withOpacity(0.7),
                             letterSpacing: 1.2,
                           ),
                         ),
@@ -140,8 +139,8 @@ class _SplashScreenState extends State<SplashScreen>
                 // Loading Indicator
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child: const CircularProgressIndicator(
-                    color: Colors.white,
+                  child: CircularProgressIndicator(
+                    color: theme.colorScheme.surface,
                     strokeWidth: 3,
                   ),
                 ),
