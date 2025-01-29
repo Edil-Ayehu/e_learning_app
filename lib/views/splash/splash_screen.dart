@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:e_learning_app/data/services/storage_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -43,7 +44,12 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Navigate to login screen after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
-      Get.offAllNamed(AppRoutes.login);
+      if (StorageService.isFirstTime()) {
+        StorageService.setFirstTime(false);
+        Get.offAllNamed(AppRoutes.onboarding);
+      } else {
+        Get.offAllNamed(AppRoutes.login);
+      }
     });
   }
 
