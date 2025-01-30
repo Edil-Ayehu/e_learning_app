@@ -5,11 +5,13 @@ import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
+import 'package:e_learning_app/views/notifications/notifications_screen.dart';
 import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
 import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
+import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
@@ -34,6 +36,9 @@ class AppRoutes {
   // Profile Routes
   static const String profile = '/profile';
   static const String editProfile = '/profile/edit';
+
+  static const String notifications = '/notifications';
+  static const String settings = '/settings';
 
   // Route list for GetX navigation
   static final List<GetPage> pages = [
@@ -95,6 +100,16 @@ class AppRoutes {
     GetPage(
       name: editProfile,
       page: () => const EditProfileScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: notifications,
+      page: () => const NotificationsScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: settings,
+      page: () => const SettingsScreen(),
       transition: Transition.rightToLeft,
     ),
   ];

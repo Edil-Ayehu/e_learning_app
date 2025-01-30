@@ -112,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
         title: 'Notifications',
         subtitle: 'Manage your notifications',
         icon: Icons.notifications_outlined,
-        onTap: () {},
+        onTap: () => Get.toNamed(AppRoutes.notifications),
         isDestructive: false,
       ),
       _buildProfileCard(
@@ -120,7 +120,7 @@ class ProfileScreen extends StatelessWidget {
         title: 'Settings',
         subtitle: 'App preferences and more',
         icon: Icons.settings_outlined,
-        onTap: () {},
+        onTap: () => Get.toNamed(AppRoutes.settings),
         isDestructive: false,
       ),
       _buildProfileCard(
@@ -201,7 +201,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.chevron_right,
                   color: AppColors.secondary,
                   size: 24,
