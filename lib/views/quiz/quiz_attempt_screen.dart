@@ -2,8 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 
-class QuizAttemptScreen extends StatelessWidget {
+class QuizAttemptScreen extends StatefulWidget {
   const QuizAttemptScreen({super.key});
+
+  @override
+  State<QuizAttemptScreen> createState() => _QuizAttemptScreenState();
+}
+
+class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
+  late final PageController _pageController;
+  int _currentPage = 0;
+  final int _totalPages = 10;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _pageController.addListener(_onPageChanged);
+  }
+
+  @override
+  void dispose() {
+    _pageController.removeListener(_onPageChanged);
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged() {
+    if (_pageController.page != null) {
+      setState(() {
+        _currentPage = _pageController.page!.round();
+      });
+    }
+  }
+
+  void _navigateToPage(int page) {
+    _pageController.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +97,12 @@ class QuizAttemptScreen extends StatelessWidget {
         ],
       ),
       body: PageView.builder(
+        controller: _pageController,
         physics: const BouncingScrollPhysics(),
-        itemCount: 10,
+        itemCount: _totalPages,
         itemBuilder: (context, index) => _QuestionPage(
           questionNumber: index + 1,
-          totalQuestions: 10,
+          totalQuestions: _totalPages,
         ),
       ),
       bottomNavigationBar: Container(
@@ -84,14 +124,16 @@ class QuizAttemptScreen extends StatelessWidget {
               theme,
               Icons.arrow_back_rounded,
               'Previous',
-              () {},
+              _currentPage > 0 ? () => _navigateToPage(_currentPage - 1) : null,
               isNext: false,
             ),
             _buildNavigationButton(
               theme,
               Icons.arrow_forward_rounded,
               'Next',
-              () {},
+              _currentPage < _totalPages - 1
+                  ? () => _navigateToPage(_currentPage + 1)
+                  : null,
               isNext: true,
             ),
           ],
@@ -104,9 +146,11 @@ class QuizAttemptScreen extends StatelessWidget {
     ThemeData theme,
     IconData icon,
     String label,
-    VoidCallback onPressed, {
+    VoidCallback? onPressed, {
     bool isNext = false,
   }) {
+    final isEnabled = onPressed != null;
+
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
@@ -116,20 +160,36 @@ class QuizAttemptScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           side: isNext ? BorderSide.none : BorderSide(color: AppColors.primary),
         ),
+        disabledBackgroundColor: isNext
+            ? AppColors.primary.withOpacity(0.5)
+            : AppColors.accent.withOpacity(0.5),
       ),
       child: Row(
         children: [
-          if (!isNext) Icon(icon, color: AppColors.primary, size: 20),
+          if (!isNext)
+            Icon(icon,
+                color: isEnabled
+                    ? AppColors.primary
+                    : AppColors.primary.withOpacity(0.5),
+                size: 20),
           if (!isNext) const SizedBox(width: 8),
           Text(
             label,
             style: theme.textTheme.labelLarge?.copyWith(
-              color: isNext ? AppColors.accent : AppColors.primary,
+              color: isEnabled
+                  ? (isNext ? AppColors.accent : AppColors.primary)
+                  : (isNext ? AppColors.accent : AppColors.primary)
+                      .withOpacity(0.5),
               fontWeight: FontWeight.bold,
             ),
           ),
           if (isNext) const SizedBox(width: 8),
-          if (isNext) Icon(icon, color: AppColors.accent, size: 20),
+          if (isNext)
+            Icon(icon,
+                color: isEnabled
+                    ? AppColors.accent
+                    : AppColors.accent.withOpacity(0.5),
+                size: 20),
         ],
       ),
     );
@@ -175,24 +235,34 @@ class _QuestionPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Question $questionNumber of $totalQuestions',
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.secondary,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'Question $questionNumber of $totalQuestions',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Text(
             'What is the main advantage of using Flutter for mobile app development?',
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
+              color: AppColors.primary,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
           _buildOptionTile(context, 'A', 'Cross-platform development'),
           _buildOptionTile(context, 'B', 'Native performance'),
           _buildOptionTile(context, 'C', 'Hot reload feature'),
@@ -205,18 +275,62 @@ class _QuestionPage extends StatelessWidget {
   Widget _buildOptionTile(BuildContext context, String option, String text) {
     final theme = Theme.of(context);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: RadioListTile(
-        value: option,
-        groupValue: null,
-        onChanged: (value) {},
-        title: Text(text),
-        secondary: Text(
-          option,
-          style: theme.textTheme.titleMedium?.copyWith(
-            color: theme.colorScheme.primary,
-            fontWeight: FontWeight.bold,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: AppColors.accent,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {},
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      option,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+                Radio(
+                  value: option,
+                  groupValue: null,
+                  onChanged: (value) {},
+                  activeColor: AppColors.primary,
+                ),
+              ],
+            ),
           ),
         ),
       ),

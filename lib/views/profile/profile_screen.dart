@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 
-
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -13,7 +12,8 @@ class ProfileScreen extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      backgroundColor:
+          isDark ? AppColors.darkBackground : AppColors.lightBackground,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -47,11 +47,14 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundColor: isDark ? AppColors.primaryLight : AppColors.lightSurface,
+                        backgroundColor: isDark
+                            ? AppColors.primaryLight
+                            : AppColors.lightSurface,
                         child: Text(
                           'JD',
                           style: theme.textTheme.displaySmall?.copyWith(
-                            color: isDark ? AppColors.accent : AppColors.primary,
+                            color:
+                                isDark ? AppColors.accent : AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -147,38 +150,86 @@ class ProfileScreen extends StatelessWidget {
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: isDestructive
-              ? theme.colorScheme.error
-              : theme.colorScheme.primary,
-        ),
-        title: Text(
-          title,
-          style: theme.textTheme.titleMedium?.copyWith(
-            color: isDestructive ? theme.colorScheme.error : null,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: AppColors.accent,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  color: isDestructive ? AppColors.error : AppColors.primary,
+                  size: 24,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: isDestructive
+                              ? AppColors.error
+                              : AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.secondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: AppColors.secondary,
+                  size: 24,
+                ),
+              ],
+            ),
           ),
         ),
-        subtitle: Text(
-          subtitle,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.secondary,
-          ),
-        ),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: onTap,
       ),
     );
   }
 
   Widget _buildStatsCard(ThemeData theme, bool isDark) {
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.accent,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -197,14 +248,15 @@ class ProfileScreen extends StatelessWidget {
         Text(
           value,
           style: theme.textTheme.headlineSmall?.copyWith(
-            color: isDark ? AppColors.accent : theme.colorScheme.primary,
+            color: AppColors.primary,
             fontWeight: FontWeight.bold,
           ),
         ),
+        const SizedBox(height: 4),
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: isDark ? AppColors.accent : theme.colorScheme.secondary,
+            color: AppColors.secondary,
           ),
         ),
       ],
