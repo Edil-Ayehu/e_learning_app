@@ -1,6 +1,7 @@
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:e_learning_app/core/theme/app_colors.dart';
 
 class LessonScreen extends StatelessWidget {
   const LessonScreen({super.key});
@@ -125,24 +126,24 @@ class LessonScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton.icon(
-                    onPressed: () {
-        final currentId = Get.parameters['id'];
-        if (currentId != null) {
-          final prevId = (int.parse(currentId) - 1).toString();
-          Get.toNamed(AppRoutes.lesson.replaceAll(':id', prevId));
-        }
-      },
+              onPressed: () {
+                final currentId = Get.parameters['id'];
+                if (currentId != null) {
+                  final prevId = (int.parse(currentId) - 1).toString();
+                  Get.toNamed(AppRoutes.lesson.replaceAll(':id', prevId));
+                }
+              },
               icon: const Icon(Icons.arrow_back),
               label: const Text('Previous'),
             ),
             TextButton.icon(
-                    onPressed: () {
-        final currentId = Get.parameters['id'];
-        if (currentId != null) {
-          final nextId = (int.parse(currentId) + 1).toString();
-          Get.toNamed(AppRoutes.lesson.replaceAll(':id', nextId));
-        }
-      },
+              onPressed: () {
+                final currentId = Get.parameters['id'];
+                if (currentId != null) {
+                  final nextId = (int.parse(currentId) + 1).toString();
+                  Get.toNamed(AppRoutes.lesson.replaceAll(':id', nextId));
+                }
+              },
               icon: const Icon(Icons.arrow_forward),
               label: const Text('Next'),
             ),
@@ -159,14 +160,52 @@ class LessonScreen extends StatelessWidget {
     VoidCallback onTap,
   ) {
     final theme = Theme.of(context);
-    
-    return ListTile(
-      onTap: onTap,
-      leading: Icon(icon, color: theme.colorScheme.primary),
-      title: Text(title),
-      trailing: const Icon(Icons.download),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: AppColors.accent,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  color: AppColors.primary,
+                  size: 24,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.download,
+                  color: AppColors.secondary,
+                  size: 24,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
