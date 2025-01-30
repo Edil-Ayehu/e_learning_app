@@ -53,6 +53,9 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         elevation: 0,
+        iconTheme: const IconThemeData(
+          color: AppColors.accent,
+        ),
         title: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
@@ -62,7 +65,8 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.timer_outlined, color: AppColors.accent, size: 20),
+              const Icon(Icons.timer_outlined,
+                  color: AppColors.accent, size: 20),
               const SizedBox(width: 8),
               Text(
                 '25:00',
