@@ -4,6 +4,7 @@ import 'package:e_learning_app/views/auth/register_screen.dart';
 import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
+import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:get/get.dart';
@@ -15,17 +16,17 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
-  
+
   // Course Routes
   static const String home = '/home';
   static const String courseList = '/courses';
   static const String courseDetail = '/course/:id';
   static const String lesson = '/lesson/:id';
-  
+
   // Quiz Routes
   static const String quizList = '/quizzes';
   static const String quizAttempt = '/quiz/:id';
-  
+
   // Profile Routes
   static const String profile = '/profile';
   static const String editProfile = '/profile/edit';
@@ -36,23 +37,28 @@ class AppRoutes {
       name: splash,
       page: () => const SplashScreen(),
     ),
-        GetPage(
+    GetPage(
       name: onboarding,
       page: () => const OnboardingScreen(),
     ),
-      GetPage(
-    name: login,
-    page: () => const LoginScreen(),
-  ),
-  GetPage(
-    name: register,
-    page: () => const RegisterScreen(),
-  ),
-  GetPage(
-    name: forgotPassword,
-    page: () => const ForgotPasswordScreen(),
-  ),
-      GetPage(
+    GetPage(
+      name: login,
+      page: () => const LoginScreen(),
+    ),
+    GetPage(
+      name: register,
+      page: () => const RegisterScreen(),
+    ),
+    GetPage(
+      name: forgotPassword,
+      page: () => const ForgotPasswordScreen(),
+    ),
+    GetPage(
+      name: home,
+      page: () => const HomeScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
       name: courseList,
       page: () => const CourseListScreen(),
       transition: Transition.rightToLeft,
