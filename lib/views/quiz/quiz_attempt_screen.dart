@@ -62,7 +62,7 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.timer_outlined, color: AppColors.accent, size: 20),
+              const Icon(Icons.timer_outlined, color: AppColors.accent, size: 20),
               const SizedBox(width: 8),
               Text(
                 '25:00',
