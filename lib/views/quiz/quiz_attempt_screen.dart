@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:e_learning_app/core/theme/app_colors.dart';
 
 class QuizAttemptScreen extends StatelessWidget {
   const QuizAttemptScreen({super.key});
@@ -9,22 +10,55 @@ class QuizAttemptScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Icon(Icons.timer),
-            const SizedBox(width: 8),
-            Text('25:00'),
-          ],
+        backgroundColor: AppColors.primary,
+        elevation: 0,
+        title: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.accent.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.timer_outlined, color: AppColors.accent, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                '25:00',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => _showSubmitDialog(context),
-            child: const Text('Submit'),
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: TextButton(
+              onPressed: () => _showSubmitDialog(context),
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.accent.withOpacity(0.1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Submit',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ],
       ),
       body: PageView.builder(
+        physics: const BouncingScrollPhysics(),
         itemCount: 10,
         itemBuilder: (context, index) => _QuestionPage(
           questionNumber: index + 1,
@@ -32,12 +66,12 @@ class QuizAttemptScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
+          color: AppColors.accent,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: AppColors.primary.withOpacity(0.1),
               blurRadius: 10,
               offset: const Offset(0, -5),
             ),
@@ -46,15 +80,19 @@ class QuizAttemptScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('Previous'),
+            _buildNavigationButton(
+              theme,
+              Icons.arrow_back_rounded,
+              'Previous',
+              () {},
+              isNext: false,
             ),
-            TextButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.arrow_forward),
-              label: const Text('Next'),
+            _buildNavigationButton(
+              theme,
+              Icons.arrow_forward_rounded,
+              'Next',
+              () {},
+              isNext: true,
             ),
           ],
         ),
@@ -62,9 +100,44 @@ class QuizAttemptScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildNavigationButton(
+    ThemeData theme,
+    IconData icon,
+    String label,
+    VoidCallback onPressed, {
+    bool isNext = false,
+  }) {
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        backgroundColor: isNext ? AppColors.primary : AppColors.accent,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: isNext ? BorderSide.none : BorderSide(color: AppColors.primary),
+        ),
+      ),
+      child: Row(
+        children: [
+          if (!isNext) Icon(icon, color: AppColors.primary, size: 20),
+          if (!isNext) const SizedBox(width: 8),
+          Text(
+            label,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: isNext ? AppColors.accent : AppColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (isNext) const SizedBox(width: 8),
+          if (isNext) Icon(icon, color: AppColors.accent, size: 20),
+        ],
+      ),
+    );
+  }
+
   Future<void> _showSubmitDialog(BuildContext context) async {
     final theme = Theme.of(context);
-    
+
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -131,7 +204,7 @@ class _QuestionPage extends StatelessWidget {
 
   Widget _buildOptionTile(BuildContext context, String option, String text) {
     final theme = Theme.of(context);
-    
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: RadioListTile(
