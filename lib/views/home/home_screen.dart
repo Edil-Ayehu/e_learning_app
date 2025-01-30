@@ -1,3 +1,4 @@
+import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
@@ -17,16 +18,19 @@ class HomeScreen extends StatelessWidget {
       child: BlocBuilder<NavigationBloc, NavigationState>(
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: AppColors.lightBackground,
             body: IndexedStack(
               index: state.currentIndex,
               children: [
                 _buildHomeContent(context),
                 const CourseListScreen(),
                 const QuizListScreen(),
-                const ProfileScreen(), // Create this screen
+                const ProfileScreen(),
               ],
             ),
             bottomNavigationBar: NavigationBar(
+              backgroundColor: AppColors.accent,
+              indicatorColor: AppColors.primary.withOpacity(0.1),
               destinations: const [
                 NavigationDestination(
                   icon: Icon(Icons.home_outlined),
@@ -64,52 +68,43 @@ class HomeScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(
-          expandedHeight: 120,
+          expandedHeight: 200,
           floating: false,
           pinned: true,
+          backgroundColor: AppColors.primary,
           flexibleSpace: FlexibleSpaceBar(
-            titlePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            title: Row(
+            titlePadding: const EdgeInsets.all(16),
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Text(
-                    'JD',
-                    style: TextStyle(color: theme.colorScheme.onPrimaryContainer),
+                Text(
+                  'Welcome back,',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.accent.withOpacity(0.7),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back,',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onPrimary.withOpacity(0.7),
-                      ),
-                    ),
-                    Text(
-                      'John Doe',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onPrimary,
-                      ),
-                    ),
-                  ],
+                Text(
+                  'John Doe',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: AppColors.accent,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
             background: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    theme.colorScheme.primary,
-                    theme.colorScheme.primary.withOpacity(0.8),
+                    AppColors.primary,
+                    AppColors.primaryLight,
                   ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
             ),
@@ -122,11 +117,11 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildSearchBar(theme),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
                 _buildCategorySection(theme),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
                 _buildInProgressSection(theme),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
                 _buildRecommendedSection(theme),
               ],
             ),
@@ -137,16 +132,30 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildSearchBar(ThemeData theme) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: 'Search courses...',
-        prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.accent,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Search courses...',
+          hintStyle: TextStyle(color: AppColors.secondary),
+          prefixIcon: Icon(Icons.search, color: AppColors.secondary),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: AppColors.accent,
         ),
-        filled: true,
-        fillColor: theme.colorScheme.surfaceVariant,
       ),
     );
   }
@@ -164,13 +173,14 @@ class HomeScreen extends StatelessWidget {
       children: [
         Text(
           'Categories',
-          style: theme.textTheme.titleLarge?.copyWith(
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: AppColors.primary,
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 100,
+          height: 120,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
@@ -178,23 +188,32 @@ class HomeScreen extends StatelessWidget {
               final category = categories[index];
               return Container(
                 width: 100,
-                margin: const EdgeInsets.only(right: 12),
+                margin: const EdgeInsets.only(right: 16),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.secondaryContainer,
+                  color: AppColors.accent,
                   borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       category['icon'] as IconData,
-                      color: theme.colorScheme.onSecondaryContainer,
+                      size: 32,
+                      color: AppColors.primary,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       category['label'] as String,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSecondaryContainer,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
