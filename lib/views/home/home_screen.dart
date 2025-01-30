@@ -71,12 +71,13 @@ class HomeScreen extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(
-          expandedHeight: 200,
+          expandedHeight: 180, // Reduced height for minimalism
           floating: false,
           pinned: true,
           backgroundColor: AppColors.primary,
           flexibleSpace: FlexibleSpaceBar(
-            titlePadding: const EdgeInsets.all(16),
+            titlePadding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             title: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Text(
                   'John Doe',
-                  style: theme.textTheme.headlineSmall?.copyWith(
+                  style: theme.textTheme.titleLarge?.copyWith(
                     color: AppColors.accent,
                     fontWeight: FontWeight.bold,
                   ),
@@ -99,10 +100,7 @@ class HomeScreen extends StatelessWidget {
             background: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    AppColors.primary,
-                    AppColors.primaryLight,
-                  ],
+                  colors: [AppColors.primary, AppColors.primaryLight],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -110,21 +108,18 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSearchBar(theme),
-                const SizedBox(height: 32),
-                _buildCategorySection(theme),
-                const SizedBox(height: 32),
-                _buildInProgressSection(theme),
-                const SizedBox(height: 32),
-                _buildRecommendedSection(theme),
-              ],
-            ),
+        SliverPadding(
+          padding: const EdgeInsets.all(20), // Consistent padding
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([
+              _buildSearchBar(theme),
+              const SizedBox(height: 32),
+              _buildCategorySection(theme),
+              const SizedBox(height: 32),
+              _buildInProgressSection(theme),
+              const SizedBox(height: 32),
+              _buildRecommendedSection(theme),
+            ]),
           ),
         ),
       ],
@@ -133,28 +128,30 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildSearchBar(ThemeData theme) {
     return Container(
+      height: 56, // Fixed height for better proportions
       decoration: BoxDecoration(
         color: AppColors.accent,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: AppColors.primary.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: TextField(
         decoration: InputDecoration(
           hintText: 'Search courses...',
-          hintStyle: const TextStyle(color: AppColors.secondary),
+          hintStyle: TextStyle(color: AppColors.secondary.withOpacity(0.7)),
           prefixIcon: const Icon(Icons.search, color: AppColors.secondary),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
           ),
           filled: true,
           fillColor: AppColors.accent,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         ),
       ),
     );
@@ -173,14 +170,14 @@ class HomeScreen extends StatelessWidget {
       children: [
         Text(
           'Categories',
-          style: theme.textTheme.headlineSmall?.copyWith(
+          style: theme.textTheme.titleLarge?.copyWith(
             color: AppColors.primary,
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 120,
+          height: 110, // Slightly reduced height
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
@@ -188,35 +185,43 @@ class HomeScreen extends StatelessWidget {
               final category = categories[index];
               return Container(
                 width: 100,
-                margin: const EdgeInsets.only(right: 16),
+                margin: const EdgeInsets.only(right: 12, bottom: 5),
                 decoration: BoxDecoration(
                   color: AppColors.accent,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      color: AppColors.primary.withOpacity(0.08),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      category['icon'] as IconData,
-                      size: 32,
-                      color: AppColors.primary,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {},
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          category['icon'] as IconData,
+                          size: 32,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          category['label'] as String,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      category['label'] as String,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               );
             },
@@ -338,7 +343,7 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return Container(
                 width: 160,
-                margin: const EdgeInsets.only(right: 16),
+                margin: const EdgeInsets.only(right: 16, bottom: 5),
                 decoration: BoxDecoration(
                   color: AppColors.accent,
                   borderRadius: BorderRadius.circular(16),

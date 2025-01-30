@@ -21,8 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'E-Learning App',
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, // This will follow system theme
+      themeMode: ThemeMode.light,
       initialRoute: AppRoutes.splash,
       getPages: AppRoutes.pages,
     );
