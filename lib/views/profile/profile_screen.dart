@@ -1,6 +1,8 @@
+import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -8,49 +10,66 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
-            expandedHeight: 200,
+            expandedHeight: 280,
             pinned: true,
+            backgroundColor: AppColors.primary,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      theme.colorScheme.primary,
-                      theme.colorScheme.primary.withOpacity(0.8),
+                      AppColors.primary,
+                      AppColors.primaryLight,
                     ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundColor: theme.colorScheme.primaryContainer,
-                      child: Text(
-                        'JD',
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          color: theme.colorScheme.onPrimaryContainer,
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.accent.withOpacity(0.5),
+                          width: 2,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: isDark ? AppColors.primaryLight : AppColors.lightSurface,
+                        child: Text(
+                          'JD',
+                          style: theme.textTheme.displaySmall?.copyWith(
+                            color: isDark ? AppColors.accent : AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
                     Text(
                       'John Doe',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        color: theme.colorScheme.onPrimary,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: AppColors.accent,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 4),
                     Text(
                       'john.doe@example.com',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onPrimary.withOpacity(0.7),
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: AppColors.accent.withOpacity(0.8),
                       ),
                     ),
                   ],
@@ -60,41 +79,12 @@ class ProfileScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  _buildProfileCard(
-                    theme,
-                    title: 'Edit Profile',
-                    icon: Icons.edit,
-                    onTap: () => Get.toNamed(AppRoutes.editProfile),
-                  ),
-                  _buildStatsCard(theme),
-                  _buildProfileCard(
-                    theme,
-                    title: 'Notifications',
-                    icon: Icons.notifications_outlined,
-                    onTap: () {},
-                  ),
-                  _buildProfileCard(
-                    theme,
-                    title: 'Settings',
-                    icon: Icons.settings_outlined,
-                    onTap: () {},
-                  ),
-                  _buildProfileCard(
-                    theme,
-                    title: 'Help & Support',
-                    icon: Icons.help_outline,
-                    onTap: () {},
-                  ),
-                  _buildProfileCard(
-                    theme,
-                    title: 'Logout',
-                    icon: Icons.logout,
-                    onTap: () => Get.offAllNamed(AppRoutes.login),
-                    isDestructive: true,
-                  ),
+                  _buildStatsCard(theme, isDark),
+                  const SizedBox(height: 24),
+                  ..._buildProfileOptions(theme, isDark),
                 ],
               ),
             ),
@@ -104,9 +94,55 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  List<Widget> _buildProfileOptions(ThemeData theme, bool isDark) {
+    return [
+      _buildProfileCard(
+        theme,
+        title: 'Edit Profile',
+        subtitle: 'Update your personal information',
+        icon: Icons.edit_outlined,
+        onTap: () => Get.toNamed(AppRoutes.editProfile),
+        isDestructive: false,
+      ),
+      _buildProfileCard(
+        theme,
+        title: 'Notifications',
+        subtitle: 'Manage your notifications',
+        icon: Icons.notifications_outlined,
+        onTap: () {},
+        isDestructive: false,
+      ),
+      _buildProfileCard(
+        theme,
+        title: 'Settings',
+        subtitle: 'App preferences and more',
+        icon: Icons.settings_outlined,
+        onTap: () {},
+        isDestructive: false,
+      ),
+      _buildProfileCard(
+        theme,
+        title: 'Help & Support',
+        subtitle: 'Get help or contact support',
+        icon: Icons.help_outline,
+        onTap: () {},
+        isDestructive: false,
+      ),
+      _buildProfileCard(
+        theme,
+        title: 'Logout',
+        subtitle: 'Sign out of your account',
+        icon: Icons.logout,
+        onTap: () => Get.offAllNamed(AppRoutes.login),
+        isDestructive: true,
+      ),
+    ];
+  }
+
   Widget _buildProfileCard(
     ThemeData theme, {
     required String title,
+    required String subtitle,
     required IconData icon,
     required VoidCallback onTap,
     bool isDestructive = false,
@@ -116,12 +152,20 @@ class ProfileScreen extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           icon,
-          color: isDestructive ? theme.colorScheme.error : theme.colorScheme.primary,
+          color: isDestructive
+              ? theme.colorScheme.error
+              : theme.colorScheme.primary,
         ),
         title: Text(
           title,
           style: theme.textTheme.titleMedium?.copyWith(
             color: isDestructive ? theme.colorScheme.error : null,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.secondary,
           ),
         ),
         trailing: const Icon(Icons.chevron_right),
@@ -130,7 +174,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsCard(ThemeData theme) {
+  Widget _buildStatsCard(ThemeData theme, bool isDark) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 12),
       child: Padding(
@@ -138,29 +182,29 @@ class ProfileScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildStat(theme, '12', 'Courses'),
-            _buildStat(theme, '148', 'Hours'),
-            _buildStat(theme, '86%', 'Success'),
+            _buildStat(theme, '12', 'Courses', isDark),
+            _buildStat(theme, '148', 'Hours', isDark),
+            _buildStat(theme, '86%', 'Success', isDark),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStat(ThemeData theme, String value, String label) {
+  Widget _buildStat(ThemeData theme, String value, String label, bool isDark) {
     return Column(
       children: [
         Text(
           value,
           style: theme.textTheme.headlineSmall?.copyWith(
-            color: theme.colorScheme.primary,
+            color: isDark ? AppColors.accent : theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.secondary,
+            color: isDark ? AppColors.accent : theme.colorScheme.secondary,
           ),
         ),
       ],
