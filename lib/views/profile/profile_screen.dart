@@ -1,4 +1,5 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
+import 'package:e_learning_app/core/utils/app_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
@@ -128,7 +129,7 @@ class ProfileScreen extends StatelessWidget {
         title: 'Help & Support',
         subtitle: 'Get help or contact support',
         icon: Icons.help_outline,
-        onTap: () {},
+        onTap: () => Get.toNamed(AppRoutes.helpSupport),
         isDestructive: false,
       ),
       _buildProfileCard(
@@ -136,7 +137,12 @@ class ProfileScreen extends StatelessWidget {
         title: 'Logout',
         subtitle: 'Sign out of your account',
         icon: Icons.logout,
-        onTap: () => Get.offAllNamed(AppRoutes.login),
+        onTap: () async {
+          final confirm = await AppDialogs.showLogoutDialog();
+          if (confirm == true) {
+            Get.offAllNamed(AppRoutes.login);
+          }
+        },
         isDestructive: true,
       ),
     ];
