@@ -6,6 +6,8 @@ import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
@@ -54,15 +56,34 @@ class AppRoutes {
       page: () => const ForgotPasswordScreen(),
     ),
     GetPage(
-      name: home,
-      page: () => const HomeScreen(),
-      transition: Transition.fadeIn,
+  name: home,
+  page: () => const HomeScreen(),
+  transition: Transition.fadeIn,
+  children: [
+    GetPage(
+      name: '/courses',
+      page: () => const CourseListScreen(),
     ),
     GetPage(
-      name: courseList,
-      page: () => const CourseListScreen(),
-      transition: Transition.rightToLeft,
+      name: '/quizzes',
+      page: () => const QuizListScreen(),
     ),
+    GetPage(
+      name: '/profile',
+      page: () => const QuizListScreen(),
+    ),
+  ],
+),
+GetPage(
+  name: quizAttempt,
+  page: () => const QuizAttemptScreen(),
+  transition: Transition.rightToLeft,
+),
+    // GetPage(
+    //   name: courseList,
+    //   page: () => const CourseListScreen(),
+    //   transition: Transition.rightToLeft,
+    // ),
     GetPage(
       name: courseDetail,
       page: () => const CourseDetailScreen(),
