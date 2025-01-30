@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_learning_app/blocs/navigation/navigation_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -267,12 +269,25 @@ class HomeScreen extends StatelessWidget {
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
-                        Icons.code,
-                        color: AppColors.primary,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl: 'https://picsum.photos/60/60',
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: AppColors.primary.withOpacity(0.1),
+                            highlightColor: AppColors.accent,
+                            child: Container(
+                              color: Colors.white,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: AppColors.primary.withOpacity(0.1),
+                            child: const Icon(Icons.error),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -370,11 +385,24 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(16),
                           ),
-                          child: Image.network(
-                            'https://picsum.photos/160/90?random=$index',
+                          child: CachedNetworkImage(
+                            imageUrl: 'https://picsum.photos/160/90?random=$index',
                             height: 90,
                             width: double.infinity,
                             fit: BoxFit.cover,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: AppColors.primary.withOpacity(0.1),
+                              highlightColor: AppColors.accent,
+                              child: Container(
+                                height: 90,
+                                width: double.infinity,
+                                color: Colors.white,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: AppColors.primary.withOpacity(0.1),
+                              child: const Icon(Icons.error),
+                            ),
                           ),
                         ),
                         Padding(
@@ -392,11 +420,38 @@ class HomeScreen extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                '2h 30m',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: AppColors.secondary,
-                                ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.person_outline,
+                                    size: 14,
+                                    color: AppColors.secondary,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'John Doe',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.access_time,
+                                    size: 14,
+                                    color: AppColors.secondary,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '2h 30m',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

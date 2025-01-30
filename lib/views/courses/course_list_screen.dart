@@ -2,6 +2,9 @@ import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+
 
 class CourseListScreen extends StatelessWidget {
   const CourseListScreen({super.key});
@@ -110,11 +113,24 @@ class _CourseCard extends StatelessWidget {
               ClipRRect(
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.network(
-                  imageUrl,
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
                   height: 120,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: AppColors.primary.withOpacity(0.1),
+                    highlightColor: AppColors.accent,
+                    child: Container(
+                      height: 120,
+                      width: double.infinity,
+                      color: Colors.white,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: AppColors.primary.withOpacity(0.1),
+                    child: const Icon(Icons.error),
+                  ),
                 ),
               ),
               Padding(
