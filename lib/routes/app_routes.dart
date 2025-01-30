@@ -6,6 +6,8 @@ import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
+import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
+import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
@@ -56,34 +58,30 @@ class AppRoutes {
       page: () => const ForgotPasswordScreen(),
     ),
     GetPage(
-  name: home,
-  page: () => const HomeScreen(),
-  transition: Transition.fadeIn,
-  children: [
-    GetPage(
-      name: '/courses',
-      page: () => const CourseListScreen(),
+      name: home,
+      page: () => const HomeScreen(),
+      transition: Transition.fadeIn,
+      children: [
+        GetPage(
+          name: '/courses',
+          page: () => const CourseListScreen(),
+        ),
+        GetPage(
+          name: '/quizzes',
+          page: () => const QuizListScreen(),
+        ),
+        GetPage(
+          name: profile,
+          page: () => const ProfileScreen(),
+          transition: Transition.rightToLeft,
+        ),
+      ],
     ),
     GetPage(
-      name: '/quizzes',
-      page: () => const QuizListScreen(),
+      name: quizAttempt,
+      page: () => const QuizAttemptScreen(),
+      transition: Transition.rightToLeft,
     ),
-    GetPage(
-      name: '/profile',
-      page: () => const QuizListScreen(),
-    ),
-  ],
-),
-GetPage(
-  name: quizAttempt,
-  page: () => const QuizAttemptScreen(),
-  transition: Transition.rightToLeft,
-),
-    // GetPage(
-    //   name: courseList,
-    //   page: () => const CourseListScreen(),
-    //   transition: Transition.rightToLeft,
-    // ),
     GetPage(
       name: courseDetail,
       page: () => const CourseDetailScreen(),
@@ -92,6 +90,11 @@ GetPage(
     GetPage(
       name: lesson,
       page: () => const LessonScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: editProfile,
+      page: () => const EditProfileScreen(),
       transition: Transition.rightToLeft,
     ),
   ];

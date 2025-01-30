@@ -1,4 +1,5 @@
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
+import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,8 +23,7 @@ class HomeScreen extends StatelessWidget {
                 _buildHomeContent(context),
                 const CourseListScreen(),
                 const QuizListScreen(),
-                const QuizListScreen(),
-                // const ProfileScreen(), // Create this screen
+                const ProfileScreen(), // Create this screen
               ],
             ),
             bottomNavigationBar: NavigationBar(
