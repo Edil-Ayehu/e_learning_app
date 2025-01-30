@@ -1,6 +1,9 @@
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
+import 'package:e_learning_app/views/courses/course_detail_screen.dart';
+import 'package:e_learning_app/views/courses/course_list_screen.dart';
+import 'package:e_learning_app/views/courses/lesson_screen.dart';
 import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:get/get.dart';
@@ -49,5 +52,20 @@ class AppRoutes {
     name: forgotPassword,
     page: () => const ForgotPasswordScreen(),
   ),
+      GetPage(
+      name: courseList,
+      page: () => const CourseListScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: courseDetail,
+      page: () => const CourseDetailScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: lesson,
+      page: () => const LessonScreen(),
+      transition: Transition.rightToLeft,
+    ),
   ];
 }
