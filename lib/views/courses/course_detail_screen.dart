@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
-
 class CourseDetailScreen extends StatelessWidget {
   const CourseDetailScreen({super.key});
 
@@ -20,6 +19,20 @@ class CourseDetailScreen extends StatelessWidget {
           SliverAppBar(
             expandedHeight: 250,
             pinned: true,
+            leading: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.accent.withOpacity(0.8),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: AppColors.primary,
+                ),
+                onPressed: () => Get.back(),
+              ),
+            ),
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
