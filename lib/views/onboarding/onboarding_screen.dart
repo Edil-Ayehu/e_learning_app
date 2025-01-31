@@ -16,19 +16,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingPage> _pages = [
     OnboardingPage(
-      image: 'assets/images/intro.png', // Add these images to your assets
+      image: 'assets/images/onboarding/onboarding1.png', // Add these images to your assets
       title: 'Learn Anywhere',
       description:
           'Access your courses anytime, anywhere. Learn at your own pace with our flexible learning platform.',
     ),
     OnboardingPage(
-      image: 'assets/images/intro1.png',
+      image: 'assets/images/onboarding/onboarding2.png',
       title: 'Interactive Learning',
       description:
           'Engage with interactive quizzes, live sessions, and hands-on projects to enhance your learning experience.',
     ),
     OnboardingPage(
-      image: 'assets/images/intro2.png',
+      image: 'assets/images/onboarding/onboarding3.png',
       title: 'Track Progress',
       description:
           'Monitor your progress, earn certificates, and achieve your learning goals with detailed analytics.',

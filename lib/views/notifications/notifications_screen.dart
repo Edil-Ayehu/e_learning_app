@@ -1,5 +1,6 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -11,8 +12,16 @@ class NotificationsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: const Text(
+          'Notifications',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: AppColors.primary,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Get.back(),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -126,9 +135,7 @@ class NotificationsScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isUnread
-            ? AppColors.primary.withOpacity(0.1)
-            : AppColors.accent,
+        color: isUnread ? AppColors.primary.withOpacity(0.1) : AppColors.accent,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(

@@ -12,8 +12,16 @@ class HelpSupportScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
-        title: const Text('Help & Support'),
+        title: const Text(
+          'Help & Support',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: AppColors.primary,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Get.back(),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -31,17 +39,20 @@ class HelpSupportScreen extends StatelessWidget {
                   _buildFaqTile(
                     theme,
                     question: 'How do I reset my password?',
-                    answer: 'Go to the login screen and tap on "Forgot Password". Follow the instructions sent to your email.',
+                    answer:
+                        'Go to the login screen and tap on "Forgot Password". Follow the instructions sent to your email.',
                   ),
                   _buildFaqTile(
                     theme,
                     question: 'How do I download courses for offline viewing?',
-                    answer: 'Open a course and tap the download icon. Make sure you have enough storage space.',
+                    answer:
+                        'Open a course and tap the download icon. Make sure you have enough storage space.',
                   ),
                   _buildFaqTile(
                     theme,
                     question: 'Can I get a refund?',
-                    answer: 'Yes, within 30 days of purchase if you\'re not satisfied with the course.',
+                    answer:
+                        'Yes, within 30 days of purchase if you\'re not satisfied with the course.',
                   ),
                 ],
               ),
