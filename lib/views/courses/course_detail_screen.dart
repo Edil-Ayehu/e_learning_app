@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:e_learning_app/views/courses/payment_screen.dart';
 
 class CourseDetailScreen extends StatelessWidget {
   const CourseDetailScreen({super.key});
@@ -145,7 +146,13 @@ class CourseDetailScreen extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.to(
+                  () => PaymentScreen(
+                    courseId: Get.parameters['id'] ?? '',
+                    courseName: 'Advanced Mobile Development',
+                    price: 99.99,
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                   shape: RoundedRectangleBorder(

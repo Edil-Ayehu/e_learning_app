@@ -4,6 +4,7 @@ import 'package:e_learning_app/views/auth/register_screen.dart';
 import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
+import 'package:e_learning_app/views/courses/payment_screen.dart';
 import 'package:e_learning_app/views/help%20&%20support/help_support_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/notifications/notifications_screen.dart';
@@ -41,6 +42,7 @@ class AppRoutes {
   static const String notifications = '/notifications';
   static const String settings = '/settings';
   static const String helpSupport = '/help-support';
+  static const String payment = '/payment';
 
   // Route list for GetX navigation
   static final List<GetPage> pages = [
@@ -115,9 +117,17 @@ class AppRoutes {
       transition: Transition.rightToLeft,
     ),
     GetPage(
-  name: helpSupport,
-  page: () => const HelpSupportScreen(),
-  transition: Transition.rightToLeft,
-),
+      name: helpSupport,
+      page: () => const HelpSupportScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: payment,
+      page: () => PaymentScreen(
+        courseId: Get.parameters['id'] ?? '',
+        courseName: Get.parameters['name'] ?? '',
+        price: double.parse(Get.parameters['price'] ?? '0'),
+      ),
+    ),
   ];
 }
