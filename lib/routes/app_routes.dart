@@ -1,6 +1,7 @@
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
+import 'package:e_learning_app/views/courses/analytics_dashboard_screen.dart';
 import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
@@ -43,6 +44,7 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String helpSupport = '/help-support';
   static const String payment = '/payment';
+  static const String analytics = '/analytics';
 
   // Route list for GetX navigation
   static final List<GetPage> pages = [
@@ -128,6 +130,11 @@ class AppRoutes {
         courseName: Get.parameters['name'] ?? '',
         price: double.parse(Get.parameters['price'] ?? '0'),
       ),
+    ),
+        GetPage(
+      name: analytics,
+      page: () => AnalyticsDashboardScreen(),
+      transition: Transition.rightToLeft,
     ),
   ];
 }

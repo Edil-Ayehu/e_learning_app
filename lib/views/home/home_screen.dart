@@ -77,6 +77,12 @@ class HomeScreen extends StatelessWidget {
           floating: false,
           pinned: true,
           backgroundColor: AppColors.primary,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.analytics, color: Colors.white),
+              onPressed: () => Get.toNamed(AppRoutes.analytics),
+            ),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             titlePadding:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
