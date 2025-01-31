@@ -5,10 +5,70 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
-
-
 class CourseListScreen extends StatelessWidget {
   const CourseListScreen({super.key});
+
+  void _showFilterDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Filter Courses',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            _buildFilterOption(context, 'All Levels', true),
+            _buildFilterOption(context, 'Beginner', false),
+            _buildFilterOption(context, 'Intermediate', false),
+            _buildFilterOption(context, 'Advanced', false),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Reset'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Apply'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterOption(
+      BuildContext context, String label, bool isSelected) {
+    return ListTile(
+      title: Text(label),
+      trailing: isSelected
+          ? const Icon(Icons.check_circle, color: AppColors.primary)
+          : const Icon(Icons.circle_outlined),
+      onTap: () {
+        // Implement filter selection logic
+        Navigator.pop(context);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +89,9 @@ class CourseListScreen extends StatelessWidget {
             ),
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                categoryId != null ? categoryName ?? 'Category Courses' : 'Explore Courses',
+                categoryId != null
+                    ? categoryName ?? 'Category Courses'
+                    : 'Explore Courses',
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,
                 ),
@@ -73,8 +135,9 @@ class CourseListScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.filter_list),
+        onPressed: () => _showFilterDialog(context),
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.filter_list, color: Colors.white),
       ),
     );
   }
