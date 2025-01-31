@@ -1,5 +1,6 @@
 import 'package:e_learning_app/config/firebase_config.dart';
 import 'package:e_learning_app/controllers/auth_controller.dart';
+import 'package:e_learning_app/controllers/quiz_controller.dart';
 import 'package:e_learning_app/core/theme/app_theme.dart';
 import 'package:e_learning_app/data/services/storage_service.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
@@ -15,6 +16,7 @@ void main() async {
   await FirebaseConfig.init();
 
   Get.put(AuthController());
+  Get.put(QuizController());
 
   await GetStorage.init();
   await StorageService.init();
