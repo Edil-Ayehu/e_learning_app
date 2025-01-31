@@ -1,9 +1,11 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:e_learning_app/services/font_service.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +124,65 @@ class SettingsScreen extends StatelessWidget {
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: AppColors.secondary,
                       ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _buildSection(
+                theme,
+                title: 'Text Settings',
+                children: [
+                  _buildSettingTile(
+                    theme,
+                    title: 'Font Size',
+                    icon: Icons.format_size,
+                    trailing: DropdownButton<String>(
+                      value: FontService.currentFontScale == 0.8
+                          ? 'Small'
+                          : FontService.currentFontScale == 1.0
+                              ? 'Normal'
+                              : FontService.currentFontScale == 1.2
+                                  ? 'Large'
+                                  : 'Extra Large',
+                      items: FontService.fontSizeScales.keys
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (value) async {
+                        if (value != null) {
+                          await FontService.setFontScale(
+                              FontService.fontSizeScales[value]!);
+                          Get.forceAppUpdate();
+                        }
+                      },
+                      underline: const SizedBox(),
+                    ),
+                  ),
+                  _buildSettingTile(
+                    theme,
+                    title: 'Font Family',
+                    icon: Icons.font_download,
+                    trailing: DropdownButton<String>(
+                      value: FontService.availableFonts.entries
+                          .firstWhere((e) => e.value == FontService.currentFontFamily)
+                          .key,
+                      items: FontService.availableFonts.keys
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (value) async {
+                        if (value != null) {
+                          await FontService.setFontFamily(
+                              FontService.availableFonts[value]!);
+                          Get.forceAppUpdate();
+                        }
+                      },
+                      underline: const SizedBox(),
                     ),
                   ),
                 ],

@@ -278,6 +278,7 @@ class HomeScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
+                        fontSize: 12,
                       ),
                   textAlign: TextAlign.center,
                   maxLines: 2,

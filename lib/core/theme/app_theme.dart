@@ -1,3 +1,4 @@
+import 'package:e_learning_app/services/font_service.dart';
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_typography.dart';
@@ -15,7 +16,7 @@ class AppTheme {
       background: AppColors.lightBackground,
       surface: AppColors.lightSurface,
     ),
-    textTheme: AppTypography.lightTextTheme,
+    textTheme: FontService.getCustomTextTheme(AppTypography.lightTextTheme),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
