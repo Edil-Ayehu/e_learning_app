@@ -83,10 +83,12 @@ class CourseListScreen extends StatelessWidget {
             expandedHeight: 200,
             floating: false,
             pinned: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Get.back(),
-            ),
+            leading: categoryId != null
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Get.back(),
+                  )
+                : null,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
                 categoryId != null
