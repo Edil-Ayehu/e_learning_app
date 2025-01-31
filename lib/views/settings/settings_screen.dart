@@ -1,5 +1,6 @@
 import 'package:e_learning_app/blocs/font/font_event.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
+import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/services/font_service.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +103,13 @@ class SettingsScreen extends StatelessWidget {
                     theme,
                     title: 'Privacy Policy',
                     icon: Icons.privacy_tip_outlined,
-                    onTap: () {},
+                    onTap: () => Get.toNamed(AppRoutes.privacyPolicy),
                   ),
                   _buildSettingTile(
                     theme,
                     title: 'Terms of Service',
                     icon: Icons.description_outlined,
-                    onTap: () {},
+                    onTap: () => Get.toNamed(AppRoutes.termsConditions),
                   ),
                 ],
               ),
@@ -157,8 +157,9 @@ class SettingsScreen extends StatelessWidget {
                       onChanged: (value) async {
                         if (value != null) {
                           context.read<FontBloc>().add(
-                            UpdateFontScale(FontService.fontSizeScales[value]!),
-                          );
+                                UpdateFontScale(
+                                    FontService.fontSizeScales[value]!),
+                              );
                         }
                       },
                       underline: const SizedBox(),
@@ -170,7 +171,8 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.font_download,
                     trailing: DropdownButton<String>(
                       value: FontService.availableFonts.entries
-                          .firstWhere((e) => e.value == FontService.currentFontFamily)
+                          .firstWhere(
+                              (e) => e.value == FontService.currentFontFamily)
                           .key,
                       items: FontService.availableFonts.keys
                           .map((e) => DropdownMenuItem(
@@ -181,8 +183,9 @@ class SettingsScreen extends StatelessWidget {
                       onChanged: (value) async {
                         if (value != null) {
                           context.read<FontBloc>().add(
-                            UpdateFontFamily(FontService.availableFonts[value]!),
-                          );
+                                UpdateFontFamily(
+                                    FontService.availableFonts[value]!),
+                              );
                         }
                       },
                       underline: const SizedBox(),

@@ -14,7 +14,9 @@ import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
+import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
+import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
@@ -45,6 +47,8 @@ class AppRoutes {
   static const String helpSupport = '/help-support';
   static const String payment = '/payment';
   static const String analytics = '/analytics';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String termsConditions = '/terms-conditions';
 
   // Route list for GetX navigation
   static final List<GetPage> pages = [
@@ -134,6 +138,16 @@ class AppRoutes {
     GetPage(
       name: analytics,
       page: () => AnalyticsDashboardScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: privacyPolicy,
+      page: () => const PrivacyPolicyScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: termsConditions,
+      page: () => const TermsConditionsScreen(),
       transition: Transition.rightToLeft,
     ),
   ];
