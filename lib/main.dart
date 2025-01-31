@@ -5,6 +5,10 @@ import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:e_learning_app/blocs/font/font_bloc.dart';
+import 'package:e_learning_app/blocs/font/font_state.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,13 +23,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'E-Learning App',
-      theme: AppTheme.lightTheme,
-      themeMode: ThemeMode.light,
-      initialRoute: AppRoutes.splash,
-      getPages: AppRoutes.pages,
+    return BlocProvider(
+      create: (context) => FontBloc(),
+      child: BlocBuilder<FontBloc, FontState>(
+        builder: (context, fontState) {
+          return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'E-Learning App',
+            theme: AppTheme.getLightTheme(fontState),
+            themeMode: ThemeMode.light,
+            initialRoute: AppRoutes.splash,
+            getPages: AppRoutes.pages,
+          );
+        },
+      ),
     );
   }
 }

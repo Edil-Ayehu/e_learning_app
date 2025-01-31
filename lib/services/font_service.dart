@@ -36,10 +36,11 @@ class FontService {
     await _storage.write(_fontFamilyKey, fontFamily);
   }
 
-  static TextTheme getCustomTextTheme(TextTheme baseTheme) {
-    final fontScale = currentFontScale;
-    final fontFamily = currentFontFamily;
-
+  static TextTheme getCustomTextTheme(
+    TextTheme baseTheme,
+    double fontScale,
+    String fontFamily,
+  ) {
     TextTheme getFontTheme() {
       switch (fontFamily) {
         case 'roboto':

@@ -1,7 +1,10 @@
+import 'package:e_learning_app/blocs/font/font_event.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/services/font_service.dart';
+import 'package:e_learning_app/blocs/font/font_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -153,9 +156,9 @@ class SettingsScreen extends StatelessWidget {
                           .toList(),
                       onChanged: (value) async {
                         if (value != null) {
-                          await FontService.setFontScale(
-                              FontService.fontSizeScales[value]!);
-                          Get.forceAppUpdate();
+                          context.read<FontBloc>().add(
+                            UpdateFontScale(FontService.fontSizeScales[value]!),
+                          );
                         }
                       },
                       underline: const SizedBox(),
@@ -177,9 +180,9 @@ class SettingsScreen extends StatelessWidget {
                           .toList(),
                       onChanged: (value) async {
                         if (value != null) {
-                          await FontService.setFontFamily(
-                              FontService.availableFonts[value]!);
-                          Get.forceAppUpdate();
+                          context.read<FontBloc>().add(
+                            UpdateFontFamily(FontService.availableFonts[value]!),
+                          );
                         }
                       },
                       underline: const SizedBox(),
