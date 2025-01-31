@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:e_learning_app/views/courses/payment_screen.dart';
+import 'package:e_learning_app/services/offline_course_service.dart';
+
 
 class CourseDetailScreen extends StatelessWidget {
   const CourseDetailScreen({super.key});
@@ -169,6 +171,11 @@ class CourseDetailScreen extends StatelessWidget {
                 ),
                 child: const Text('Enroll Now'),
               ),
+            ),
+            IconButton(
+              onPressed: () => _downloadCourse(context),
+              icon: const Icon(Icons.download),
+              tooltip: 'Download for offline access',
             ),
           ],
         ),
@@ -396,6 +403,55 @@ class CourseDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _downloadCourse(BuildContext context) async {
+    final offlineCourseService = OfflineCourseService();
+    
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+
+      await offlineCourseService.downloadCourse(
+        Get.parameters['id'] ?? '',
+        'Advanced Mobile Development',
+        'Learn the basics of Flutter framework and how to create beautiful, native applications for iOS and Android with a single codebase.',
+        'https://picsum.photos/800/400',
+        [
+          {
+            'id': '1',
+            'title': 'Introduction to Flutter',
+            'videoUrl': 'https://example.com/video1.mp4',
+            'resourceUrls': [
+              'https://example.com/slides1.pdf',
+              'https://example.com/code1.zip',
+            ],
+          },
+          // Add more lessons as needed
+        ],
+      );
+
+      Navigator.pop(context); // Close loading dialog
+      Get.snackbar(
+        'Success',
+        'Course downloaded successfully',
+        backgroundColor: AppColors.primary,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Navigator.pop(context); // Close loading dialog
+      Get.snackbar(
+        'Error',
+        'Failed to download course',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }
 

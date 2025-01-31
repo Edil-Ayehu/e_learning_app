@@ -154,6 +154,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 32),
               _buildInProgressSection(context, theme),
               const SizedBox(height: 32),
+              _buildRecommendedSection(theme),
             ]),
           ),
         ),
