@@ -6,12 +6,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 
+
 class CourseListScreen extends StatelessWidget {
   const CourseListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final categoryId = Get.parameters['category'];
+    final categoryName = Get.parameters['categoryName'];
 
     return Scaffold(
       body: CustomScrollView(
@@ -20,9 +23,13 @@ class CourseListScreen extends StatelessWidget {
             expandedHeight: 200,
             floating: false,
             pinned: true,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Get.back(),
+            ),
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'Explore Courses',
+                categoryId != null ? categoryName ?? 'Category Courses' : 'Explore Courses',
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,
                 ),

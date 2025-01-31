@@ -70,23 +70,23 @@ class AppRoutes {
     ),
     GetPage(
       name: home,
-      page: () => const HomeScreen(),
+      page: () => HomeScreen(),
       transition: Transition.fadeIn,
-      children: [
-        GetPage(
-          name: '/courses',
-          page: () => const CourseListScreen(),
-        ),
-        GetPage(
-          name: '/quizzes',
-          page: () => const QuizListScreen(),
-        ),
-        GetPage(
-          name: profile,
-          page: () => const ProfileScreen(),
-          transition: Transition.rightToLeft,
-        ),
-      ],
+    ),
+    GetPage(
+      name: courseList,
+      page: () => const CourseListScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: quizList,
+      page: () => const QuizListScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: profile,
+      page: () => const ProfileScreen(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: quizAttempt,
@@ -131,7 +131,7 @@ class AppRoutes {
         price: double.parse(Get.parameters['price'] ?? '0'),
       ),
     ),
-        GetPage(
+    GetPage(
       name: analytics,
       page: () => AnalyticsDashboardScreen(),
       transition: Transition.rightToLeft,

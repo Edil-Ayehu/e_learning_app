@@ -13,6 +13,14 @@ class CourseDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final lastLesson = Get.parameters['lastLesson'];
+    
+    // If coming from in-progress, scroll to last lesson
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (lastLesson != null) {
+        // Implement scroll to last lesson logic here
+      }
+    });
 
     return Scaffold(
       body: CustomScrollView(
