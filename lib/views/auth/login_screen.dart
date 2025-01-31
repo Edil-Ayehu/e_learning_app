@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -7,6 +6,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -14,7 +15,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             // Top Wave Design
             Container(
-              height: Get.height * 0.3,
+              height: size.height * 0.3,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -35,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                     left: 20,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                      onPressed: () => Get.back(),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ),
                   const Center(
@@ -108,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
+                      onPressed: () => Navigator.pushNamed(context, AppRoutes.forgotPassword),
                       child: Text(
                         "Forgot Password?",
                         style: TextStyle(
@@ -129,7 +130,7 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () => Get.offAllNamed(AppRoutes.home),
+                      onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.home),
                       child: const Text(
                         "Login",
                         style: TextStyle(
@@ -177,7 +178,7 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       const Text("Don't have an account?"),
                       TextButton(
-                        onPressed: () => Get.toNamed(AppRoutes.register),
+                        onPressed: () => Navigator.pushNamed(context, AppRoutes.register),
                         child: Text(
                           "Register",
                           style: TextStyle(

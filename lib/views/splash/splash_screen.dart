@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:e_learning_app/data/services/storage_service.dart';
+import 'package:e_learning_app/blocs/auth/auth_bloc.dart';
+import 'package:e_learning_app/blocs/auth/auth_state.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,6 +17,7 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
@@ -42,15 +45,26 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animationController.forward();
 
-    // Navigate to login screen after 3 seconds
+    // Delayed navigation with auth check
     Future.delayed(const Duration(seconds: 3), () {
-      if (StorageService.isFirstTime()) {
-        StorageService.setFirstTime(false);
-        Get.offAllNamed(AppRoutes.onboarding);
-      } else {
-        Get.offAllNamed(AppRoutes.login);
-      }
+      if (!mounted || _hasNavigated) return;
+      _handleNavigation(context);
     });
+  }
+
+  void _handleNavigation(BuildContext context) {
+    if (_hasNavigated) return;
+    _hasNavigated = true;
+
+    final authState = context.read<AuthBloc>().state;
+    if (StorageService.isFirstTime()) {
+      StorageService.setFirstTime(false);
+      Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
+    } else if (authState.firebaseUser != null) {
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
+    } else {
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    }
   }
 
   @override

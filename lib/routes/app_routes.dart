@@ -18,7 +18,7 @@ import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class AppRoutes {
   // Auth Routes
@@ -50,105 +50,104 @@ class AppRoutes {
   static const String privacyPolicy = '/privacy-policy';
   static const String termsConditions = '/terms-conditions';
 
-  // Route list for GetX navigation
-  static final List<GetPage> pages = [
-    GetPage(
-      name: splash,
-      page: () => const SplashScreen(),
-    ),
-    GetPage(
-      name: onboarding,
-      page: () => const OnboardingScreen(),
-    ),
-    GetPage(
-      name: login,
-      page: () => const LoginScreen(),
-    ),
-    GetPage(
-      name: register,
-      page: () => const RegisterScreen(),
-    ),
-    GetPage(
-      name: forgotPassword,
-      page: () => const ForgotPasswordScreen(),
-    ),
-    GetPage(
-      name: home,
-      page: () => HomeScreen(),
-      transition: Transition.fadeIn,
-    ),
-    GetPage(
-      name: courseList,
-      page: () => const CourseListScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: quizList,
-      page: () => const QuizListScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: profile,
-      page: () => const ProfileScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: quizAttempt,
-      page: () => const QuizAttemptScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: courseDetail,
-      page: () => const CourseDetailScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: lesson,
-      page: () => const LessonScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: editProfile,
-      page: () => const EditProfileScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: notifications,
-      page: () => const NotificationsScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: settings,
-      page: () => const SettingsScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: helpSupport,
-      page: () => const HelpSupportScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: payment,
-      page: () => PaymentScreen(
-        courseId: Get.parameters['id'] ?? '',
-        courseName: Get.parameters['name'] ?? '',
-        price: double.parse(Get.parameters['price'] ?? '0'),
-      ),
-    ),
-    GetPage(
-      name: analytics,
-      page: () => AnalyticsDashboardScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: privacyPolicy,
-      page: () => const PrivacyPolicyScreen(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: termsConditions,
-      page: () => const TermsConditionsScreen(),
-      transition: Transition.rightToLeft,
-    ),
-  ];
+  static Route<dynamic> onGenerateRoute(RouteSettings setting) {
+    switch (setting.name) {
+      case splash:
+        return MaterialPageRoute(
+          builder: (_) => const SplashScreen(),
+        );
+      case onboarding:
+        return MaterialPageRoute(
+          builder: (_) => const OnboardingScreen(),
+        );
+      case login:
+        return MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
+        );
+      case register:
+        return MaterialPageRoute(
+          builder: (_) => const RegisterScreen(),
+        );
+      case forgotPassword:
+        return MaterialPageRoute(
+          builder: (_) => const ForgotPasswordScreen(),
+        );
+      case home:
+        return MaterialPageRoute(
+          builder: (_) => HomeScreen(),
+        );
+      case courseList:
+        return MaterialPageRoute(
+          builder: (_) => const CourseListScreen(),
+        );
+      case quizList:
+        return MaterialPageRoute(
+          builder: (_) => const QuizListScreen(),
+        );
+      case quizAttempt:
+        final quizId = setting.arguments as String?;
+        return MaterialPageRoute(
+          builder: (_) => QuizAttemptScreen(quizId: quizId ?? ''),
+        );
+      case courseDetail:
+        final courseId = setting.arguments as String?;
+        return MaterialPageRoute(
+          builder: (_) => CourseDetailScreen(courseId: courseId ?? ''),
+        );
+      case lesson:
+        final lessonId = setting.arguments as String?;
+        return MaterialPageRoute(
+          builder: (_) => LessonScreen(lessonId: lessonId ?? ''),
+        );
+      case profile:
+        return MaterialPageRoute(
+          builder: (_) => const ProfileScreen(),
+        );
+      case editProfile:
+        return MaterialPageRoute(
+          builder: (_) => const EditProfileScreen(),
+        );
+      case notifications:
+        return MaterialPageRoute(
+          builder: (_) => const NotificationsScreen(),
+        );
+      case settings:
+        return MaterialPageRoute(
+          builder: (_) => const SettingsScreen(),
+        );
+      case helpSupport:
+        return MaterialPageRoute(
+          builder: (_) => const HelpSupportScreen(),
+        );
+      case payment:
+        final args = setting.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => PaymentScreen(
+            courseId: args['courseId'] ?? '',
+            courseName: args['courseName'] ?? '',
+            price: args['price'] ?? 0.0,
+          ),
+        );
+      case analytics:
+        return MaterialPageRoute(
+          builder: (_) => AnalyticsDashboardScreen(),
+        );
+      case privacyPolicy:
+        return MaterialPageRoute(
+          builder: (_) => const PrivacyPolicyScreen(),
+        );
+      case termsConditions:
+        return MaterialPageRoute(
+          builder: (_) => const TermsConditionsScreen(),
+        );
+      default:
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(
+              child: Text('Route not found!'),
+            ),
+          ),
+        );
+    }
+  }
 }

@@ -10,7 +10,8 @@ import 'package:e_learning_app/services/offline_course_service.dart';
 
 
 class CourseDetailScreen extends StatelessWidget {
-  const CourseDetailScreen({super.key});
+   final String courseId;
+  const CourseDetailScreen({super.key, required this.courseId});
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String uid;
   final String email;
@@ -14,6 +16,18 @@ class UserModel {
     required this.createdAt,
     required this.lastLoginAt,
   });
+
+    factory UserModel.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return UserModel(
+      uid: doc.id,
+      email: data['email'] ?? '',
+      fullName: data['fullName'],
+      photoUrl: data['photoUrl'],
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      lastLoginAt: (data['lastLoginAt'] as Timestamp).toDate(),
+    );
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

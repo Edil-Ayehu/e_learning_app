@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 
 class LessonScreen extends StatelessWidget {
-  const LessonScreen({super.key});
+  final String lessonId;
+  const LessonScreen({super.key, required this.lessonId});
 
   @override
   Widget build(BuildContext context) {

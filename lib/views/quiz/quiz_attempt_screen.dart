@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 
 class QuizAttemptScreen extends StatefulWidget {
-  const QuizAttemptScreen({super.key});
+  final String quizId;
+  const QuizAttemptScreen({super.key, required this.quizId});
 
   @override
   State<QuizAttemptScreen> createState() => _QuizAttemptScreenState();
