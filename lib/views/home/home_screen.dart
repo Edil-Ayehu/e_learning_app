@@ -301,12 +301,11 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildInProgressSection(BuildContext context, ThemeData theme) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'In Progress',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: theme.textTheme.titleLarge?.copyWith(),
         ),
         const SizedBox(height: 16),
         Container(

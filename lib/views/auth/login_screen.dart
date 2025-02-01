@@ -29,17 +29,9 @@ class LoginScreen extends StatelessWidget {
                   bottomLeft: Radius.circular(100),
                 ),
               ),
-              child: Stack(
+              child: const Stack(
                 children: [
-                  Positioned(
-                    top: 50,
-                    left: 20,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
-                  const Center(
+                  Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
