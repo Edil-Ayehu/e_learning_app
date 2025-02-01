@@ -1,6 +1,8 @@
+import 'package:e_learning_app/blocs/course/course_bloc.dart';
 import 'package:e_learning_app/config/firebase_config.dart';
 import 'package:e_learning_app/core/theme/app_theme.dart';
 import 'package:e_learning_app/data/services/storage_service.dart';
+import 'package:e_learning_app/repository/course_repository.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -34,6 +36,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<FontBloc>(
           create: (context) => FontBloc(),
+        ),
+        BlocProvider<CourseBloc>(
+          create: (context) => CourseBloc(
+            courseRepository: CourseRepository(),
+            authBloc: context.read<AuthBloc>(),
+          ),
         ),
       ],
       child: BlocBuilder<FontBloc, FontState>(

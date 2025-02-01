@@ -1,19 +1,19 @@
 import 'package:e_learning_app/blocs/course/course_event.dart';
 import 'package:e_learning_app/blocs/course/course_state.dart';
-import 'package:e_learning_app/controllers/auth_controller.dart';
+import 'package:e_learning_app/blocs/auth/auth_bloc.dart';
 import 'package:e_learning_app/repository/course_repository.dart';
 import 'package:e_learning_app/services/offline_course_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CourseBloc extends Bloc<CourseEvent, CourseState> {
   final CourseRepository _courseRepository;
-  final AuthController _authController;
+  final AuthBloc _authBloc;
 
   CourseBloc({
     required CourseRepository courseRepository,
-    required AuthController authController,
+    required AuthBloc authBloc,
   })  : _courseRepository = courseRepository,
-        _authController = authController,
+        _authBloc = authBloc,
         super(CourseInitial()) {
     on<LoadCourses>(_onLoadCourses);
     on<LoadCourseDetail>(_onLoadCourseDetail);
@@ -55,7 +55,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     Emitter<CourseState> emit,
   ) async {
     try {
-      final userId = _authController.firebaseUser?.uid;
+      final userId = _authBloc.state.firebaseUser?.uid;
       if (userId == null) {
         emit(CourseError('User not authenticated'));
         return;
@@ -73,7 +73,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
   ) async {
     emit(CourseLoading());
     try {
-      final userId = _authController.firebaseUser?.uid;
+      final userId = _authBloc.state.firebaseUser?.uid;
       if (userId == null) {
         emit(CourseError('User not authenticated'));
         return;
