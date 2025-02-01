@@ -6,10 +6,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CourseListScreen extends StatelessWidget {
-    final String? categoryId;
+  final String? categoryId;
   final String? categoryName;
-    const CourseListScreen({
-    super.key, 
+  const CourseListScreen({
+    super.key,
     this.categoryId,
     this.categoryName,
   });
@@ -87,8 +87,8 @@ class CourseListScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             expandedHeight: 200,
-            floating: false,
             pinned: true,
+            backgroundColor: AppColors.primary,
             leading: activeCategoryId != null
                 ? IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -96,23 +96,26 @@ class CourseListScreen extends StatelessWidget {
                   )
                 : null,
             flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.only(
+                left: activeCategoryId != null ? 56 : 16,
+                right: 16,
+                bottom: 16,
+              ),
               title: Text(
                 activeCategoryId != null
                     ? activeCategoryName ?? 'Category Courses'
                     : 'Explore Courses',
                 style: theme.textTheme.headlineMedium?.copyWith(
-                  color: theme.colorScheme.onPrimary,
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               background: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      theme.colorScheme.primary,
-                      theme.colorScheme.primary.withOpacity(0.8),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+                    colors: [AppColors.primary, AppColors.primaryLight],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
                 ),
               ),
@@ -132,10 +135,10 @@ class CourseListScreen extends StatelessWidget {
                   title: 'Course ${index + 1}',
                   subtitle: 'Intermediate Level',
                   imageUrl: 'https://picsum.photos/200/300?random=$index',
-onTap: () => Get.toNamed(
-  AppRoutes.courseDetail.replaceAll(':id', index.toString()),
-  arguments: index.toString(),
-),
+                  onTap: () => Get.toNamed(
+                    AppRoutes.courseDetail.replaceAll(':id', index.toString()),
+                    arguments: index.toString(),
+                  ),
                 ),
                 childCount: 10,
               ),

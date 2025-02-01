@@ -106,7 +106,7 @@ class HomeScreen extends StatelessWidget {
           pinned: true,
           backgroundColor: AppColors.primary,
           actions: [
-            
+
             IconButton(
               icon: const Icon(Icons.analytics, color: Colors.white),
               onPressed: () => Get.toNamed(AppRoutes.analytics),
