@@ -13,7 +13,7 @@ import 'package:e_learning_app/blocs/quiz/quiz_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseConfig.init();
-  await GetStorage.init();
+  // await GetStorage.init();
   await StorageService.init();
 
   runApp(const MyApp());

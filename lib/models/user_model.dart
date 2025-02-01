@@ -17,7 +17,7 @@ class UserModel {
     required this.lastLoginAt,
   });
 
-    factory UserModel.fromFirestore(DocumentSnapshot doc) {
+  factory UserModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return UserModel(
       uid: doc.id,
@@ -27,6 +27,16 @@ class UserModel {
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       lastLoginAt: (data['lastLoginAt'] as Timestamp).toDate(),
     );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'email': email,
+      'fullName': fullName,
+      'photoUrl': photoUrl,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'lastLoginAt': Timestamp.fromDate(lastLoginAt),
+    };
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {

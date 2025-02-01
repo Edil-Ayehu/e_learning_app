@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_learning_app/models/user_model.dart';
 
+
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -53,7 +54,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     try {
       emit(state.copyWith(isLoading: true));
-      // Implement registration logic
+      
+      // Create Firebase Auth user
+      final userCredential = await _auth.createUserWithEmailAndPassword(
+        email: event.email,
+        password: event.password,
+      );
+
+      if (userCredential.user != null) {
+        // Create user document in Firestore
+        final userModel = UserModel(
+          uid: userCredential.user!.uid,
+          email: event.email,
+          fullName: event.fullName,
+          createdAt: DateTime.now(),
+          lastLoginAt: DateTime.now(),
+        );
+
+        await _firestore
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set(userModel.toFirestore());
+
+        emit(state.copyWith(
+          isLoading: false,
+          userModel: userModel,
+          firebaseUser: userCredential.user,
+        ));
+      }
     } catch (e) {
       emit(state.copyWith(error: e.toString(), isLoading: false));
     }
