@@ -1,68 +1,34 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_learning_app/models/course.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 
 class CourseRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   Future<List<Course>> getCourses({String? categoryId}) async {
-    try {
-      Query query = _firestore.collection('courses');
-      
-      if (categoryId != null) {
-        query = query.where('categoryId', isEqualTo: categoryId);
-      }
-      
-      final snapshot = await query.get();
-      return snapshot.docs
-          .map((doc) => Course.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to load courses: $e');
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 1));
+    
+    if (categoryId != null) {
+      return DummyDataService.getCoursesByCategory(categoryId);
     }
+    return DummyDataService.courses;
   }
 
   Future<Course> getCourseDetail(String courseId) async {
-    try {
-      final doc = await _firestore.collection('courses').doc(courseId).get();
-      if (!doc.exists) {
-        throw Exception('Course not found');
-      }
-      return Course.fromJson(doc.data() as Map<String, dynamic>);
-    } catch (e) {
-      throw Exception('Failed to load course detail: $e');
-    }
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 800));
+    return DummyDataService.getCourseById(courseId);
   }
 
   Future<void> enrollCourse(String userId, String courseId) async {
-    try {
-      await _firestore.collection('enrollments').add({
-        'userId': userId,
-        'courseId': courseId,
-        'enrolledAt': DateTime.now().toIso8601String(),
-        'progress': 0,
-        'lastAccessedAt': DateTime.now().toIso8601String(),
-      });
-    } catch (e) {
-      throw Exception('Failed to enroll in course: $e');
-    }
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 500));
+    // In dummy implementation, we'll just return successfully
+    return;
   }
 
   Future<List<Course>> getEnrolledCourses(String userId) async {
-    try {
-      final enrollments = await _firestore
-          .collection('enrollments')
-          .where('userId', isEqualTo: userId)
-          .get();
-
-      final courseIds = enrollments.docs.map((doc) => doc.get('courseId')).toList();
-      
-      final courses = await Future.wait(
-        courseIds.map((id) => getCourseDetail(id as String))
-      );
-      
-      return courses;
-    } catch (e) {
-      throw Exception('Failed to load enrolled courses: $e');
-    }
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 1));
+    // For dummy data, return first 2 courses as enrolled
+    return DummyDataService.courses.take(2).toList();
   }
 }
