@@ -6,7 +6,8 @@ class DummyDataService {
     Course(
       id: '1',
       title: 'Flutter Development Bootcamp',
-      description: 'Learn Flutter and Dart from scratch and build real-world apps',
+      description:
+          'Learn Flutter and Dart from scratch and build real-world apps',
       imageUrl: 'https://picsum.photos/800/400?random=1',
       instructorId: 'inst_1',
       categoryId: '1', // Programming
@@ -33,7 +34,8 @@ class DummyDataService {
     Course(
       id: '2',
       title: 'UI/UX Design Fundamentals',
-      description: 'Master the principles of user interface and experience design',
+      description:
+          'Master the principles of user interface and experience design',
       imageUrl: 'https://picsum.photos/800/400?random=2',
       instructorId: 'inst_2',
       categoryId: '2', // Design
@@ -66,7 +68,8 @@ class DummyDataService {
         id: 'lesson_${index + 1}',
         title: 'Lesson ${index + 1}',
         description: 'This is a detailed description for lesson ${index + 1}',
-        videoUrl: 'https://example.com/video${index + 1}.mp4',
+        videoUrl:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
         duration: 30 + (index * 5),
         resources: _createDummyResources(),
         isPreview: index == 0,

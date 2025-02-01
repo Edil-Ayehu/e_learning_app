@@ -2,10 +2,88 @@ import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 
-class LessonScreen extends StatelessWidget {
+class LessonScreen extends StatefulWidget {
   final String lessonId;
   const LessonScreen({super.key, required this.lessonId});
+
+  @override
+  State<LessonScreen> createState() => _LessonScreenState();
+}
+
+class _LessonScreenState extends State<LessonScreen> {
+  late VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+Future<void> _initializeVideo() async {
+  try {
+    final courseId = Get.parameters['courseId'];
+    print('CourseId: $courseId');
+
+    if (courseId == null) {
+      print('No courseId found in parameters');
+      setState(() => _isLoading = false);
+      return;
+    }
+
+    final course = DummyDataService.getCourseById(courseId);
+    print('Course found: ${course.title}');
+
+    final lesson = course.lessons.firstWhere(
+      (lesson) => lesson.id == widget.lessonId,
+      orElse: () => course.lessons.first,
+    );
+
+    print('Video URL: ${lesson.videoUrl}');
+
+    setState(() {
+      _videoPlayerController = VideoPlayerController.network(lesson.videoUrl);
+    });
+
+    await _videoPlayerController.initialize();
+    print('Video initialized successfully');
+
+    if (!mounted) return;
+
+    setState(() {
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController,
+        aspectRatio: 16 / 9,
+        autoPlay: false,
+        looping: false,
+        allowFullScreen: true,
+        showControls: true,
+        placeholder: Container(
+          color: Colors.black,
+          child: const Center(child: CircularProgressIndicator()),
+        ),
+      );
+      _isLoading = false;
+    });
+  } catch (e) {
+    print('Error initializing video: $e');
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
+  }
+}
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +94,21 @@ class LessonScreen extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 16 / 9,
-            child: Container(
-              color: theme.colorScheme.surface,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(
-                    Icons.play_circle_outline,
-                    size: 64,
-                    color: theme.colorScheme.primary,
-                  ),
-                  Positioned(
-                    top: 40,
-                    left: 16,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () => Get.back(),
+            child: _isLoading
+                ? Container(
+                    color: theme.colorScheme.surface,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  )
+                : _chewieController != null
+                    ? Chewie(controller: _chewieController!)
+                    : Container(
+                        color: theme.colorScheme.surface,
+                        child: const Center(
+                          child: Text('Error loading video'),
+                        ),
+                      ),
           ),
           Expanded(
             child: SingleChildScrollView(

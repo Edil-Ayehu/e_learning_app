@@ -1,5 +1,6 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'package:e_learning_app/views/widgets/course/review_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,11 +9,10 @@ import 'package:shimmer/shimmer.dart';
 import 'package:e_learning_app/views/courses/payment_screen.dart';
 import 'package:e_learning_app/services/offline_course_service.dart';
 
-
 class CourseDetailScreen extends StatelessWidget {
   final String courseId;
   const CourseDetailScreen({
-    super.key, 
+    super.key,
     required this.courseId,
   });
 
@@ -21,7 +21,7 @@ class CourseDetailScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final lastLesson = Get.parameters['lastLesson'];
     final id = Get.parameters['id'] ?? courseId;
-    
+
     // If coming from in-progress, scroll to last lesson
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (lastLesson != null) {
@@ -260,23 +260,27 @@ class CourseDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLessonsList(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return _LessonTile(
-          title: 'Lesson ${index + 1}',
-          duration: '30 min',
-          isCompleted: index < 2,
-          onTap: () => Get.toNamed(
-            AppRoutes.lesson.replaceAll(':id', index.toString()),
-          ),
-        );
-      },
-    );
-  }
+Widget _buildLessonsList(BuildContext context) {
+  final course = DummyDataService.getCourseById(courseId);
+  
+  return ListView.builder(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    itemCount: course.lessons.length,
+    itemBuilder: (context, index) {
+      final lesson = course.lessons[index];
+      return _LessonTile(
+        title: lesson.title,
+        duration: '${lesson.duration} min',
+        isCompleted: index < 2,
+        onTap: () => Get.toNamed(
+          AppRoutes.lesson.replaceAll(':id', lesson.id),
+          parameters: {'courseId': courseId},
+        ),
+      );
+    },
+  );
+}
 
   Widget _buildReviewsSection(BuildContext context) {
     final theme = Theme.of(context);
@@ -412,7 +416,7 @@ class CourseDetailScreen extends StatelessWidget {
 
   Future<void> _downloadCourse(BuildContext context) async {
     final offlineCourseService = OfflineCourseService();
-    
+
     try {
       showDialog(
         context: context,

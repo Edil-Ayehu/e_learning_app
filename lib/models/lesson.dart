@@ -38,6 +38,12 @@ class Lesson {
         'resources': resources.map((resource) => resource.toJson()).toList(),
         'isPreview': isPreview,
       };
+
+  String get videoStreamUrl {
+    // Add your video streaming URL logic here
+    // This could be a direct URL or a function to generate a signed URL
+    return videoUrl;
+  }
 }
 
 class Resource {
