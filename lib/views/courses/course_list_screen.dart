@@ -6,7 +6,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CourseListScreen extends StatelessWidget {
-  const CourseListScreen({super.key});
+    final String? categoryId;
+  final String? categoryName;
+    const CourseListScreen({
+    super.key, 
+    this.categoryId,
+    this.categoryName,
+  });
 
   void _showFilterDialog(BuildContext context) {
     showModalBottomSheet(
@@ -126,9 +132,10 @@ class CourseListScreen extends StatelessWidget {
                   title: 'Course ${index + 1}',
                   subtitle: 'Intermediate Level',
                   imageUrl: 'https://picsum.photos/200/300?random=$index',
-                  onTap: () => Get.toNamed(
-                    AppRoutes.courseDetail.replaceAll(':id', index.toString()),
-                  ),
+onTap: () => Get.toNamed(
+  AppRoutes.courseDetail.replaceAll(':id', index.toString()),
+  arguments: index.toString(),
+),
                 ),
                 childCount: 10,
               ),

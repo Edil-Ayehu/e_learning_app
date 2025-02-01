@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -101,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.forgotPassword),
+                      onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
                       child: Text(
                         "Forgot Password?",
                         style: TextStyle(
@@ -122,7 +123,7 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.home),
+                      onPressed: () => Get.offAllNamed(AppRoutes.home),
                       child: const Text(
                         "Login",
                         style: TextStyle(
@@ -170,7 +171,7 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       const Text("Don't have an account?"),
                       TextButton(
-                        onPressed: () => Navigator.pushNamed(context, AppRoutes.register),
+                        onPressed: () => Get.toNamed(AppRoutes.register),
                         child: Text(
                           "Register",
                           style: TextStyle(

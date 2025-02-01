@@ -77,8 +77,12 @@ class AppRoutes {
           builder: (_) => HomeScreen(),
         );
       case courseList:
+        final args = setting.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
-          builder: (_) => const CourseListScreen(),
+          builder: (_) => CourseListScreen(
+            categoryId: args?['category'] as String?,
+            categoryName: args?['categoryName'] as String?,
+          ),
         );
       case quizList:
         return MaterialPageRoute(
@@ -90,9 +94,15 @@ class AppRoutes {
           builder: (_) => QuizAttemptScreen(quizId: quizId ?? ''),
         );
       case courseDetail:
-        final courseId = setting.arguments as String?;
+        String courseId;
+        if (setting.arguments != null) {
+          courseId = setting.arguments as String;
+        } else {
+          final uri = Uri.parse(setting.name ?? '');
+          courseId = uri.pathSegments.last;
+        }
         return MaterialPageRoute(
-          builder: (_) => CourseDetailScreen(courseId: courseId ?? ''),
+          builder: (_) => CourseDetailScreen(courseId: courseId),
         );
       case lesson:
         final lessonId = setting.arguments as String?;

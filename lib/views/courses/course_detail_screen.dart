@@ -10,13 +10,17 @@ import 'package:e_learning_app/services/offline_course_service.dart';
 
 
 class CourseDetailScreen extends StatelessWidget {
-   final String courseId;
-  const CourseDetailScreen({super.key, required this.courseId});
+  final String courseId;
+  const CourseDetailScreen({
+    super.key, 
+    required this.courseId,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final lastLesson = Get.parameters['lastLesson'];
+    final id = Get.parameters['id'] ?? courseId;
     
     // If coming from in-progress, scroll to last lesson
     WidgetsBinding.instance.addPostFrameCallback((_) {

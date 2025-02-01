@@ -222,7 +222,7 @@ class HomeScreen extends StatelessWidget {
     final category = categories.firstWhere((c) => c.id == categoryId);
     Get.toNamed(
       AppRoutes.courseList,
-      parameters: {
+      arguments: {
         'category': categoryId,
         'categoryName': category.name,
       },
@@ -232,8 +232,9 @@ class HomeScreen extends StatelessWidget {
   void _handleInProgressCourseTap(
       BuildContext context, String courseId, int lastLesson) {
     Get.toNamed(
-      AppRoutes.courseDetail.replaceAll(':id', courseId),
+      '/course/$courseId',
       parameters: {
+        'id': courseId,
         'lastLesson': lastLesson.toString(),
       },
     );
@@ -423,7 +424,7 @@ class HomeScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: 5,
             itemBuilder: (context, index) {
-              return _buildInProgressCourseCard(context, index);
+              return _buildRecommendedCourseCard(context, index);
             },
           ),
         ),
@@ -431,7 +432,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInProgressCourseCard(BuildContext context, int index) {
+  Widget _buildRecommendedCourseCard(BuildContext context, int index) {
     return Container(
       width: 160,
       margin: const EdgeInsets.only(right: 16, bottom: 5),
@@ -450,8 +451,13 @@ class HomeScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () =>
-              _handleInProgressCourseTap(context, 'course_$index', index),
+          onTap: () => Get.toNamed(
+            '/course/course_$index',
+            parameters: {
+              'id': 'course_$index',
+            },
+            preventDuplicates: false,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
