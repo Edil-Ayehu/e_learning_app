@@ -275,10 +275,9 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   category.name,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
-                        fontSize: 12,
                       ),
                   textAlign: TextAlign.center,
                   maxLines: 2,
