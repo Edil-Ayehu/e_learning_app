@@ -79,8 +79,8 @@ class CourseListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final categoryId = Get.parameters['category'];
-    final categoryName = Get.parameters['categoryName'];
+    final activeCategoryId = categoryId ?? Get.parameters['category'];
+    final activeCategoryName = categoryName ?? Get.parameters['categoryName'];
 
     return Scaffold(
       body: CustomScrollView(
@@ -89,7 +89,7 @@ class CourseListScreen extends StatelessWidget {
             expandedHeight: 200,
             floating: false,
             pinned: true,
-            leading: categoryId != null
+            leading: activeCategoryId != null
                 ? IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
                     onPressed: () => Get.back(),
@@ -97,8 +97,8 @@ class CourseListScreen extends StatelessWidget {
                 : null,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                categoryId != null
-                    ? categoryName ?? 'Category Courses'
+                activeCategoryId != null
+                    ? activeCategoryName ?? 'Category Courses'
                     : 'Explore Courses',
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,

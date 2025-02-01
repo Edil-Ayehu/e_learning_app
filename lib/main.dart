@@ -101,9 +101,11 @@ class MyApp extends StatelessWidget {
                 // transition: Transition.rightToLeft,
               ),
               GetPage(
-                name: '/courses',
-                page: () => const CourseListScreen(),
-                // transition: Transition.rightToLeft,
+                name: AppRoutes.courseList,
+                page: () => CourseListScreen(
+                  categoryId: Get.arguments?['category'] as String?,
+                  categoryName: Get.arguments?['categoryName'] as String?,
+                ),
               ),
               GetPage(
                 name: AppRoutes.lesson,

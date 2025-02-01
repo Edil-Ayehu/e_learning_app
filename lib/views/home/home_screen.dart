@@ -226,6 +226,10 @@ class HomeScreen extends StatelessWidget {
         'category': categoryId,
         'categoryName': category.name,
       },
+      parameters: {
+        'category': categoryId,
+        'categoryName': category.name,
+      },
     );
   }
 
