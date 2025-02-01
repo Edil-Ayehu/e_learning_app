@@ -8,6 +8,7 @@ import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
+import 'package:e_learning_app/views/courses/analytics_dashboard_screen.dart';
 import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
@@ -92,6 +93,10 @@ class MyApp extends StatelessWidget {
               GetPage(
                 name: AppRoutes.forgotPassword,
                 page: () => const ForgotPasswordScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.analytics,
+                page: () => AnalyticsDashboardScreen(),
               ),
               GetPage(
                 name: '/course/:id',
