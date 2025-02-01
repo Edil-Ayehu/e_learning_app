@@ -12,8 +12,15 @@ import 'package:e_learning_app/views/courses/analytics_dashboard_screen.dart';
 import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
+import 'package:e_learning_app/views/help%20&%20support/help_support_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
+import 'package:e_learning_app/views/notifications/notifications_screen.dart';
 import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
+import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
+import 'package:e_learning_app/views/profile/profile_screen.dart';
+import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
+import 'package:e_learning_app/views/settings/settings_screen.dart';
+import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,6 +105,34 @@ class MyApp extends StatelessWidget {
                 name: AppRoutes.analytics,
                 page: () => AnalyticsDashboardScreen(),
               ),
+              GetPage(
+  name: AppRoutes.profile,
+  page: () => const ProfileScreen(),
+),
+GetPage(
+  name: AppRoutes.editProfile,
+  page: () => const EditProfileScreen(),
+),
+GetPage(
+  name: AppRoutes.notifications,
+  page: () => const NotificationsScreen(),
+),
+GetPage(
+  name: AppRoutes.settings,
+  page: () => const SettingsScreen(),
+),
+GetPage(
+  name: AppRoutes.helpSupport,
+  page: () => const HelpSupportScreen(),
+),
+GetPage(
+  name: AppRoutes.privacyPolicy,
+  page: () => const PrivacyPolicyScreen(),
+),
+GetPage(
+  name: AppRoutes.termsConditions,
+  page: () => const TermsConditionsScreen(),
+),
               GetPage(
                 name: '/course/:id',
                 page: () => CourseDetailScreen(
