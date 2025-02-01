@@ -39,16 +39,16 @@ class SettingsScreen extends StatelessWidget {
                 theme,
                 title: 'App Preferences',
                 children: [
-                  _buildSettingTile(
-                    theme,
-                    title: 'Dark Mode',
-                    icon: Icons.dark_mode_outlined,
-                    trailing: Switch(
-                      value: false,
-                      onChanged: (value) {},
-                      activeColor: AppColors.primary,
-                    ),
-                  ),
+                  // _buildSettingTile(
+                  //   theme,
+                  //   title: 'Dark Mode',
+                  //   icon: Icons.dark_mode_outlined,
+                  //   trailing: Switch(
+                  //     value: false,
+                  //     onChanged: (value) {},
+                  //     activeColor: AppColors.primary,
+                  //   ),
+                  // ),
                   _buildSettingTile(
                     theme,
                     title: 'Download over Wi-Fi only',
@@ -116,24 +116,6 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 24),
               _buildSection(
                 theme,
-                title: 'App Info',
-                children: [
-                  _buildSettingTile(
-                    theme,
-                    title: 'Version',
-                    icon: Icons.info_outline,
-                    trailing: Text(
-                      '1.0.0',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.secondary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              _buildSection(
-                theme,
                 title: 'Text Settings',
                 children: [
                   _buildSettingTile(
@@ -189,6 +171,24 @@ class SettingsScreen extends StatelessWidget {
                         }
                       },
                       underline: const SizedBox(),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _buildSection(
+                theme,
+                title: 'App Info',
+                children: [
+                  _buildSettingTile(
+                    theme,
+                    title: 'Version',
+                    icon: Icons.info_outline,
+                    trailing: Text(
+                      '1.0.0',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.secondary,
+                      ),
                     ),
                   ),
                 ],

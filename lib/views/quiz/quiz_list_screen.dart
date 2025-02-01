@@ -49,7 +49,8 @@ class QuizListScreen extends StatelessWidget {
                   questionCount: 10,
                   timeLimit: 30,
                   onTap: () => Get.toNamed(
-                    AppRoutes.quizAttempt.replaceAll(':id', index.toString()),
+                    '/quiz/${index.toString()}',
+                    parameters: {'id': index.toString()},
                   ),
                 ),
                 childCount: 5,

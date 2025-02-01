@@ -18,6 +18,8 @@ import 'package:e_learning_app/views/notifications/notifications_screen.dart';
 import 'package:e_learning_app/views/onboarding/onboarding_screen.dart';
 import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
 import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
@@ -132,6 +134,16 @@ GetPage(
 GetPage(
   name: AppRoutes.termsConditions,
   page: () => const TermsConditionsScreen(),
+),
+GetPage(
+  name: AppRoutes.quizList,
+  page: () => const QuizListScreen(),
+),
+GetPage(
+  name: '/quiz/:id',
+  page: () => QuizAttemptScreen(
+    quizId: Get.parameters['id'] ?? '',
+  ),
 ),
               GetPage(
                 name: '/course/:id',
