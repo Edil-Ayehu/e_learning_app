@@ -305,100 +305,140 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildInProgressSection(BuildContext context, ThemeData theme) {
+    // Get all courses with in-progress lessons
+    final inProgressCourses = DummyDataService.courses
+        .where(
+          (course) =>
+              course.lessons.any((lesson) => lesson.isCompleted) &&
+              !course.lessons.every((lesson) => lesson.isCompleted),
+        )
+        .toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'In Progress',
-          style: theme.textTheme.titleLarge?.copyWith(),
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.accent,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+        if (inProgressCourses.isEmpty)
+          Center(
+            child: Text(
+              'No courses in progress',
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: AppColors.secondary,
               ),
-            ],
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: () => _handleInProgressCourseTap(
-                context,
-                'course_1', // Replace with actual course ID
-                3, // Replace with actual last lesson number
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+            ),
+          )
+        else
+          Column(
+            children: inProgressCourses.map((course) {
+              // Calculate progress percentage
+              final completedLessons =
+                  course.lessons.where((lesson) => lesson.isCompleted).length;
+              final totalLessons = course.lessons.length;
+              final progress = completedLessons / totalLessons;
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.accent,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: CachedNetworkImage(
-                          imageUrl: 'https://picsum.photos/60/60',
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: AppColors.primary.withOpacity(0.1),
-                            highlightColor: AppColors.accent,
-                            child: Container(
-                              color: Colors.white,
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => _handleInProgressCourseTap(
+                        context,
+                        course.id,
+                        completedLessons,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                  imageUrl: course.imageUrl,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor:
+                                        AppColors.primary.withOpacity(0.1),
+                                    highlightColor: AppColors.accent,
+                                    child: Container(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    color: AppColors.primary.withOpacity(0.1),
+                                    child: const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: AppColors.primary.withOpacity(0.1),
-                            child: const Icon(Icons.error),
-                          ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    course.title,
+                                    style:
+                                        theme.textTheme.titleMedium?.copyWith(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Progress: ${(progress * 100).toInt()}%',
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  LinearProgressIndicator(
+                                    value: progress,
+                                    backgroundColor:
+                                        AppColors.primary.withOpacity(0.1),
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                      AppColors.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Flutter Development',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Progress: 60%',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppColors.secondary,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          LinearProgressIndicator(
-                            value: 0.6,
-                            backgroundColor: AppColors.primary.withOpacity(0.1),
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppColors.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            }).toList(),
           ),
-        ),
       ],
     );
   }
