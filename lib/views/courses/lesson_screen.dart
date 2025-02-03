@@ -125,10 +125,7 @@ class _LessonScreenState extends State<LessonScreen> {
         final allLessonsCompleted =
             DummyDataService.isCourseCompleted(courseId);
 
-        Get.offNamed(
-          AppRoutes.courseDetail.replaceAll(':id', courseId),
-          arguments: courseId,
-        );
+        Get.back();
 
         if (isLastLesson && allLessonsCompleted) {
           _showCertificateDialog(context, course);
