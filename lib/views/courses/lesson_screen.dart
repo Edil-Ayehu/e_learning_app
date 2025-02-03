@@ -111,13 +111,36 @@ class _LessonScreenState extends State<LessonScreen> {
     final courseId = Get.parameters['courseId'];
     if (courseId != null) {
       final course = DummyDataService.getCourseById(courseId);
-      final lessonIndex =
-          course.lessons.indexWhere((l) => l.id == widget.lessonId);
+      final lessonIndex = course.lessons.indexWhere((l) => l.id == widget.lessonId);
+      
       if (lessonIndex != -1) {
         // Update the lesson completion status
         course.lessons[lessonIndex] = course.lessons[lessonIndex].copyWith(
           isCompleted: true,
         );
+
+        // Check if there's a next lesson
+        if (lessonIndex < course.lessons.length - 1) {
+          final nextLesson = course.lessons[lessonIndex + 1];
+          // Navigate to the next lesson with both lessonId and courseId
+          Get.offNamed(
+            AppRoutes.lesson,
+            arguments: nextLesson.id,
+            parameters: {'courseId': courseId},
+          );
+        } else {
+          // If this was the last lesson, go back to course details
+          Get.offNamed(
+            AppRoutes.courseDetail.replaceAll(':id', courseId),
+            arguments: courseId,
+          );
+          Get.snackbar(
+            'Congratulations!',
+            'You have completed all lessons in this course',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+        }
       }
     }
   }
