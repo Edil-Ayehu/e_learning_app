@@ -20,25 +20,25 @@ class HomeScreen extends StatelessWidget {
     Category(
       id: '1',
       name: 'Programming',
-      icon: Icons.code.codePoint.toRadixString(16),
+      icon: Icons.code,
       courseCount: DummyDataService.getCoursesByCategory('1').length,
     ),
     Category(
       id: '2',
       name: 'Design',
-      icon: Icons.brush.codePoint.toRadixString(16),
+      icon: Icons.brush,
       courseCount: DummyDataService.getCoursesByCategory('2').length,
     ),
     Category(
       id: '3',
       name: 'Business',
-      icon: Icons.business.codePoint.toRadixString(16),
+      icon: Icons.business,
       courseCount: DummyDataService.getCoursesByCategory('3').length,
     ),
     Category(
       id: '4',
       name: 'Music',
-      icon: Icons.music_note.codePoint.toRadixString(16),
+      icon: Icons.music_note,
       courseCount: DummyDataService.getCoursesByCategory('4').length,
     ),
   ];
@@ -272,12 +272,9 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  IconData(
-                    int.parse(category.icon, radix: 16),
-                    fontFamily: 'MaterialIcons',
-                  ),
-                  color: AppColors.primary,
+                  category.icon,
                   size: 32,
+                  color: AppColors.primary,
                 ),
                 const SizedBox(height: 8),
                 Text(
