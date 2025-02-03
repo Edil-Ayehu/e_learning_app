@@ -1,3 +1,5 @@
+import 'package:e_learning_app/models/course.dart';
+import 'package:e_learning_app/models/lesson.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -159,6 +161,12 @@ class _LessonScreenState extends State<LessonScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final courseId = Get.parameters['courseId'];
+    final course = courseId != null ? DummyDataService.getCourseById(courseId) : null;
+    final lesson = course?.lessons.firstWhere(
+      (l) => l.id == widget.lessonId,
+      orElse: () => course.lessons.first,
+    );
 
     return Scaffold(
       body: Column(
@@ -181,118 +189,126 @@ class _LessonScreenState extends State<LessonScreen> {
                         ),
                       ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Introduction to Flutter',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.access_time,
-                        size: 16,
-                        color: theme.colorScheme.secondary,
+          if (lesson != null)
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      lesson.title,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '30 minutes',
-                        style: theme.textTheme.bodySmall?.copyWith(
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.access_time,
+                          size: 16,
                           color: theme.colorScheme.secondary,
                         ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${lesson.duration} minutes',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.secondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Description',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'Description',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Learn the basics of Flutter framework and how to create beautiful, native applications for iOS and Android with a single codebase.',
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'Resources',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 8),
+                    Text(
+                      lesson.description,
+                      style: theme.textTheme.bodyLarge,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildResourceTile(
-                    context,
-                    'Presentation Slides',
-                    Icons.picture_as_pdf,
-                    () {},
-                  ),
-                  _buildResourceTile(
-                    context,
-                    'Source Code',
-                    Icons.code,
-                    () {},
-                  ),
-                  _buildResourceTile(
-                    context,
-                    'Exercise Files',
-                    Icons.folder,
-                    () {},
-                  ),
-                ],
+                    const SizedBox(height: 24),
+                    Text(
+                      'Resources',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ...lesson.resources.map((resource) => _buildResourceTile(
+                          context,
+                          resource.title,
+                          _getIconForResourceType(resource.type),
+                          () {}, // TODO: Implement resource download
+                        )),
+                  ],
+                ),
               ),
             ),
+        ],
+      ),
+      bottomNavigationBar: _buildNavigationBar(context, course, lesson),
+    );
+  }
+
+  IconData _getIconForResourceType(String type) {
+    switch (type.toLowerCase()) {
+      case 'pdf':
+        return Icons.picture_as_pdf;
+      case 'zip':
+        return Icons.folder_zip;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
+  Widget _buildNavigationBar(BuildContext context, Course? course, Lesson? lesson) {
+    if (course == null || lesson == null) return const SizedBox.shrink();
+    
+    final lessonIndex = course.lessons.indexOf(lesson);
+    final hasPrevious = lessonIndex > 0;
+    final hasNext = lessonIndex < course.lessons.length - 1;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton.icon(
-              onPressed: () {
-                final currentId = Get.parameters['id'];
-                if (currentId != null) {
-                  final prevId = (int.parse(currentId) - 1).toString();
-                  Get.toNamed(AppRoutes.lesson.replaceAll(':id', prevId));
-                }
-              },
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('Previous'),
-            ),
-            TextButton.icon(
-              onPressed: () {
-                final currentId = Get.parameters['id'];
-                if (currentId != null) {
-                  final nextId = (int.parse(currentId) + 1).toString();
-                  Get.toNamed(AppRoutes.lesson.replaceAll(':id', nextId));
-                }
-              },
-              icon: const Icon(Icons.arrow_forward),
-              label: const Text('Next'),
-            ),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton.icon(
+            onPressed: hasPrevious
+                ? () => Get.toNamed(
+                    AppRoutes.lesson.replaceAll(':id', course.lessons[lessonIndex - 1].id),
+                    parameters: {'courseId': course.id},
+                  )
+                : null,
+            icon: const Icon(Icons.arrow_back),
+            label: const Text('Previous'),
+          ),
+          TextButton.icon(
+            onPressed: hasNext
+                ? () => Get.toNamed(
+                    AppRoutes.lesson.replaceAll(':id', course.lessons[lessonIndex + 1].id),
+                    parameters: {'courseId': course.id},
+                  )
+                : null,
+            icon: const Icon(Icons.arrow_forward),
+            label: const Text('Next'),
+          ),
+        ],
       ),
     );
   }

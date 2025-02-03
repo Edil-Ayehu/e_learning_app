@@ -103,7 +103,7 @@ class DummyDataService {
 
   static List<Lesson> _createDesignLessons() {
     return [
-      _createLesson('1', 'Design Fundamentals', true, true),
+      _createLesson('1', 'Design Fundamentals', true, false),
       _createLesson('2', 'Color Theory', false, false),
       _createLesson('3', 'Typography Basics', false, false),
       _createLesson('4', 'Layout Design', false, false),
