@@ -41,6 +41,30 @@ class HomeScreen extends StatelessWidget {
       icon: Icons.music_note,
       courseCount: DummyDataService.getCoursesByCategory('4').length,
     ),
+    Category(
+      id: '5',
+      name: 'Photography',
+      icon: Icons.camera_alt,
+      courseCount: DummyDataService.getCoursesByCategory('5').length,
+    ),
+    Category(
+      id: '6',
+      name: 'Language',
+      icon: Icons.language,
+      courseCount: DummyDataService.getCoursesByCategory('6').length,
+    ),
+    Category(
+      id: '7',
+      name: 'Health & Fitness',
+      icon: Icons.fitness_center,
+      courseCount: DummyDataService.getCoursesByCategory('7').length,
+    ),
+    Category(
+      id: '8',
+      name: 'Personal Development',
+      icon: Icons.psychology,
+      courseCount: DummyDataService.getCoursesByCategory('8').length,
+    ),
   ];
 
   @override
@@ -263,7 +287,7 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: InkWell( 
           borderRadius: BorderRadius.circular(16),
           onTap: () => _handleCategoryTap(context, category.id),
           child: Padding(

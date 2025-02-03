@@ -251,26 +251,27 @@ class _CourseCard extends StatelessWidget {
                     const BorderRadius.vertical(top: Radius.circular(16)),
                 child: CachedNetworkImage(
                   imageUrl: imageUrl,
-                  height: 120,
+                  height: 180,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: AppColors.primary.withOpacity(0.1),
                     highlightColor: AppColors.accent,
                     child: Container(
-                      height: 120,
+                      height: 180,
                       width: double.infinity,
                       color: Colors.white,
                     ),
                   ),
                   errorWidget: (context, url, error) => Container(
+                    height: 180,
                     color: AppColors.primary.withOpacity(0.1),
                     child: const Icon(Icons.error),
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -283,14 +284,16 @@ class _CourseCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Text(
                       subtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppColors.secondary,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         const Icon(

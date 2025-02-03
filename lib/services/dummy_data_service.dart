@@ -5,13 +5,17 @@ import 'package:e_learning_app/models/question.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
 
 
+
+
 class DummyDataService {
   static final List<Course> courses = [
     Course(
       id: '1',
       title: 'Flutter Development Bootcamp',
-      description: 'Master Flutter and Dart from scratch. Build real-world cross-platform apps.',
-      imageUrl: 'https://picsum.photos/800/400?random=1',
+      description:
+          'Master Flutter and Dart from scratch. Build real-world cross-platform apps.',
+      imageUrl:
+          'https://t4.ftcdn.net/jpg/02/92/10/07/360_F_292100788_fMpSuZTQ2yG1AqOF5Hc8ywVdzYqJ0btW.jpg',
       instructorId: 'inst_1',
       categoryId: '1', // Programming
       price: 99.99,
@@ -38,8 +42,10 @@ class DummyDataService {
     Course(
       id: '2',
       title: 'UI/UX Design Masterclass',
-      description: 'Learn professional UI/UX design from scratch using Figma and Adobe XD.',
-      imageUrl: 'https://picsum.photos/800/400?random=2',
+      description:
+          'Learn professional UI/UX design from scratch using Figma and Adobe XD.',
+      imageUrl:
+          'https://img.freepik.com/premium-psd/school-education-admission-youtube-thumbnail-web-banner-template_475351-410.jpg?semt=ais_hybrid',
       instructorId: 'inst_2',
       categoryId: '2', // Design
       price: 79.99,
@@ -67,7 +73,7 @@ class DummyDataService {
       id: '3',
       title: 'Digital Marketing Essentials',
       description: 'Master digital marketing strategies for business growth.',
-      imageUrl: 'https://picsum.photos/800/400?random=3',
+      imageUrl: 'https://img.freepik.com/free-vector/online-english-lessons-youtube-thumbnail_23-2149291956.jpg',
       instructorId: 'inst_3',
       categoryId: '3', // Business
       price: 89.99,
@@ -90,6 +96,146 @@ class DummyDataService {
       rating: 4.7,
       reviewCount: 156,
       enrollmentCount: 750,
+    ),
+    Course(
+      id: '4',
+      title: 'Advanced Mobile App Architecture',
+      description: 'Learn advanced architectural patterns and best practices for mobile app development.',
+      imageUrl: 'https://img.freepik.com/free-vector/gradient-ui-ux-background_23-2149024129.jpg',
+      instructorId: 'inst_4',
+      categoryId: '1', // Programming
+      price: 129.99,
+      lessons: _createArchitectureLessons(),
+      level: 'Advanced',
+      requirements: [
+        'Intermediate programming knowledge',
+        'Basic mobile development experience',
+        'Understanding of design patterns'
+      ],
+      whatYouWillLearn: [
+        'Clean Architecture principles',
+        'SOLID principles in mobile development',
+        'State management patterns',
+        'Dependency injection',
+        'Unit testing and TDD'
+      ],
+      createdAt: DateTime.now().subtract(const Duration(days: 10)),
+      updatedAt: DateTime.now(),
+      rating: 4.9,
+      reviewCount: 178,
+      enrollmentCount: 560,
+    ),
+    Course(
+      id: '5',
+      title: 'Motion Design with After Effects',
+      description: 'Create stunning motion graphics and visual effects using Adobe After Effects.',
+      imageUrl: 'https://img.freepik.com/free-vector/flat-design-motion-graphics-background_23-2149489315.jpg',
+      instructorId: 'inst_5',
+      categoryId: '2', // Design
+      price: 89.99,
+      lessons: _createMotionDesignLessons(),
+      level: 'Intermediate',
+      requirements: [
+        'Basic Adobe After Effects knowledge',
+        'Understanding of design principles',
+        'Creative mindset'
+      ],
+      whatYouWillLearn: [
+        'Advanced animation techniques',
+        'Character animation',
+        'Visual effects creation',
+        'Motion graphics principles',
+        'Project workflow optimization'
+      ],
+      createdAt: DateTime.now().subtract(const Duration(days: 20)),
+      updatedAt: DateTime.now(),
+      rating: 4.7,
+      reviewCount: 145,
+      enrollmentCount: 420,
+    ),
+    Course(
+      id: '6',
+      title: 'Financial Management Fundamentals',
+      description: 'Master the basics of financial management and business economics.',
+      imageUrl: 'https://img.freepik.com/free-vector/gradient-stock-market-concept_23-2149166910.jpg',
+      instructorId: 'inst_6',
+      categoryId: '3', // Business
+      price: 74.99,
+      lessons: _createFinanceLessons(),
+      level: 'Beginner',
+      requirements: [
+        'Basic math skills',
+        'Interest in finance',
+        'No prior experience needed'
+      ],
+      whatYouWillLearn: [
+        'Financial statements analysis',
+        'Investment basics',
+        'Risk management',
+        'Budgeting techniques',
+        'Business valuation'
+      ],
+      createdAt: DateTime.now().subtract(const Duration(days: 25)),
+      updatedAt: DateTime.now(),
+      rating: 4.6,
+      reviewCount: 98,
+      enrollmentCount: 340,
+    ),
+    Course(
+      id: '7',
+      title: 'Professional Photography Masterclass',
+      description: 'Learn professional photography techniques from composition to post-processing.',
+      imageUrl: 'https://img.freepik.com/free-photo/professional-camera-blurred-background_169016-10249.jpg',
+      instructorId: 'inst_7',
+      categoryId: '5', // Photography
+      price: 84.99,
+      lessons: _createPhotographyLessons(),
+      level: 'Beginner',
+      requirements: [
+        'Digital camera (DSLR or Mirrorless)',
+        'Basic computer skills',
+        'Adobe Lightroom (optional)'
+      ],
+      whatYouWillLearn: [
+        'Camera basics and settings',
+        'Composition techniques',
+        'Lighting fundamentals',
+        'Post-processing skills',
+        'Building a portfolio'
+      ],
+      createdAt: DateTime.now().subtract(const Duration(days: 25)),
+      updatedAt: DateTime.now(),
+      rating: 4.7,
+      reviewCount: 132,
+      enrollmentCount: 450,
+    ),
+    Course(
+      id: '8',
+      title: 'English Business Communication',
+      description: 'Master business English for professional success.',
+      imageUrl: 'https://img.freepik.com/free-vector/language-learning-concept-illustration_114360-6565.jpg',
+      instructorId: 'inst_8',
+      categoryId: '6', // Language
+      price: 69.99,
+      lessons: _createLanguageLessons(),
+      level: 'Intermediate',
+      requirements: [
+        'Basic English knowledge',
+        'Dedication to practice',
+        'Internet connection'
+      ],
+      whatYouWillLearn: [
+        'Business vocabulary',
+        'Email writing',
+        'Presentation skills',
+        'Negotiation techniques',
+        'Professional communication'
+      ],
+      createdAt: DateTime.now().subtract(const Duration(days: 18)),
+      updatedAt: DateTime.now(),
+      rating: 4.8,
+      reviewCount: 167,
+      enrollmentCount: 580,
     ),
   ];
 
@@ -156,12 +302,64 @@ class DummyDataService {
     ];
   }
 
-  static Lesson _createLesson(String id, String title, bool isPreview, bool isCompleted) {
+  static List<Lesson> _createArchitectureLessons() {
+    return [
+      _createLesson('1', 'Clean Architecture Overview', true, false),
+      _createLesson('2', 'SOLID Principles', false, false),
+      _createLesson('3', 'Repository Pattern', false, false),
+      _createLesson('4', 'Dependency Injection', false, false),
+      _createLesson('5', 'Unit Testing', false, false),
+    ];
+  }
+
+  static List<Lesson> _createMotionDesignLessons() {
+    return [
+      _createLesson('1', 'Animation Basics', true, false),
+      _createLesson('2', 'Keyframe Animation', false, false),
+      _createLesson('3', 'Character Rigging', false, false),
+      _createLesson('4', 'Visual Effects', false, false),
+      _createLesson('5', 'Project Workflow', false, false),
+    ];
+  }
+
+  static List<Lesson> _createFinanceLessons() {
+    return [
+      _createLesson('1', 'Introduction to Finance', true, false),
+      _createLesson('2', 'Financial Statements', false, false),
+      _createLesson('3', 'Investment Basics', false, false),
+      _createLesson('4', 'Risk Management', false, false),
+      _createLesson('5', 'Business Valuation', false, false),
+    ];
+  }
+
+  static List<Lesson> _createPhotographyLessons() {
+    return [
+      _createLesson('1', 'Understanding Your Camera', true, false),
+      _createLesson('2', 'Composition Basics', false, false),
+      _createLesson('3', 'Lighting Techniques', false, false),
+      _createLesson('4', 'Portrait Photography', false, false),
+      _createLesson('5', 'Post-Processing', false, false),
+    ];
+  }
+
+  static List<Lesson> _createLanguageLessons() {
+    return [
+      _createLesson('1', 'Business Vocabulary', true, false),
+      _createLesson('2', 'Email Writing', false, false),
+      _createLesson('3', 'Presentation Skills', false, false),
+      _createLesson('4', 'Negotiation Language', false, false),
+      _createLesson('5', 'Professional Communication', false, false),
+    ];
+  }
+
+  static Lesson _createLesson(
+      String id, String title, bool isPreview, bool isCompleted) {
     return Lesson(
       id: 'lesson_$id',
       title: title,
       description: 'This is a detailed description for $title',
-      videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      videoUrl:
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
       duration: 30,
       resources: _createDummyResources(),
       isPreview: isPreview,
