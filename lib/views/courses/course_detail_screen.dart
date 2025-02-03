@@ -21,6 +21,7 @@ class CourseDetailScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final lastLesson = Get.parameters['lastLesson'];
     final id = Get.parameters['id'] ?? courseId;
+    final course = DummyDataService.getCourseById(id);
 
     // If coming from in-progress, scroll to last lesson
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,8 +55,7 @@ class CourseDetailScreen extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   CachedNetworkImage(
-                    imageUrl:
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1W2rPnH8AhI2ZSJ37T4XRtWEETFdQ1hr7kA&s',
+                    imageUrl: course.imageUrl,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: AppColors.primary.withOpacity(0.1),
@@ -82,7 +82,7 @@ class CourseDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Advanced Mobile Development',
+                    course.title,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -90,15 +90,33 @@ class CourseDetailScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.person, color: theme.colorScheme.primary),
-                      const SizedBox(width: 8),
-                      Text('John Doe', style: theme.textTheme.bodyLarge),
-                      const Spacer(),
-                      Icon(Icons.star, color: theme.colorScheme.primary),
+                      const Icon(Icons.star, color: Colors.amber),
                       const SizedBox(width: 4),
-                      Text('4.8 (2.5k reviews)',
-                          style: theme.textTheme.bodyLarge),
+                      Text(
+                        course.rating.toString(),
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '(${course.reviewCount} reviews)',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.secondary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '\$${course.price}',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
                     ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    course.description,
+                    style: theme.textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 16),
                   _buildInfoCard(context),
