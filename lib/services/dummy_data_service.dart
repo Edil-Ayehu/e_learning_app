@@ -2,7 +2,7 @@ import 'package:e_learning_app/models/course.dart';
 import 'package:e_learning_app/models/lesson.dart';
 import 'package:e_learning_app/models/quiz.dart';
 import 'package:e_learning_app/models/question.dart';
-
+import 'package:e_learning_app/models/quiz_attempt.dart';
 
 
 class DummyDataService {
@@ -122,6 +122,8 @@ class DummyDataService {
       isActive: true,
     ),
   ];
+
+  static final List<QuizAttempt> quizAttempts = [];
 
   static List<Lesson> _createFlutterLessons() {
     return [
@@ -272,5 +274,13 @@ class DummyDataService {
       (quiz) => quiz.id == id,
       orElse: () => quizzes.first,
     );
+  }
+
+  static void saveQuizAttempt(QuizAttempt attempt) {
+    quizAttempts.add(attempt);
+  }
+
+  static List<QuizAttempt> getQuizAttempts(String userId) {
+    return quizAttempts.where((attempt) => attempt.userId == userId).toList();
   }
 }
