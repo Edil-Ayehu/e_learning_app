@@ -28,16 +28,16 @@ class _LessonScreenState extends State<LessonScreen> {
   Future<void> _initializeVideo() async {
     try {
       final courseId = Get.parameters['courseId'];
-      print('CourseId: $courseId');
+      debugPrint('CourseId: $courseId');
 
       if (courseId == null) {
-        print('No courseId found in parameters');
+        debugPrint('No courseId found in parameters');
         setState(() => _isLoading = false);
         return;
       }
 
       final course = DummyDataService.getCourseById(courseId);
-      print('Course found: ${course.title}');
+      debugPrint('Course found: ${course.title}');
 
       final lesson = course.lessons.firstWhere(
         (lesson) => lesson.id == widget.lessonId,
@@ -70,7 +70,13 @@ class _LessonScreenState extends State<LessonScreen> {
 
       // Create and configure the Chewie Controller
       _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController,
+        videoPlayerController: _videoPlayerController
+          ..addListener(() {
+            if (_videoPlayerController.value.position >=
+                _videoPlayerController.value.duration) {
+              _markLessonAsCompleted();
+            }
+          }),
         autoPlay: true,
         looping: false,
         aspectRatio: 16 / 9,
@@ -82,6 +88,10 @@ class _LessonScreenState extends State<LessonScreen> {
             ),
           );
         },
+        showControls: true,
+        allowFullScreen: true,
+        showOptions: false,
+        allowPlaybackSpeedChanging: false,
       );
 
       if (mounted) {
