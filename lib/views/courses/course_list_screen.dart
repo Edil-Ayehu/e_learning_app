@@ -126,25 +126,73 @@ class CourseListScreen extends StatelessWidget {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.all(20),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final course = courses[index];
-                  return _CourseCard(
-                    imageUrl: course.imageUrl,
-                    title: course.title,
-                    subtitle: course.description,
-                    rating: course.rating,
-                    duration: '${course.lessons.length * 30} mins',
-                    onTap: () => Get.toNamed(
-                      AppRoutes.courseDetail.replaceAll(':id', course.id),
-                      arguments: course.id,
-                    ),
-                  );
-                },
-                childCount: courses.length,
+          if (courses.isEmpty)
+            SliverFillRemaining(
+              child: _buildEmptyState(theme),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final course = courses[index];
+                    return _CourseCard(
+                      imageUrl: course.imageUrl,
+                      title: course.title,
+                      subtitle: course.description,
+                      rating: course.rating,
+                      duration: '${course.lessons.length * 30} mins',
+                      onTap: () => Get.toNamed(
+                        AppRoutes.courseDetail.replaceAll(':id', course.id),
+                        arguments: course.id,
+                      ),
+                    );
+                  },
+                  childCount: courses.length,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(ThemeData theme) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.school_outlined,
+            size: 80,
+            color: AppColors.primary.withOpacity(0.5),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'No Courses Found',
+            style: theme.textTheme.headlineSmall?.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'There are no courses available in this category yet.',
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: AppColors.secondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back),
+            label: const Text('Go Back'),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 12,
               ),
             ),
           ),
