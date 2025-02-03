@@ -1,18 +1,18 @@
 import 'package:e_learning_app/models/course.dart';
 import 'package:e_learning_app/models/lesson.dart';
 
+
 class DummyDataService {
   static final List<Course> courses = [
     Course(
       id: '1',
       title: 'Flutter Development Bootcamp',
-      description:
-          'Learn Flutter and Dart from scratch and build real-world apps',
+      description: 'Master Flutter and Dart from scratch. Build real-world cross-platform apps.',
       imageUrl: 'https://picsum.photos/800/400?random=1',
       instructorId: 'inst_1',
       categoryId: '1', // Programming
       price: 99.99,
-      lessons: _createDummyLessons(6),
+      lessons: _createFlutterLessons(),
       level: 'Intermediate',
       requirements: [
         'Basic programming knowledge',
@@ -21,9 +21,10 @@ class DummyDataService {
       ],
       whatYouWillLearn: [
         'Build beautiful native apps',
-        'Learn Dart programming',
-        'State management techniques',
-        'API integration'
+        'Master Dart programming',
+        'State management with GetX',
+        'REST API integration',
+        'Local data storage'
       ],
       createdAt: DateTime.now().subtract(const Duration(days: 30)),
       updatedAt: DateTime.now(),
@@ -33,24 +34,25 @@ class DummyDataService {
     ),
     Course(
       id: '2',
-      title: 'UI/UX Design Fundamentals',
-      description:
-          'Master the principles of user interface and experience design',
+      title: 'UI/UX Design Masterclass',
+      description: 'Learn professional UI/UX design from scratch using Figma and Adobe XD.',
       imageUrl: 'https://picsum.photos/800/400?random=2',
       instructorId: 'inst_2',
       categoryId: '2', // Design
       price: 79.99,
-      lessons: _createDummyLessons(8),
+      lessons: _createDesignLessons(),
       level: 'Beginner',
       requirements: [
         'No prior experience needed',
-        'Design software will be provided',
+        'Figma (free account)',
+        'Creative mindset'
       ],
       whatYouWillLearn: [
-        'Design principles',
-        'Color theory',
-        'Typography basics',
-        'User research methods'
+        'Design principles and theory',
+        'User research methods',
+        'Wireframing and prototyping',
+        'Design systems',
+        'Portfolio building'
       ],
       createdAt: DateTime.now().subtract(const Duration(days: 45)),
       updatedAt: DateTime.now(),
@@ -58,26 +60,80 @@ class DummyDataService {
       reviewCount: 189,
       enrollmentCount: 890,
     ),
-    // Add more courses as needed
+    Course(
+      id: '3',
+      title: 'Digital Marketing Essentials',
+      description: 'Master digital marketing strategies for business growth.',
+      imageUrl: 'https://picsum.photos/800/400?random=3',
+      instructorId: 'inst_3',
+      categoryId: '3', // Business
+      price: 89.99,
+      lessons: _createMarketingLessons(),
+      level: 'Intermediate',
+      requirements: [
+        'Basic marketing knowledge',
+        'Social media familiarity',
+        'Google Analytics account'
+      ],
+      whatYouWillLearn: [
+        'SEO optimization',
+        'Social media marketing',
+        'Email campaigns',
+        'Google Analytics',
+        'Content marketing'
+      ],
+      createdAt: DateTime.now().subtract(const Duration(days: 15)),
+      updatedAt: DateTime.now(),
+      rating: 4.7,
+      reviewCount: 156,
+      enrollmentCount: 750,
+    ),
   ];
 
-static List<Lesson> _createDummyLessons(int count) {
-  return List.generate(
-    count,
-    (index) => Lesson(
-      id: 'lesson_${index + 1}',
-      title: 'Lesson ${index + 1}',
-      description: 'This is a detailed description for lesson ${index + 1}',
-      videoUrl:
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      duration: 30 + (index * 5),
+  static List<Lesson> _createFlutterLessons() {
+    return [
+      _createLesson('1', 'Introduction to Flutter', true, true),
+      _createLesson('2', 'Dart Programming Basics', false, false),
+      _createLesson('3', 'Building UI with Widgets', false, false),
+      _createLesson('4', 'State Management', false, false),
+      _createLesson('5', 'Working with APIs', false, false),
+      _createLesson('6', 'Local Data Storage', false, false),
+    ];
+  }
+
+  static List<Lesson> _createDesignLessons() {
+    return [
+      _createLesson('1', 'Design Fundamentals', true, true),
+      _createLesson('2', 'Color Theory', false, false),
+      _createLesson('3', 'Typography Basics', false, false),
+      _createLesson('4', 'Layout Design', false, false),
+      _createLesson('5', 'Prototyping', false, false),
+    ];
+  }
+
+  static List<Lesson> _createMarketingLessons() {
+    return [
+      _createLesson('1', 'Digital Marketing Overview', true, true),
+      _createLesson('2', 'SEO Fundamentals', false, false),
+      _createLesson('3', 'Social Media Strategy', false, false),
+      _createLesson('4', 'Email Marketing', false, false),
+      _createLesson('5', 'Analytics & Reporting', false, false),
+    ];
+  }
+
+  static Lesson _createLesson(String id, String title, bool isPreview, bool isCompleted) {
+    return Lesson(
+      id: 'lesson_$id',
+      title: title,
+      description: 'This is a detailed description for $title',
+      videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      duration: 30,
       resources: _createDummyResources(),
-      isPreview: index == 0,
-      isLocked: index > 0,  // First lesson is unlocked
-      isCompleted: false,
-    ),
-  );
-}
+      isPreview: isPreview,
+      isLocked: !isPreview,
+      isCompleted: isCompleted,
+    );
+  }
 
   static List<Resource> _createDummyResources() {
     return [
