@@ -260,27 +260,38 @@ class CourseDetailScreen extends StatelessWidget {
     );
   }
 
-Widget _buildLessonsList(BuildContext context) {
-  final course = DummyDataService.getCourseById(courseId);
-  
-  return ListView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: course.lessons.length,
-    itemBuilder: (context, index) {
-      final lesson = course.lessons[index];
-      return _LessonTile(
-        title: lesson.title,
-        duration: '${lesson.duration} min',
-        isCompleted: index < 2,
-        onTap: () => Get.toNamed(
-          AppRoutes.lesson.replaceAll(':id', lesson.id),
-          parameters: {'courseId': courseId},
-        ),
-      );
-    },
-  );
-}
+  Widget _buildLessonsList(BuildContext context) {
+    final course = DummyDataService.getCourseById(courseId);
+    
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: course.lessons.length,
+      itemBuilder: (context, index) {
+        final lesson = course.lessons[index];
+        final isLocked = !lesson.isPreview && 
+            !course.lessons.sublist(0, index).every((l) => l.isCompleted);
+        
+        return _LessonTile(
+          title: lesson.title,
+          duration: '${lesson.duration} min',
+          isCompleted: lesson.isCompleted,
+          isLocked: isLocked,
+          onTap: isLocked 
+              ? () => Get.snackbar(
+                  'Lesson Locked',
+                  'Please complete the previous lessons first',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                )
+              : () => Get.toNamed(
+                  AppRoutes.lesson.replaceAll(':id', lesson.id),
+                  parameters: {'courseId': courseId},
+                ),
+        );
+      },
+    );
+  }
 
   Widget _buildReviewsSection(BuildContext context) {
     final theme = Theme.of(context);
@@ -468,12 +479,14 @@ class _LessonTile extends StatelessWidget {
   final String title;
   final String duration;
   final bool isCompleted;
+  final bool isLocked;
   final VoidCallback onTap;
 
   const _LessonTile({
     required this.title,
     required this.duration,
     required this.isCompleted,
+    required this.isLocked,
     required this.onTap,
   });
 
@@ -486,16 +499,34 @@ class _LessonTile extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: isCompleted
             ? theme.colorScheme.primary
-            : theme.colorScheme.secondary.withOpacity(0.2),
+            : isLocked
+                ? theme.colorScheme.secondary.withOpacity(0.1)
+                : theme.colorScheme.secondary.withOpacity(0.2),
         child: Icon(
-          isCompleted ? Icons.check : Icons.play_arrow,
+          isCompleted
+              ? Icons.check
+              : isLocked
+                  ? Icons.lock
+                  : Icons.play_arrow,
           color: isCompleted
               ? theme.colorScheme.onPrimary
-              : theme.colorScheme.secondary,
+              : isLocked
+                  ? theme.colorScheme.secondary
+                  : theme.colorScheme.secondary,
         ),
       ),
-      title: Text(title),
-      subtitle: Text(duration),
+      title: Text(
+        title,
+        style: theme.textTheme.bodyLarge?.copyWith(
+          color: isLocked ? theme.colorScheme.secondary : null,
+        ),
+      ),
+      subtitle: Text(
+        duration,
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: isLocked ? theme.colorScheme.secondary : null,
+        ),
+      ),
       trailing: const Icon(Icons.chevron_right),
     );
   }

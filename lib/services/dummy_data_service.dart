@@ -61,21 +61,23 @@ class DummyDataService {
     // Add more courses as needed
   ];
 
-  static List<Lesson> _createDummyLessons(int count) {
-    return List.generate(
-      count,
-      (index) => Lesson(
-        id: 'lesson_${index + 1}',
-        title: 'Lesson ${index + 1}',
-        description: 'This is a detailed description for lesson ${index + 1}',
-        videoUrl:
-            'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-        duration: 30 + (index * 5),
-        resources: _createDummyResources(),
-        isPreview: index == 0,
-      ),
-    );
-  }
+static List<Lesson> _createDummyLessons(int count) {
+  return List.generate(
+    count,
+    (index) => Lesson(
+      id: 'lesson_${index + 1}',
+      title: 'Lesson ${index + 1}',
+      description: 'This is a detailed description for lesson ${index + 1}',
+      videoUrl:
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      duration: 30 + (index * 5),
+      resources: _createDummyResources(),
+      isPreview: index == 0,
+      isLocked: index > 0,  // First lesson is unlocked
+      isCompleted: false,
+    ),
+  );
+}
 
   static List<Resource> _createDummyResources() {
     return [

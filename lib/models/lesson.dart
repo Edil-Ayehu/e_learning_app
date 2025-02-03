@@ -6,6 +6,8 @@ class Lesson {
   final int duration;
   final List<Resource> resources;
   final bool isPreview;
+  final bool isLocked; 
+  final bool isCompleted;
 
   Lesson({
     required this.id,
@@ -15,7 +17,33 @@ class Lesson {
     required this.duration,
     required this.resources,
     this.isPreview = false,
+    this.isLocked = true, 
+    this.isCompleted = false,
   });
+
+    Lesson copyWith({
+    String? id,
+    String? title,
+    String? description,
+    String? videoUrl,
+    int? duration,
+    List<Resource>? resources,
+    bool? isPreview,
+    bool? isLocked,
+    bool? isCompleted,
+  }) {
+    return Lesson(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      videoUrl: videoUrl ?? this.videoUrl,
+      duration: duration ?? this.duration,
+      resources: resources ?? this.resources,
+      isPreview: isPreview ?? this.isPreview,
+      isLocked: isLocked ?? this.isLocked,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
 
   factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
         id: json['id'],
@@ -27,6 +55,8 @@ class Lesson {
             .map((resource) => Resource.fromJson(resource))
             .toList(),
         isPreview: json['isPreview'] ?? false,
+                isLocked: json['isLocked'] ?? true,
+        isCompleted: json['isCompleted'] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,6 +67,8 @@ class Lesson {
         'duration': duration,
         'resources': resources.map((resource) => resource.toJson()).toList(),
         'isPreview': isPreview,
+                'isLocked': isLocked,
+        'isCompleted': isCompleted,
       };
 
   String get videoStreamUrl {

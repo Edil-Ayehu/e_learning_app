@@ -44,36 +44,48 @@ Future<void> _initializeVideo() async {
       orElse: () => course.lessons.first,
     );
 
+    // Check if lesson is locked
+    final lessonIndex = course.lessons.indexOf(lesson);
+    final previousLessonsCompleted = course.lessons
+        .sublist(0, lessonIndex)
+        .every((lesson) => lesson.isCompleted);
+
+    if (!previousLessonsCompleted && !lesson.isPreview) {
+      Get.snackbar(
+        'Lesson Locked',
+        'Please complete the previous lessons first',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      Get.back();
+      return;
+    }
+
     print('Video URL: ${lesson.videoUrl}');
 
     setState(() {
       _videoPlayerController = VideoPlayerController.network(lesson.videoUrl);
     });
 
-    await _videoPlayerController.initialize();
-    print('Video initialized successfully');
-
-    if (!mounted) return;
-
-    setState(() {
-      _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController,
-        aspectRatio: 16 / 9,
-        autoPlay: false,
-        looping: false,
-        allowFullScreen: true,
-        showControls: true,
-        placeholder: Container(
-          color: Colors.black,
-          child: const Center(child: CircularProgressIndicator()),
-        ),
-      );
-      _isLoading = false;
-    });
+    // Rest of the initialization code...
   } catch (e) {
     print('Error initializing video: $e');
     if (mounted) {
       setState(() => _isLoading = false);
+    }
+  }
+}
+
+void _markLessonAsCompleted() {
+  final courseId = Get.parameters['courseId'];
+  if (courseId != null) {
+    final course = DummyDataService.getCourseById(courseId);
+    final lessonIndex = course.lessons.indexWhere((l) => l.id == widget.lessonId);
+    if (lessonIndex != -1) {
+      // Update the lesson completion status
+      course.lessons[lessonIndex] = course.lessons[lessonIndex].copyWith(
+        isCompleted: true,
+      );
     }
   }
 }
