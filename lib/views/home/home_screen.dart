@@ -20,25 +20,25 @@ class HomeScreen extends StatelessWidget {
       id: '1',
       name: 'Programming',
       icon: Icons.code.codePoint.toRadixString(16),
-      courseCount: 12,
+      courseCount: DummyDataService.getCoursesByCategory('1').length,
     ),
     Category(
       id: '2',
       name: 'Design',
       icon: Icons.brush.codePoint.toRadixString(16),
-      courseCount: 8,
+      courseCount: DummyDataService.getCoursesByCategory('2').length,
     ),
     Category(
       id: '3',
       name: 'Business',
       icon: Icons.business.codePoint.toRadixString(16),
-      courseCount: 10,
+      courseCount: DummyDataService.getCoursesByCategory('3').length,
     ),
     Category(
       id: '4',
       name: 'Music',
       icon: Icons.music_note.codePoint.toRadixString(16),
-      courseCount: 6,
+      courseCount: DummyDataService.getCoursesByCategory('4').length,
     ),
   ];
 
