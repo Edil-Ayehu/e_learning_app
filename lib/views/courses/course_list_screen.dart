@@ -9,10 +9,12 @@ import 'package:shimmer/shimmer.dart';
 class CourseListScreen extends StatelessWidget {
   final String? categoryId;
   final String? categoryName;
+  final bool showBackButton;
   const CourseListScreen({
     super.key,
     this.categoryId,
     this.categoryName,
+    this.showBackButton = false,
   });
 
   void _showFilterDialog(BuildContext context) {
@@ -93,8 +95,8 @@ class CourseListScreen extends StatelessWidget {
             expandedHeight: 200,
             pinned: true,
             backgroundColor: AppColors.primary,
-            automaticallyImplyLeading: categoryId != null,
-            leading: categoryId != null
+            automaticallyImplyLeading: categoryId != null || showBackButton,
+            leading: (categoryId != null || showBackButton)
                 ? IconButton(
                     icon: const Icon(Icons.arrow_back, color: AppColors.accent),
                     onPressed: () => Get.back(),

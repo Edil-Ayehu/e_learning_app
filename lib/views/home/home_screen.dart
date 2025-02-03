@@ -12,6 +12,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:e_learning_app/models/category.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 
+
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
@@ -459,7 +460,9 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () => Get.toNamed(AppRoutes.courseList),
+              onPressed: () => Get.to(
+                () => const CourseListScreen(showBackButton: true),
+              ),
               child: const Text('See All'),
             ),
           ],
