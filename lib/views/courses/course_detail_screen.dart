@@ -54,7 +54,8 @@ class CourseDetailScreen extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   CachedNetworkImage(
-                    imageUrl: 'https://picsum.photos/800/400',
+                    imageUrl:
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1W2rPnH8AhI2ZSJ37T4XRtWEETFdQ1hr7kA&s',
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: AppColors.primary.withOpacity(0.1),
@@ -68,18 +69,6 @@ class CourseDetailScreen extends StatelessWidget {
                     errorWidget: (context, url, error) => Container(
                       color: AppColors.primary.withOpacity(0.1),
                       child: const Icon(Icons.error),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          theme.colorScheme.background.withOpacity(0.7),
-                        ],
-                      ),
                     ),
                   ),
                 ],
@@ -262,32 +251,32 @@ class CourseDetailScreen extends StatelessWidget {
 
   Widget _buildLessonsList(BuildContext context) {
     final course = DummyDataService.getCourseById(courseId);
-    
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: course.lessons.length,
       itemBuilder: (context, index) {
         final lesson = course.lessons[index];
-        final isLocked = !lesson.isPreview && 
+        final isLocked = !lesson.isPreview &&
             !course.lessons.sublist(0, index).every((l) => l.isCompleted);
-        
+
         return _LessonTile(
           title: lesson.title,
           duration: '${lesson.duration} min',
           isCompleted: lesson.isCompleted,
           isLocked: isLocked,
-          onTap: isLocked 
+          onTap: isLocked
               ? () => Get.snackbar(
-                  'Lesson Locked',
-                  'Please complete the previous lessons first',
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
-                )
+                    'Lesson Locked',
+                    'Please complete the previous lessons first',
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  )
               : () => Get.toNamed(
-                  AppRoutes.lesson.replaceAll(':id', lesson.id),
-                  parameters: {'courseId': courseId},
-                ),
+                    AppRoutes.lesson.replaceAll(':id', lesson.id),
+                    parameters: {'courseId': courseId},
+                  ),
         );
       },
     );
