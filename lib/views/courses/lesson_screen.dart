@@ -25,70 +25,92 @@ class _LessonScreenState extends State<LessonScreen> {
     _initializeVideo();
   }
 
-Future<void> _initializeVideo() async {
-  try {
-    final courseId = Get.parameters['courseId'];
-    print('CourseId: $courseId');
+  Future<void> _initializeVideo() async {
+    try {
+      final courseId = Get.parameters['courseId'];
+      print('CourseId: $courseId');
 
-    if (courseId == null) {
-      print('No courseId found in parameters');
-      setState(() => _isLoading = false);
-      return;
-    }
+      if (courseId == null) {
+        print('No courseId found in parameters');
+        setState(() => _isLoading = false);
+        return;
+      }
 
-    final course = DummyDataService.getCourseById(courseId);
-    print('Course found: ${course.title}');
+      final course = DummyDataService.getCourseById(courseId);
+      print('Course found: ${course.title}');
 
-    final lesson = course.lessons.firstWhere(
-      (lesson) => lesson.id == widget.lessonId,
-      orElse: () => course.lessons.first,
-    );
-
-    // Check if lesson is locked
-    final lessonIndex = course.lessons.indexOf(lesson);
-    final previousLessonsCompleted = course.lessons
-        .sublist(0, lessonIndex)
-        .every((lesson) => lesson.isCompleted);
-
-    if (!previousLessonsCompleted && !lesson.isPreview) {
-      Get.snackbar(
-        'Lesson Locked',
-        'Please complete the previous lessons first',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+      final lesson = course.lessons.firstWhere(
+        (lesson) => lesson.id == widget.lessonId,
+        orElse: () => course.lessons.first,
       );
-      Get.back();
-      return;
-    }
 
-    print('Video URL: ${lesson.videoUrl}');
+      // Check if lesson is locked
+      final lessonIndex = course.lessons.indexOf(lesson);
+      final previousLessonsCompleted = course.lessons
+          .sublist(0, lessonIndex)
+          .every((lesson) => lesson.isCompleted);
 
-    setState(() {
+      if (!previousLessonsCompleted && !lesson.isPreview) {
+        Get.snackbar(
+          'Lesson Locked',
+          'Please complete the previous lessons first',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        Get.back();
+        return;
+      }
+
+      print('Video URL: ${lesson.videoUrl}');
+
       _videoPlayerController = VideoPlayerController.network(lesson.videoUrl);
-    });
 
-    // Rest of the initialization code...
-  } catch (e) {
-    print('Error initializing video: $e');
-    if (mounted) {
-      setState(() => _isLoading = false);
-    }
-  }
-}
+      // Initialize the video controller
+      await _videoPlayerController.initialize();
 
-void _markLessonAsCompleted() {
-  final courseId = Get.parameters['courseId'];
-  if (courseId != null) {
-    final course = DummyDataService.getCourseById(courseId);
-    final lessonIndex = course.lessons.indexWhere((l) => l.id == widget.lessonId);
-    if (lessonIndex != -1) {
-      // Update the lesson completion status
-      course.lessons[lessonIndex] = course.lessons[lessonIndex].copyWith(
-        isCompleted: true,
+      // Create and configure the Chewie Controller
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController,
+        autoPlay: true,
+        looping: false,
+        aspectRatio: 16 / 9,
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Text(
+              'Error: $errorMessage',
+              style: const TextStyle(color: Colors.white),
+            ),
+          );
+        },
       );
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error initializing video: $e');
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
-}
+
+  void _markLessonAsCompleted() {
+    final courseId = Get.parameters['courseId'];
+    if (courseId != null) {
+      final course = DummyDataService.getCourseById(courseId);
+      final lessonIndex =
+          course.lessons.indexWhere((l) => l.id == widget.lessonId);
+      if (lessonIndex != -1) {
+        // Update the lesson completion status
+        course.lessons[lessonIndex] = course.lessons[lessonIndex].copyWith(
+          isCompleted: true,
+        );
+      }
+    }
+  }
 
   @override
   void dispose() {
