@@ -79,40 +79,69 @@ class CourseListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final courses = categoryId != null
         ? DummyDataService.getCoursesByCategory(categoryId!)
         : DummyDataService.courses;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(categoryName ?? 'All Courses'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () => _showFilterDialog(context),
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: courses.length,
-        itemBuilder: (context, index) {
-          final course = courses[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: _CourseCard(
-              imageUrl: course.imageUrl,
-              title: course.title,
-              subtitle: course.description,
-              rating: course.rating,
-              duration: '${course.lessons.length * 30} mins',
-              onTap: () => Get.toNamed(
-                AppRoutes.courseDetail.replaceAll(':id', course.id),
-                arguments: course.id,
+      backgroundColor: AppColors.lightBackground,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200,
+            pinned: true,
+            backgroundColor: AppColors.primary,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.filter_list, color: AppColors.accent),
+                onPressed: () => _showFilterDialog(context),
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: const EdgeInsets.all(16),
+              title: Text(
+                categoryName ?? 'All Courses',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryLight],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
               ),
             ),
-          );
-        },
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(20),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final course = courses[index];
+                  return _CourseCard(
+                    imageUrl: course.imageUrl,
+                    title: course.title,
+                    subtitle: course.description,
+                    rating: course.rating,
+                    duration: '${course.lessons.length * 30} mins',
+                    onTap: () => Get.toNamed(
+                      AppRoutes.courseDetail.replaceAll(':id', course.id),
+                      arguments: course.id,
+                    ),
+                  );
+                },
+                childCount: courses.length,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
