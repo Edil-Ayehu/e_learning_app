@@ -98,15 +98,18 @@ class CourseListScreen extends StatelessWidget {
         itemCount: courses.length,
         itemBuilder: (context, index) {
           final course = courses[index];
-          return _CourseCard(
-            imageUrl: course.imageUrl,
-            title: course.title,
-            subtitle: course.description,
-            rating: course.rating,
-            duration: '${course.lessons.length * 30} mins',
-            onTap: () => Get.toNamed(
-              AppRoutes.courseDetail.replaceAll(':id', course.id),
-              arguments: course.id,
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: _CourseCard(
+              imageUrl: course.imageUrl,
+              title: course.title,
+              subtitle: course.description,
+              rating: course.rating,
+              duration: '${course.lessons.length * 30} mins',
+              onTap: () => Get.toNamed(
+                AppRoutes.courseDetail.replaceAll(':id', course.id),
+                arguments: course.id,
+              ),
             ),
           );
         },
