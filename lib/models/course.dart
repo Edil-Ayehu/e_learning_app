@@ -17,6 +17,7 @@ class Course {
   final List<String> whatYouWillLearn;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool isPremium;
 
   Course({
     required this.id,
@@ -35,6 +36,7 @@ class Course {
     required this.whatYouWillLearn,
     required this.createdAt,
     required this.updatedAt,
+    this.isPremium = false,
   });
 
   factory Course.fromJson(Map<String, dynamic> json) => Course(
@@ -56,6 +58,7 @@ class Course {
         whatYouWillLearn: List<String>.from(json['whatYouWillLearn']),
         createdAt: DateTime.parse(json['createdAt']),
         updatedAt: DateTime.parse(json['updatedAt']),
+        isPremium: json['isPremium'] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -75,5 +78,6 @@ class Course {
         'whatYouWillLearn': whatYouWillLearn,
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
+        'isPremium': isPremium,
       };
 }

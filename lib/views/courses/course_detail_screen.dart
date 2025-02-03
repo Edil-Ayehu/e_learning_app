@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:e_learning_app/views/courses/payment_screen.dart';
 import 'package:e_learning_app/services/offline_course_service.dart';
+
 
 class CourseDetailScreen extends StatelessWidget {
   final String courseId;
@@ -24,6 +24,7 @@ class CourseDetailScreen extends StatelessWidget {
     final id = Get.parameters['id'] ?? courseId;
     final course = DummyDataService.getCourseById(id);
     final isCompleted = DummyDataService.isCourseCompleted(course.id);
+    final isUnlocked = DummyDataService.isCourseUnlocked(courseId);
 
     // If coming from in-progress, scroll to last lesson
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -130,7 +131,7 @@ class CourseDetailScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _buildLessonsList(context),
+                  _buildLessonsList(context, isUnlocked),
                   const SizedBox(height: 24),
                   _buildReviewsSection(context),
                 ],
@@ -139,9 +140,9 @@ class CourseDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: isCompleted
+      bottomNavigationBar: course.isPremium && !isUnlocked
           ? Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: theme.scaffoldBackgroundColor,
                 boxShadow: [
@@ -152,10 +153,20 @@ class CourseDetailScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: ElevatedButton.icon(
-                onPressed: () => _showCertificateDialog(context, course),
-                icon: const Icon(Icons.workspace_premium),
-                label: const Text('Get Certificate'),
+              child: ElevatedButton(
+                onPressed: () => Get.toNamed(
+                  AppRoutes.payment,
+                  arguments: {
+                    'courseId': courseId,
+                    'courseName': course.title,
+                    'price': course.price,
+                  },
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: Text('Buy Now for \$${course.price}'),
               ),
             )
           : null,
@@ -234,7 +245,7 @@ class CourseDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLessonsList(BuildContext context) {
+  Widget _buildLessonsList(BuildContext context, bool isUnlocked) {
     final course = DummyDataService.getCourseById(courseId);
 
     return ListView.builder(
@@ -251,6 +262,7 @@ class CourseDetailScreen extends StatelessWidget {
           duration: '${lesson.duration} min',
           isCompleted: lesson.isCompleted,
           isLocked: isLocked,
+          isUnlocked: isUnlocked,
           onTap: isLocked
               ? () => Get.snackbar(
                     'Lesson Locked',
@@ -543,6 +555,7 @@ class _LessonTile extends StatelessWidget {
   final String duration;
   final bool isCompleted;
   final bool isLocked;
+  final bool isUnlocked;
   final VoidCallback onTap;
 
   const _LessonTile({
@@ -550,6 +563,7 @@ class _LessonTile extends StatelessWidget {
     required this.duration,
     required this.isCompleted,
     required this.isLocked,
+    required this.isUnlocked,
     required this.onTap,
   });
 

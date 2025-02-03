@@ -1,6 +1,7 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 
 class PaymentScreen extends StatefulWidget {
   final String courseId;
@@ -267,7 +268,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   // Add form field widgets and payment processing logic here
   void _processPayment() {
     if (_formKey.currentState!.validate()) {
-      // Show loading indicator
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
@@ -276,6 +276,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
       // Simulate payment processing
       Future.delayed(const Duration(seconds: 2), () {
         Get.back(); // Close loading dialog
+        
+        // Add the course to purchased courses
+        DummyDataService.addPurchasedCourse(widget.courseId);
+        
         Get.dialog(
           _buildSuccessDialog(),
           barrierDismissible: false,

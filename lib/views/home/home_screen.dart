@@ -503,6 +503,7 @@ class HomeScreen extends StatelessWidget {
                 course.imageUrl,
                 course.instructorId,
                 '${course.lessons.length * 30} mins',
+                course.isPremium,
               );
             },
           ),
@@ -518,6 +519,7 @@ class HomeScreen extends StatelessWidget {
     String imageUrl,
     String instructorId,
     String duration,
+    bool isPremium,
   ) {
     return Container(
       width: 160,
@@ -544,29 +546,64 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  height: 90,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: AppColors.primary.withOpacity(0.1),
-                    highlightColor: AppColors.accent,
-                    child: Container(
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
                       height: 90,
                       width: double.infinity,
-                      color: Colors.white,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: AppColors.primary.withOpacity(0.1),
+                        highlightColor: AppColors.accent,
+                        child: Container(
+                          height: 90,
+                          width: double.infinity,
+                          color: Colors.white,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: AppColors.primary.withOpacity(0.1),
+                        child: const Icon(Icons.error),
+                      ),
                     ),
                   ),
-                  errorWidget: (context, url, error) => Container(
-                    color: AppColors.primary.withOpacity(0.1),
-                    child: const Icon(Icons.error),
-                  ),
-                ),
+                  if (isPremium)
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              'PRO',
+                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(12),

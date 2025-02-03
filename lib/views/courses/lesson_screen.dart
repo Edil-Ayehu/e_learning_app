@@ -41,6 +41,26 @@ class _LessonScreenState extends State<LessonScreen> {
       final course = DummyDataService.getCourseById(courseId);
       debugPrint('Course found: ${course.title}');
 
+      // Check if course is premium and not purchased
+      if (course.isPremium && !DummyDataService.isCourseUnlocked(courseId)) {
+        Get.snackbar(
+          'Premium Content',
+          'Please purchase this course to access its content',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        Get.back();
+        Get.toNamed(
+          AppRoutes.payment,
+          arguments: {
+            'courseId': courseId,
+            'courseName': course.title,
+            'price': course.price,
+          },
+        );
+        return;
+      }
+
       final lesson = course.lessons.firstWhere(
         (lesson) => lesson.id == widget.lessonId,
         orElse: () => course.lessons.first,

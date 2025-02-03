@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
+
 class CourseListScreen extends StatelessWidget {
   final String? categoryId;
   final String? categoryName;
@@ -139,16 +140,15 @@ class CourseListScreen extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final course = courses[index];
-                    return _CourseCard(
-                      imageUrl: course.imageUrl,
-                      title: course.title,
-                      subtitle: course.description,
-                      rating: course.rating,
-                      duration: '${course.lessons.length * 30} mins',
-                      onTap: () => Get.toNamed(
-                        AppRoutes.courseDetail.replaceAll(':id', course.id),
-                        arguments: course.id,
-                      ),
+                    return _buildCourseCard(
+                      context,
+                      course.id,
+                      course.title,
+                      course.description,
+                      course.imageUrl,
+                      course.rating,
+                      '${course.lessons.length * 30} mins',
+                      course.isPremium,
                     );
                   },
                   childCount: courses.length,
@@ -202,27 +202,17 @@ class CourseListScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class _CourseCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String subtitle;
-  final double rating;
-  final String duration;
-  final VoidCallback onTap;
-
-  const _CourseCard({
-    required this.imageUrl,
-    required this.title,
-    required this.subtitle,
-    required this.rating,
-    required this.duration,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildCourseCard(
+    BuildContext context,
+    String courseId,
+    String title,
+    String subtitle,
+    String imageUrl,
+    double rating,
+    String duration,
+    bool isPremium,
+  ) {
     final theme = Theme.of(context);
 
     return Container(
@@ -241,34 +231,70 @@ class _CourseCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: () => Get.toNamed(
+            AppRoutes.courseDetail.replaceAll(':id', courseId),
+            arguments: courseId,
+          ),
           borderRadius: BorderRadius.circular(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  height: 180,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: AppColors.primary.withOpacity(0.1),
-                    highlightColor: AppColors.accent,
-                    child: Container(
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
                       height: 180,
                       width: double.infinity,
-                      color: Colors.white,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: AppColors.primary.withOpacity(0.1),
+                        highlightColor: AppColors.accent,
+                        child: Container(
+                          height: 180,
+                          width: double.infinity,
+                          color: Colors.white,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        height: 180,
+                        color: AppColors.primary.withOpacity(0.1),
+                        child: const Icon(Icons.error),
+                      ),
                     ),
                   ),
-                  errorWidget: (context, url, error) => Container(
-                    height: 180,
-                    color: AppColors.primary.withOpacity(0.1),
-                    child: const Icon(Icons.error),
-                  ),
-                ),
+                  if (isPremium)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Premium',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(16),

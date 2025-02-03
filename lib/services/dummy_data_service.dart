@@ -4,9 +4,6 @@ import 'package:e_learning_app/models/quiz.dart';
 import 'package:e_learning_app/models/question.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
 
-
-
-
 class DummyDataService {
   static final List<Course> courses = [
     Course(
@@ -38,6 +35,7 @@ class DummyDataService {
       rating: 4.8,
       reviewCount: 245,
       enrollmentCount: 1200,
+      isPremium: true,
     ),
     Course(
       id: '2',
@@ -68,6 +66,7 @@ class DummyDataService {
       rating: 4.6,
       reviewCount: 189,
       enrollmentCount: 890,
+      isPremium: true,
     ),
     Course(
       id: '3',
@@ -152,6 +151,7 @@ class DummyDataService {
       rating: 4.7,
       reviewCount: 145,
       enrollmentCount: 420,
+      isPremium: true,
     ),
     Course(
       id: '6',
@@ -208,6 +208,7 @@ class DummyDataService {
       rating: 4.7,
       reviewCount: 132,
       enrollmentCount: 450,
+      isPremium: true,
     ),
     Course(
       id: '8',
@@ -480,5 +481,18 @@ class DummyDataService {
 
   static List<QuizAttempt> getQuizAttempts(String userId) {
     return quizAttempts.where((attempt) => attempt.userId == userId).toList();
+  }
+
+  // Add a set to store purchased course IDs
+  static final Set<String> _purchasedCourseIds = {};
+
+  // Add methods to manage purchased courses
+  static bool isCourseUnlocked(String courseId) {
+    final course = getCourseById(courseId);
+    return !course.isPremium || _purchasedCourseIds.contains(courseId);
+  }
+
+  static void addPurchasedCourse(String courseId) {
+    _purchasedCourseIds.add(courseId);
   }
 }
