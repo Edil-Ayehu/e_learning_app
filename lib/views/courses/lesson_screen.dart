@@ -119,28 +119,19 @@ class _LessonScreenState extends State<LessonScreen> {
           isCompleted: true,
         );
 
-        // Check if there's a next lesson
-        if (lessonIndex < course.lessons.length - 1) {
-          final nextLesson = course.lessons[lessonIndex + 1];
-          // Navigate to the next lesson with both lessonId and courseId
-          Get.offNamed(
-            AppRoutes.lesson,
-            arguments: nextLesson.id,
-            parameters: {'courseId': courseId},
-          );
-        } else {
-          // If this was the last lesson, go back to course details
-          Get.offNamed(
-            AppRoutes.courseDetail.replaceAll(':id', courseId),
-            arguments: courseId,
-          );
-          Get.snackbar(
-            'Congratulations!',
-            'You have completed all lessons in this course',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
-        }
+        // Go back to course details
+        Get.offNamed(
+          AppRoutes.courseDetail.replaceAll(':id', courseId),
+          arguments: courseId,
+        );
+        
+        // Show completion message
+        Get.snackbar(
+          'Lesson Completed!',
+          'You can now proceed to the next lesson',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
       }
     }
   }
