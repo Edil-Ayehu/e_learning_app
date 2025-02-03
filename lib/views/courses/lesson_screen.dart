@@ -119,19 +119,32 @@ class _LessonScreenState extends State<LessonScreen> {
           isCompleted: true,
         );
 
+        // Check if this is the last lesson
+        final isLastLesson = lessonIndex == course.lessons.length - 1;
+
         // Go back to course details
         Get.offNamed(
           AppRoutes.courseDetail.replaceAll(':id', courseId),
           arguments: courseId,
         );
         
-        // Show completion message
-        Get.snackbar(
-          'Lesson Completed!',
-          'You can now proceed to the next lesson',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        // Show appropriate completion message
+        if (isLastLesson) {
+          Get.snackbar(
+            'Course Completed! 🎉',
+            'Congratulations! You\'ve completed the course. You can now get your certificate.',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 5),
+          );
+        } else {
+          Get.snackbar(
+            'Lesson Completed!',
+            'You can now proceed to the next lesson',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+        }
       }
     }
   }
