@@ -1,4 +1,5 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
+import 'package:e_learning_app/models/course.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'package:e_learning_app/views/widgets/course/review_dialog.dart';
@@ -22,6 +23,7 @@ class CourseDetailScreen extends StatelessWidget {
     final lastLesson = Get.parameters['lastLesson'];
     final id = Get.parameters['id'] ?? courseId;
     final course = DummyDataService.getCourseById(id);
+    final isCompleted = DummyDataService.isCourseCompleted(course.id);
 
     // If coming from in-progress, scroll to last lesson
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -137,61 +139,26 @@ class CourseDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '\$99.99',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
+      bottomNavigationBar: isCompleted
+          ? Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, -5),
                   ),
-                ),
-                Text('Lifetime Access', style: theme.textTheme.bodySmall),
-              ],
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () => Get.to(
-                  () => PaymentScreen(
-                    courseId: Get.parameters['id'] ?? '',
-                    courseName: 'Advanced Mobile Development',
-                    price: 99.99,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text('Enroll Now'),
+                ],
               ),
-            ),
-            IconButton(
-              onPressed: () => _downloadCourse(context),
-              icon: const Icon(Icons.download),
-              tooltip: 'Download for offline access',
-            ),
-          ],
-        ),
-      ),
+              child: ElevatedButton.icon(
+                onPressed: () => _showCertificateDialog(context, course),
+                icon: const Icon(Icons.workspace_premium),
+                label: const Text('Get Certificate'),
+              ),
+            )
+          : null,
     );
   }
 
@@ -479,6 +446,95 @@ class CourseDetailScreen extends StatelessWidget {
         colorText: Colors.white,
       );
     }
+  }
+
+  void _showCertificateDialog(BuildContext context, Course course) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Congratulations! 🎉'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.workspace_premium,
+                size: 64,
+                color: AppColors.primary,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'You have completed all lessons in "${course.title}"',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'You can now download your certificate of completion!',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.secondary),
+              ),
+            ],
+          ),
+          actions: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                    ),
+                    onPressed: () => Get.back(),
+                    child: const Text(
+                      'Later',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 12),
+                      backgroundColor: AppColors.primary,
+                    ),
+                    onPressed: () {
+                      Get.back();
+                      _downloadCertificate(course);
+                    },
+                    child: const Text(
+                      'Get Certificate',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _downloadCertificate(Course course) {
+    // Here you would implement the actual certificate generation and download
+    // For now, we'll just show a success message
+    Get.snackbar(
+      'Certificate Ready!',
+      'Your certificate for ${course.title} has been generated.',
+      backgroundColor: AppColors.primary,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 5),
+    );
   }
 }
 

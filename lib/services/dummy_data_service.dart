@@ -162,4 +162,9 @@ class DummyDataService {
   static List<Course> getCoursesByCategory(String categoryId) {
     return courses.where((course) => course.categoryId == categoryId).toList();
   }
+
+  static bool isCourseCompleted(String courseId) {
+    final course = getCourseById(courseId);
+    return course.lessons.every((lesson) => lesson.isCompleted);
+  }
 }

@@ -109,36 +109,29 @@ class _LessonScreenState extends State<LessonScreen> {
     }
   }
 
-  void _markLessonAsCompleted() {
+  void _markLessonAsCompleted() async {
     final courseId = Get.parameters['courseId'];
     if (courseId != null) {
       final course = DummyDataService.getCourseById(courseId);
-      final lessonIndex = course.lessons.indexWhere((l) => l.id == widget.lessonId);
-      
+      final lessonIndex =
+          course.lessons.indexWhere((l) => l.id == widget.lessonId);
+
       if (lessonIndex != -1) {
-        // Update the lesson completion status
         course.lessons[lessonIndex] = course.lessons[lessonIndex].copyWith(
           isCompleted: true,
         );
 
-        // Check if this is the last lesson
         final isLastLesson = lessonIndex == course.lessons.length - 1;
+        final allLessonsCompleted =
+            DummyDataService.isCourseCompleted(courseId);
 
-        // Go back to course details
         Get.offNamed(
           AppRoutes.courseDetail.replaceAll(':id', courseId),
           arguments: courseId,
         );
-        
-        // Show appropriate completion message
-        if (isLastLesson) {
-          Get.snackbar(
-            'Course Completed! 🎉',
-            'Congratulations! You\'ve completed the course. You can now get your certificate.',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-            duration: const Duration(seconds: 5),
-          );
+
+        if (isLastLesson && allLessonsCompleted) {
+          _showCertificateDialog(context, course);
         } else {
           Get.snackbar(
             'Lesson Completed!',
@@ -149,6 +142,95 @@ class _LessonScreenState extends State<LessonScreen> {
         }
       }
     }
+  }
+
+  void _showCertificateDialog(BuildContext context, Course course) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Congratulations! 🎉'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.workspace_premium,
+                size: 64,
+                color: AppColors.primary,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'You have completed all lessons in "${course.title}"',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'You can now download your certificate of completion!',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.secondary),
+              ),
+            ],
+          ),
+          actions: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                    ),
+                    onPressed: () => Get.back(),
+                    child: const Text(
+                      'Later',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 12),
+                      backgroundColor: AppColors.primary,
+                    ),
+                    onPressed: () {
+                      Get.back();
+                      _downloadCertificate(course);
+                    },
+                    child: const Text(
+                      'Get Certificate',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _downloadCertificate(Course course) {
+    // Here you would implement the actual certificate generation and download
+    // For now, we'll just show a success message
+    Get.snackbar(
+      'Certificate Ready!',
+      'Your certificate for ${course.title} has been generated.',
+      backgroundColor: AppColors.primary,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 5),
+    );
   }
 
   @override
@@ -162,7 +244,8 @@ class _LessonScreenState extends State<LessonScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final courseId = Get.parameters['courseId'];
-    final course = courseId != null ? DummyDataService.getCourseById(courseId) : null;
+    final course =
+        courseId != null ? DummyDataService.getCourseById(courseId) : null;
     final lesson = course?.lessons.firstWhere(
       (l) => l.id == widget.lessonId,
       orElse: () => course.lessons.first,
@@ -266,9 +349,10 @@ class _LessonScreenState extends State<LessonScreen> {
     }
   }
 
-  Widget _buildNavigationBar(BuildContext context, Course? course, Lesson? lesson) {
+  Widget _buildNavigationBar(
+      BuildContext context, Course? course, Lesson? lesson) {
     if (course == null || lesson == null) return const SizedBox.shrink();
-    
+
     final lessonIndex = course.lessons.indexOf(lesson);
     final hasPrevious = lessonIndex > 0;
     final hasNext = lessonIndex < course.lessons.length - 1;
@@ -291,9 +375,10 @@ class _LessonScreenState extends State<LessonScreen> {
           TextButton.icon(
             onPressed: hasPrevious
                 ? () => Get.toNamed(
-                    AppRoutes.lesson.replaceAll(':id', course.lessons[lessonIndex - 1].id),
-                    parameters: {'courseId': course.id},
-                  )
+                      AppRoutes.lesson.replaceAll(
+                          ':id', course.lessons[lessonIndex - 1].id),
+                      parameters: {'courseId': course.id},
+                    )
                 : null,
             icon: const Icon(Icons.arrow_back),
             label: const Text('Previous'),
@@ -301,9 +386,10 @@ class _LessonScreenState extends State<LessonScreen> {
           TextButton.icon(
             onPressed: hasNext
                 ? () => Get.toNamed(
-                    AppRoutes.lesson.replaceAll(':id', course.lessons[lessonIndex + 1].id),
-                    parameters: {'courseId': course.id},
-                  )
+                      AppRoutes.lesson.replaceAll(
+                          ':id', course.lessons[lessonIndex + 1].id),
+                      parameters: {'courseId': course.id},
+                    )
                 : null,
             icon: const Icon(Icons.arrow_forward),
             label: const Text('Next'),
