@@ -1,6 +1,9 @@
+import 'package:e_learning_app/models/question.dart';
+import 'package:e_learning_app/models/quiz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 
 class QuizAttemptScreen extends StatefulWidget {
   final String quizId;
@@ -10,14 +13,16 @@ class QuizAttemptScreen extends StatefulWidget {
   State<QuizAttemptScreen> createState() => _QuizAttemptScreenState();
 }
 
+
 class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
+  late final Quiz quiz;
   late final PageController _pageController;
   int _currentPage = 0;
-  final int _totalPages = 10;
 
   @override
   void initState() {
     super.initState();
+    quiz = DummyDataService.getQuizById(widget.quizId);
     _pageController = PageController();
     _pageController.addListener(_onPageChanged);
   }
@@ -104,10 +109,11 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
       body: PageView.builder(
         controller: _pageController,
         physics: const BouncingScrollPhysics(),
-        itemCount: _totalPages,
+        itemCount: quiz.questions.length,
         itemBuilder: (context, index) => _QuestionPage(
           questionNumber: index + 1,
-          totalQuestions: _totalPages,
+          totalQuestions: quiz.questions.length,
+          question: quiz.questions[index],
         ),
       ),
       bottomNavigationBar: Container(
@@ -136,7 +142,7 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
               theme,
               Icons.arrow_forward_rounded,
               'Next',
-              _currentPage < _totalPages - 1
+              _currentPage < quiz.questions.length - 1
                   ? () => _navigateToPage(_currentPage + 1)
                   : null,
               isNext: true,
@@ -229,10 +235,12 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
 class _QuestionPage extends StatelessWidget {
   final int questionNumber;
   final int totalQuestions;
+  final Question question;
 
   const _QuestionPage({
     required this.questionNumber,
     required this.totalQuestions,
+    required this.question,
   });
 
   @override
@@ -261,17 +269,18 @@ class _QuestionPage extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'What is the main advantage of using Flutter for mobile app development?',
+            question.text,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.primary,
             ),
           ),
           const SizedBox(height: 32),
-          _buildOptionTile(context, 'A', 'Cross-platform development'),
-          _buildOptionTile(context, 'B', 'Native performance'),
-          _buildOptionTile(context, 'C', 'Hot reload feature'),
-          _buildOptionTile(context, 'D', 'Rich widget library'),
+          ...question.options.map((option) => _buildOptionTile(
+                context,
+                option.id,
+                option.text,
+              )),
         ],
       ),
     );

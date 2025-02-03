@@ -1,4 +1,5 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
@@ -43,17 +44,20 @@ class QuizListScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => _QuizCard(
-                  title: 'Flutter Basics Quiz ${index + 1}',
-                  description: 'Test your knowledge on Flutter fundamentals',
-                  questionCount: 10,
-                  timeLimit: 30,
-                  onTap: () => Get.toNamed(
-                    '/quiz/${index.toString()}',
-                    parameters: {'id': index.toString()},
-                  ),
-                ),
-                childCount: 5,
+                (context, index) {
+                  final quiz = DummyDataService.quizzes[index];
+                  return _QuizCard(
+                    title: quiz.title,
+                    description: quiz.description,
+                    questionCount: quiz.questions.length,
+                    timeLimit: quiz.timeLimit,
+                    onTap: () => Get.toNamed(
+                      '/quiz/${quiz.id}',
+                      parameters: {'id': quiz.id},
+                    ),
+                  );
+                },
+                childCount: DummyDataService.quizzes.length,
               ),
             ),
           ),

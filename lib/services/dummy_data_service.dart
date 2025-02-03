@@ -1,5 +1,8 @@
 import 'package:e_learning_app/models/course.dart';
 import 'package:e_learning_app/models/lesson.dart';
+import 'package:e_learning_app/models/quiz.dart';
+import 'package:e_learning_app/models/question.dart';
+
 
 
 class DummyDataService {
@@ -90,6 +93,36 @@ class DummyDataService {
     ),
   ];
 
+  static final List<Quiz> quizzes = [
+    Quiz(
+      id: '1',
+      title: 'Flutter Basics Quiz',
+      description: 'Test your knowledge of Flutter fundamentals',
+      timeLimit: 30,
+      questions: _createFlutterQuizQuestions(),
+      createdAt: DateTime.now().subtract(const Duration(days: 5)),
+      isActive: true,
+    ),
+    Quiz(
+      id: '2',
+      title: 'Dart Programming Quiz',
+      description: 'Check your understanding of Dart programming concepts',
+      timeLimit: 25,
+      questions: _createDartQuizQuestions(),
+      createdAt: DateTime.now().subtract(const Duration(days: 3)),
+      isActive: true,
+    ),
+    Quiz(
+      id: '3',
+      title: 'State Management Quiz',
+      description: 'Test your knowledge of Flutter state management',
+      timeLimit: 20,
+      questions: _createStateManagementQuizQuestions(),
+      createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      isActive: true,
+    ),
+  ];
+
   static List<Lesson> _createFlutterLessons() {
     return [
       _createLesson('1', 'Introduction to Flutter', true, true),
@@ -166,5 +199,78 @@ class DummyDataService {
   static bool isCourseCompleted(String courseId) {
     final course = getCourseById(courseId);
     return course.lessons.every((lesson) => lesson.isCompleted);
+  }
+
+  static List<Question> _createFlutterQuizQuestions() {
+    return [
+      Question(
+        id: '1',
+        text: 'What is Flutter?',
+        options: [
+          Option(id: 'a', text: 'A UI framework for building native apps'),
+          Option(id: 'b', text: 'A programming language'),
+          Option(id: 'c', text: 'A database management system'),
+          Option(id: 'd', text: 'A design tool'),
+        ],
+        correctOptionId: 'a',
+        points: 1,
+      ),
+      Question(
+        id: '2',
+        text: 'Which programming language is used in Flutter?',
+        options: [
+          Option(id: 'a', text: 'Java'),
+          Option(id: 'b', text: 'Kotlin'),
+          Option(id: 'c', text: 'Dart'),
+          Option(id: 'd', text: 'Swift'),
+        ],
+        correctOptionId: 'c',
+        points: 1,
+      ),
+      // Add more questions as needed
+    ];
+  }
+
+  static List<Question> _createDartQuizQuestions() {
+    return [
+      Question(
+        id: '1',
+        text: 'What is Dart?',
+        options: [
+          Option(id: 'a', text: 'A markup language'),
+          Option(id: 'b', text: 'An object-oriented programming language'),
+          Option(id: 'c', text: 'A database'),
+          Option(id: 'd', text: 'A web browser'),
+        ],
+        correctOptionId: 'b',
+        points: 1,
+      ),
+      // Add more questions
+    ];
+  }
+
+  static List<Question> _createStateManagementQuizQuestions() {
+    return [
+      Question(
+        id: '1',
+        text: 'What is state management in Flutter?',
+        options: [
+          Option(id: 'a', text: 'Managing app data and UI updates'),
+          Option(id: 'b', text: 'Managing device storage'),
+          Option(id: 'c', text: 'Managing user authentication'),
+          Option(id: 'd', text: 'Managing network requests'),
+        ],
+        correctOptionId: 'a',
+        points: 1,
+      ),
+      // Add more questions
+    ];
+  }
+
+  static Quiz getQuizById(String id) {
+    return quizzes.firstWhere(
+      (quiz) => quiz.id == id,
+      orElse: () => quizzes.first,
+    );
   }
 }
