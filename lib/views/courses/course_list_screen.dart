@@ -1,5 +1,6 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -78,93 +79,56 @@ class CourseListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final activeCategoryId = categoryId ?? Get.parameters['category'];
-    final activeCategoryName = categoryName ?? Get.parameters['categoryName'];
+    final courses = categoryId != null
+        ? DummyDataService.getCoursesByCategory(categoryId!)
+        : DummyDataService.courses;
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 200,
-            pinned: true,
-            backgroundColor: AppColors.primary,
-            leading: activeCategoryId != null
-                ? IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Get.back(),
-                  )
-                : null,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.only(
-                left: activeCategoryId != null ? 56 : 16,
-                right: 16,
-                bottom: 16,
-              ),
-              title: Text(
-                activeCategoryId != null
-                    ? activeCategoryName ?? 'Category Courses'
-                    : 'Explore Courses',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 0.75,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => _CourseCard(
-                  title: 'Course ${index + 1}',
-                  subtitle: 'Intermediate Level',
-                  imageUrl: 'https://picsum.photos/200/300?random=$index',
-                  onTap: () => Get.toNamed(
-                    AppRoutes.courseDetail.replaceAll(':id', index.toString()),
-                    arguments: index.toString(),
-                  ),
-                ),
-                childCount: 10,
-              ),
-            ),
+      appBar: AppBar(
+        title: Text(categoryName ?? 'All Courses'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: () => _showFilterDialog(context),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showFilterDialog(context),
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.filter_list, color: Colors.white),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: courses.length,
+        itemBuilder: (context, index) {
+          final course = courses[index];
+          return _CourseCard(
+            imageUrl: course.imageUrl,
+            title: course.title,
+            subtitle: course.description,
+            rating: course.rating,
+            duration: '${course.lessons.length * 30} mins',
+            onTap: () => Get.toNamed(
+              AppRoutes.courseDetail.replaceAll(':id', course.id),
+              arguments: course.id,
+            ),
+          );
+        },
       ),
     );
   }
 }
 
 class _CourseCard extends StatelessWidget {
+  final String imageUrl;
   final String title;
   final String subtitle;
-  final String imageUrl;
+  final double rating;
+  final String duration;
   final VoidCallback onTap;
 
   const _CourseCard({
+    required this.imageUrl,
     required this.title,
     required this.subtitle,
-    required this.imageUrl,
+    required this.rating,
+    required this.duration,
     required this.onTap,
   });
 
@@ -246,7 +210,7 @@ class _CourseCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '4.5',
+                          rating.toString(),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: AppColors.secondary,
                           ),
@@ -259,7 +223,7 @@ class _CourseCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '2h 30m',
+                          duration,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: AppColors.secondary,
                           ),
