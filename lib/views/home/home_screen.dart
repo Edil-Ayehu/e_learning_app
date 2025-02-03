@@ -10,6 +10,7 @@ import 'package:e_learning_app/blocs/navigation/navigation_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:e_learning_app/models/category.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -106,7 +107,6 @@ class HomeScreen extends StatelessWidget {
           pinned: true,
           backgroundColor: AppColors.primary,
           actions: [
-
             IconButton(
               icon: const Icon(Icons.analytics, color: Colors.white),
               onPressed: () => Get.toNamed(AppRoutes.analytics),
@@ -404,6 +404,8 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildRecommendedSection(ThemeData theme) {
+    final courses = DummyDataService.courses;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -427,9 +429,17 @@ class HomeScreen extends StatelessWidget {
           height: 200,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 5,
+            itemCount: courses.length,
             itemBuilder: (context, index) {
-              return _buildRecommendedCourseCard(context, index);
+              final course = courses[index];
+              return _buildRecommendedCourseCard(
+                context,
+                course.id,
+                course.title,
+                course.imageUrl,
+                course.instructorId,
+                '${course.lessons.length * 30} mins',
+              );
             },
           ),
         ),
@@ -437,7 +447,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecommendedCourseCard(BuildContext context, int index) {
+  Widget _buildRecommendedCourseCard(
+    BuildContext context,
+    String courseId,
+    String title,
+    String imageUrl,
+    String instructorId,
+    String duration,
+  ) {
     return Container(
       width: 160,
       margin: const EdgeInsets.only(right: 16, bottom: 5),
@@ -457,11 +474,8 @@ class HomeScreen extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () => Get.toNamed(
-            '/course/course_$index',
-            parameters: {
-              'id': 'course_$index',
-            },
-            preventDuplicates: false,
+            AppRoutes.courseDetail.replaceAll(':id', courseId),
+            arguments: courseId,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,7 +485,7 @@ class HomeScreen extends StatelessWidget {
                   top: Radius.circular(16),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: 'https://picsum.photos/160/90?random=$index',
+                  imageUrl: imageUrl,
                   height: 90,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -496,7 +510,7 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Course ${index + 1}',
+                      title,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
@@ -514,7 +528,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'John Doe',
+                          'Instructor $instructorId',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: AppColors.secondary,
@@ -532,7 +546,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '2h 30m',
+                          duration,
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: AppColors.secondary,
