@@ -93,6 +93,13 @@ class CourseListScreen extends StatelessWidget {
             expandedHeight: 200,
             pinned: true,
             backgroundColor: AppColors.primary,
+            automaticallyImplyLeading: categoryId != null,
+            leading: categoryId != null
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back, color: AppColors.accent),
+                    onPressed: () => Get.back(),
+                  )
+                : null,
             actions: [
               IconButton(
                 icon: const Icon(Icons.filter_list, color: AppColors.accent),
