@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:e_learning_app/services/offline_course_service.dart';
-
+import 'package:e_learning_app/views/chat/chat_screen.dart';
 
 class CourseDetailScreen extends StatelessWidget {
   final String courseId;
@@ -134,6 +134,8 @@ class CourseDetailScreen extends StatelessWidget {
                   _buildLessonsList(context, isUnlocked),
                   const SizedBox(height: 24),
                   _buildReviewsSection(context),
+                  const SizedBox(height: 16),
+                  _buildActionButtons(course),
                 ],
               ),
             ),
@@ -559,6 +561,32 @@ class CourseDetailScreen extends StatelessWidget {
       backgroundColor: AppColors.primary,
       colorText: Colors.white,
       duration: const Duration(seconds: 5),
+    );
+  }
+
+  Widget _buildActionButtons(Course course) {
+    return Row(
+      children: [
+        Expanded(
+          child: ElevatedButton.icon(
+            onPressed: () => Get.toNamed(
+                AppRoutes.lesson.replaceAll(':id', course.lessons.first.id),
+                parameters: {
+                  'courseId': course.id,
+                }),
+            icon: const Icon(Icons.play_circle),
+            label: const Text('Start Learning'),
+          ),
+        ),
+        const SizedBox(width: 16),
+        IconButton(
+          icon: const Icon(Icons.chat),
+          onPressed: () => Get.to(() => ChatScreen(
+                courseId: course.id,
+                instructorId: course.instructorId,
+              )),
+        ),
+      ],
     );
   }
 }

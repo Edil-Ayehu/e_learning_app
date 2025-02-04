@@ -1,3 +1,4 @@
+import 'package:e_learning_app/models/chat_message.dart';
 import 'package:e_learning_app/models/course.dart';
 import 'package:e_learning_app/models/lesson.dart';
 import 'package:e_learning_app/models/quiz.dart';
@@ -577,6 +578,16 @@ class DummyDataService {
     return studentProgress[instructorId]?.where(
       (progress) => courseIds.contains(progress.courseId)
     ).toList() ?? [];
+  }
+
+    static Stream<List<ChatMessage>> getChatMessages(String courseId) {
+    // Implement real-time chat messages stream
+    return Stream.value([]);
+  }
+
+  static Stream<List<ChatMessage>> getTeacherChats(String instructorId) {
+    // Implement teacher's chat list stream
+    return Stream.value([]);
   }
 }
 

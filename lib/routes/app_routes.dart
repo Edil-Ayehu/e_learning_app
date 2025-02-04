@@ -1,6 +1,7 @@
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
+import 'package:e_learning_app/views/chat/chat_list_screen.dart';
 import 'package:e_learning_app/views/courses/analytics_dashboard_screen.dart';
 import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
@@ -60,6 +61,7 @@ static const String myCourses = '/teacher/courses';
 static const String createCourse = '/teacher/courses/create';
 static const String teacherAnalytics = '/teacher/analytics';
 static const String studentProgress = '/teacher/students';
+static const String teacherChats = '/teacher/chats';
 
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
@@ -180,6 +182,10 @@ static const String studentProgress = '/teacher/students';
            case studentProgress:
         return MaterialPageRoute(
           builder: (_) => const StudentProgressScreen(),
+        );
+         case teacherChats:
+        return MaterialPageRoute(
+          builder: (_) => const ChatListScreen(),
         );
       default:
         return MaterialPageRoute(

@@ -68,6 +68,11 @@ class TeacherHomeScreen extends StatelessWidget {
                   Icons.people,
                   () => Get.toNamed(AppRoutes.studentProgress),
                 ),
+                _buildDashboardCard(
+  'Messages',
+  Icons.chat,
+  () => Get.toNamed(AppRoutes.teacherChats),
+),
               ]),
             ),
           ),
