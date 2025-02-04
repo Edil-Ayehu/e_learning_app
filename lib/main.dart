@@ -26,6 +26,8 @@ import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:e_learning_app/views/teacher/create_course_screen.dart';
 import 'package:e_learning_app/views/teacher/my_courses_screen.dart';
+import 'package:e_learning_app/views/teacher/student_progress_screen.dart';
+import 'package:e_learning_app/views/teacher/teacher_analytics_screen.dart';
 import 'package:e_learning_app/views/teacher/teacher_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -180,6 +182,14 @@ class MyApp extends StatelessWidget {
               GetPage(
                 name: AppRoutes.createCourse,
                 page: () => const CreateCourseScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.teacherAnalytics,
+                page: () => const TeacherAnalyticsScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.studentProgress,
+                page: () => const StudentProgressScreen(),
               ),
             ],
           );

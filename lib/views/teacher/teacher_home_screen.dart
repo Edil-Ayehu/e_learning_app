@@ -55,12 +55,12 @@ class TeacherHomeScreen extends StatelessWidget {
                 _buildDashboardCard(
                   'Analytics',
                   Icons.analytics,
-                  () {},
+                  () => Get.toNamed(AppRoutes.teacherAnalytics),
                 ),
                 _buildDashboardCard(
                   'Student Progress',
                   Icons.people,
-                  () {},
+                  () => Get.toNamed(AppRoutes.studentProgress),
                 ),
               ]),
             ),

@@ -20,6 +20,8 @@ import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
 import 'package:e_learning_app/views/teacher/create_course_screen.dart';
 import 'package:e_learning_app/views/teacher/my_courses_screen.dart';
+import 'package:e_learning_app/views/teacher/student_progress_screen.dart';
+import 'package:e_learning_app/views/teacher/teacher_analytics_screen.dart';
 import 'package:e_learning_app/views/teacher/teacher_home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -54,9 +56,10 @@ class AppRoutes {
   static const String termsConditions = '/terms-conditions';
 
   static const String teacherHome = '/teacher/home';
-static const String studentProgress = '/teacher/students';
 static const String myCourses = '/teacher/courses';
 static const String createCourse = '/teacher/courses/create';
+static const String teacherAnalytics = '/teacher/analytics';
+static const String studentProgress = '/teacher/students';
 
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
@@ -169,6 +172,14 @@ static const String createCourse = '/teacher/courses/create';
          case createCourse:
         return MaterialPageRoute(
           builder: (_) => const CreateCourseScreen(),
+        );
+           case teacherAnalytics:
+        return MaterialPageRoute(
+          builder: (_) => const TeacherAnalyticsScreen(),
+        );
+           case studentProgress:
+        return MaterialPageRoute(
+          builder: (_) => const StudentProgressScreen(),
         );
       default:
         return MaterialPageRoute(
