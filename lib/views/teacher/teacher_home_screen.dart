@@ -16,6 +16,12 @@ class TeacherHomeScreen extends StatelessWidget {
             expandedHeight: 200,
             pinned: true,
             backgroundColor: AppColors.primary,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout, color: AppColors.accent),
+                onPressed: () => _showLogoutDialog(context),
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: const Text(
                 'Teacher Dashboard',
@@ -66,6 +72,64 @@ class TeacherHomeScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor:
+            isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        title: Text(
+          'Logout',
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: AppColors.error,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to logout?',
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: isDark ? AppColors.accent : AppColors.secondary,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Get.offAllNamed(AppRoutes.login);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              foregroundColor: AppColors.accent,
+            ),
+            child: Text(
+              'Logout',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: AppColors.accent,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
       ),
     );
   }
