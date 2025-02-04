@@ -24,6 +24,8 @@ import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
+import 'package:e_learning_app/views/teacher/create_course_screen.dart';
+import 'package:e_learning_app/views/teacher/my_courses_screen.dart';
 import 'package:e_learning_app/views/teacher/teacher_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -109,43 +111,43 @@ class MyApp extends StatelessWidget {
                 page: () => AnalyticsDashboardScreen(),
               ),
               GetPage(
-  name: AppRoutes.profile,
-  page: () => const ProfileScreen(),
-),
-GetPage(
-  name: AppRoutes.editProfile,
-  page: () => const EditProfileScreen(),
-),
-GetPage(
-  name: AppRoutes.notifications,
-  page: () => const NotificationsScreen(),
-),
-GetPage(
-  name: AppRoutes.settings,
-  page: () => const SettingsScreen(),
-),
-GetPage(
-  name: AppRoutes.helpSupport,
-  page: () => const HelpSupportScreen(),
-),
-GetPage(
-  name: AppRoutes.privacyPolicy,
-  page: () => const PrivacyPolicyScreen(),
-),
-GetPage(
-  name: AppRoutes.termsConditions,
-  page: () => const TermsConditionsScreen(),
-),
-GetPage(
-  name: AppRoutes.quizList,
-  page: () => const QuizListScreen(),
-),
-GetPage(
-  name: '/quiz/:id',
-  page: () => QuizAttemptScreen(
-    quizId: Get.parameters['id'] ?? '',
-  ),
-),
+                name: AppRoutes.profile,
+                page: () => const ProfileScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.editProfile,
+                page: () => const EditProfileScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.notifications,
+                page: () => const NotificationsScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.settings,
+                page: () => const SettingsScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.helpSupport,
+                page: () => const HelpSupportScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.privacyPolicy,
+                page: () => const PrivacyPolicyScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.termsConditions,
+                page: () => const TermsConditionsScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.quizList,
+                page: () => const QuizListScreen(),
+              ),
+              GetPage(
+                name: '/quiz/:id',
+                page: () => QuizAttemptScreen(
+                  quizId: Get.parameters['id'] ?? '',
+                ),
+              ),
               GetPage(
                 name: '/course/:id',
                 page: () => CourseDetailScreen(
@@ -167,9 +169,17 @@ GetPage(
                 ),
                 // transition: Transition.rightToLeft,
               ),
-                            GetPage(
+              GetPage(
                 name: AppRoutes.teacherHome,
                 page: () => const TeacherHomeScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.myCourses,
+                page: () => const MyCoursesScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.createCourse,
+                page: () => const CreateCourseScreen(),
               ),
             ],
           );

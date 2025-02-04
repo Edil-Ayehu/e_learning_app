@@ -17,7 +17,7 @@ class TeacherHomeScreen extends StatelessWidget {
             pinned: true,
             backgroundColor: AppColors.primary,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
+              title: const Text(
                 'Teacher Dashboard',
                 style: TextStyle(color: AppColors.accent),
               ),
@@ -45,7 +45,7 @@ class TeacherHomeScreen extends StatelessWidget {
                 _buildDashboardCard(
                   'My Courses',
                   Icons.book,
-                  () => Get.toNamed(AppRoutes.courseList),
+                  () => Get.toNamed(AppRoutes.myCourses),
                 ),
                 _buildDashboardCard(
                   'Create Course',
@@ -55,12 +55,12 @@ class TeacherHomeScreen extends StatelessWidget {
                 _buildDashboardCard(
                   'Analytics',
                   Icons.analytics,
-                  () => Get.toNamed(AppRoutes.analytics),
+                  () {},
                 ),
                 _buildDashboardCard(
                   'Student Progress',
                   Icons.people,
-                  () => Get.toNamed(AppRoutes.studentProgress),
+                  () {},
                 ),
               ]),
             ),
