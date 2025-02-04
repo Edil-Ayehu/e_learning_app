@@ -2,6 +2,7 @@ import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 
+
 class StudentProgressScreen extends StatelessWidget {
   const StudentProgressScreen({super.key});
 
@@ -206,10 +207,8 @@ class StudentProgressScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       itemCount: engagement.courseCompletionRates.length,
       itemBuilder: (context, index) {
-        final courseName =
-            engagement.courseCompletionRates.keys.elementAt(index);
-        final completionRate =
-            engagement.courseCompletionRates[courseName] ?? 0.0;
+        final courseName = engagement.courseCompletionRates.keys.elementAt(index);
+        final completionRate = engagement.courseCompletionRates[courseName] ?? 0.0;
         return _buildPerformanceCard(
           courseName: courseName,
           completionRate: completionRate,

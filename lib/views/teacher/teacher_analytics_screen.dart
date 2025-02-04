@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 
+
 class TeacherAnalyticsScreen extends StatelessWidget {
   const TeacherAnalyticsScreen({super.key});
 
@@ -259,8 +260,11 @@ class TeacherAnalyticsScreen extends StatelessWidget {
   }
 
   Widget _buildStudentEngagement() {
+    final stats = DummyDataService.getTeacherStats('inst_1');
+    final engagement = stats.studentEngagement;
+    
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -285,19 +289,19 @@ class TeacherAnalyticsScreen extends StatelessWidget {
           const SizedBox(height: 24),
           _buildEngagementMetric(
             'Average Completion Rate',
-            '78%',
+            '${(engagement.averageCompletionRate * 100).toInt()}%',
             Icons.school,
           ),
           const Divider(height: 32),
           _buildEngagementMetric(
             'Average Time per Lesson',
-            '45 mins',
+            '${engagement.averageTimePerLesson} mins',
             Icons.timer,
           ),
           const Divider(height: 32),
           _buildEngagementMetric(
             'Active Students this Week',
-            '156',
+            engagement.activeStudentsThisWeek.toString(),
             Icons.people,
           ),
         ],

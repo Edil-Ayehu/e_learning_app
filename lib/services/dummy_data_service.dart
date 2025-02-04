@@ -4,7 +4,6 @@ import 'package:e_learning_app/models/quiz.dart';
 import 'package:e_learning_app/models/question.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
 
-
 class DummyDataService {
   static final List<Course> courses = [
     Course(
@@ -398,6 +397,10 @@ class DummyDataService {
     return courses.where((course) => course.categoryId == categoryId).toList();
   }
 
+    static List<Course> getInstructorCourses(String instructorId) {
+    return courses.where((course) => course.instructorId == instructorId).toList();
+  }
+
   static bool isCourseCompleted(String courseId) {
     final course = getCourseById(courseId);
     return course.lessons.every((lesson) => lesson.isCompleted);
@@ -550,11 +553,30 @@ class DummyDataService {
 
   // Helper methods to get teacher-specific data
   static TeacherStats getTeacherStats(String instructorId) {
-    return teacherStats[instructorId] ?? TeacherStats.empty();
+    final instructorCourses = getInstructorCourses(instructorId);
+    final stats = teacherStats[instructorId] ?? TeacherStats.empty();
+    
+    // Calculate stats based on instructor's courses only
+    return TeacherStats(
+      totalStudents: instructorCourses.fold(0, (sum, course) => sum + course.enrollmentCount),
+      activeCourses: instructorCourses.length,
+      totalRevenue: instructorCourses.fold(0.0, (sum, course) => sum + (course.price * course.enrollmentCount)),
+      averageRating: instructorCourses.isEmpty ? 0.0 : 
+        instructorCourses.fold(0.0, (sum, course) => sum + course.rating) / instructorCourses.length,
+      monthlyEnrollments: stats.monthlyEnrollments,
+      monthlyRevenue: stats.monthlyRevenue,
+      studentEngagement: stats.studentEngagement,
+    );
   }
 
   static List<StudentProgress> getStudentProgress(String instructorId) {
-    return studentProgress[instructorId] ?? [];
+    final instructorCourses = getInstructorCourses(instructorId);
+    final courseIds = instructorCourses.map((c) => c.id).toSet();
+    
+    // Filter student progress for instructor's courses only
+    return studentProgress[instructorId]?.where(
+      (progress) => courseIds.contains(progress.courseId)
+    ).toList() ?? [];
   }
 }
 

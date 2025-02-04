@@ -12,13 +12,7 @@ class MyCoursesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Filter courses by instructor ID (you'll need to implement this)
-    final teacherCourses = DummyDataService.courses
-        .where(
-          (course) =>
-              course.instructorId == 'inst_1', // Replace with actual teacher ID
-        )
-        .toList();
+    final teacherCourses = DummyDataService.getInstructorCourses('inst_1'); // Replace with actual instructor ID
 
     return Scaffold(
       appBar: AppBar(
