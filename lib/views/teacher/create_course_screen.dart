@@ -19,21 +19,28 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
+        elevation: 0,
         title: const Text('Create New Course'),
+        actions: [
+          TextButton(
+            onPressed: _submitForm,
+            child: const Text('Create'),
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
           children: [
             _buildImagePicker(),
-            const SizedBox(height: 24),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Course Title',
-                border: OutlineInputBorder(),
-              ),
+            const SizedBox(height: 32),
+            _buildTextField(
+              'Course Title',
+              'Enter course title',
+              maxLines: 1,
               validator: (value) {
                 if (value?.isEmpty ?? true) {
                   return 'Please enter a title';
@@ -41,12 +48,10 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
-              ),
+            const SizedBox(height: 24),
+            _buildTextField(
+              'Description',
+              'Enter course description',
               maxLines: 3,
               validator: (value) {
                 if (value?.isEmpty ?? true) {
@@ -55,71 +60,44 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Price',
-                border: OutlineInputBorder(),
-                prefixText: '\$',
-              ),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value?.isEmpty ?? true) {
-                  return 'Please enter a price';
-                }
-                return null;
-              },
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildTextField(
+                    'Price',
+                    'Enter price',
+                    prefixText: '\$',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Required';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildDropdown(),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              decoration: const InputDecoration(
-                labelText: 'Level',
-                border: OutlineInputBorder(),
-              ),
-              value: _selectedLevel,
-              items: ['Beginner', 'Intermediate', 'Advanced']
-                  .map((level) => DropdownMenuItem(
-                        value: level,
-                        child: Text(level),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedLevel = value!;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            SwitchListTile(
-              title: const Text('Premium Course'),
-              value: _isPremium,
-              onChanged: (value) {
-                setState(() {
-                  _isPremium = value;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
+            _buildPremiumSwitch(),
+            const SizedBox(height: 32),
             _buildDynamicList(
-              'Requirements',
+              'Course Requirements',
               _requirements,
               (index) => _requirements.removeAt(index),
               () => _requirements.add(''),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 32),
             _buildDynamicList(
               'What You Will Learn',
               _learningPoints,
               (index) => _learningPoints.removeAt(index),
               () => _learningPoints.add(''),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _submitForm,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: const Text('Create Course'),
             ),
           ],
         ),
@@ -145,6 +123,133 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     );
   }
 
+  Widget _buildTextField(
+    String label,
+    String hint, {
+    int maxLines = 1,
+    String? prefixText,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          decoration: InputDecoration(
+            hintText: hint,
+            prefixText: prefixText,
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey[300]!),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey[300]!),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red, width: 2),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red, width: 2),
+            ),
+          ),
+          maxLines: maxLines,
+          keyboardType: keyboardType,
+          validator: validator,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Level',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: _selectedLevel,
+              isExpanded: true,
+              items: ['Beginner', 'Intermediate', 'Advanced']
+                  .map((level) => DropdownMenuItem(
+                        value: level,
+                        child: Text(level),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedLevel = value!;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPremiumSwitch() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Premium Course',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Switch(
+            value: _isPremium,
+            onChanged: (value) {
+              setState(() {
+                _isPremium = value;
+              });
+            },
+            activeColor: AppColors.primary,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDynamicList(
     String title,
     List<String> items,
@@ -156,7 +261,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
+          ),
         ),
         const SizedBox(height: 8),
         ListView.builder(
@@ -164,26 +273,45 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
           itemBuilder: (context, index) {
-            return Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'Enter $title',
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Enter $title',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                              color: AppColors.primary, width: 2),
+                        ),
+                      ),
+                      initialValue: items[index],
+                      onChanged: (value) => items[index] = value,
                     ),
-                    initialValue: items[index],
-                    onChanged: (value) => items[index] = value,
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.remove_circle_outline),
-                  onPressed: () {
-                    setState(() {
-                      onRemove(index);
-                    });
-                  },
-                ),
-              ],
+                  IconButton(
+                    icon: Icon(Icons.remove_circle_outline,
+                        color: Colors.grey[600]),
+                    onPressed: () {
+                      setState(() {
+                        onRemove(index);
+                      });
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -195,6 +323,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           },
           icon: const Icon(Icons.add),
           label: Text('Add $title'),
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.primary,
+          ),
         ),
       ],
     );
