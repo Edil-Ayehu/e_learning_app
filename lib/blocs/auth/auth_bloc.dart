@@ -69,6 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           fullName: event.fullName,
           createdAt: DateTime.now(),
           lastLoginAt: DateTime.now(),
+          role: event.role,
         );
 
         await _firestore

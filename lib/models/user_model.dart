@@ -7,6 +7,7 @@ class UserModel {
   final String? photoUrl;
   final DateTime createdAt;
   final DateTime lastLoginAt;
+  final UserRole role; 
 
   UserModel({
     required this.uid,
@@ -15,6 +16,7 @@ class UserModel {
     this.photoUrl,
     required this.createdAt,
     required this.lastLoginAt,
+    required this.role,
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -26,6 +28,10 @@ class UserModel {
       photoUrl: data['photoUrl'],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       lastLoginAt: (data['lastLoginAt'] as Timestamp).toDate(),
+      role: UserRole.values.firstWhere(
+        (e) => e.toString() == data['role'],
+        orElse: () => UserRole.student,
+      ),
     );
   }
 
@@ -36,6 +42,7 @@ class UserModel {
       'photoUrl': photoUrl,
       'createdAt': Timestamp.fromDate(createdAt),
       'lastLoginAt': Timestamp.fromDate(lastLoginAt),
+      'role': role.toString(),
     };
   }
 
@@ -47,6 +54,10 @@ class UserModel {
       photoUrl: json['photoUrl'],
       createdAt: DateTime.parse(json['createdAt']),
       lastLoginAt: DateTime.parse(json['lastLoginAt']),
+            role: UserRole.values.firstWhere(
+        (e) => e.toString() == json['role'],
+        orElse: () => UserRole.student,
+      ),
     );
   }
 
@@ -58,6 +69,12 @@ class UserModel {
       'photoUrl': photoUrl,
       'createdAt': createdAt.toIso8601String(),
       'lastLoginAt': lastLoginAt.toIso8601String(),
+      'role': role.toString(),
     };
   }
+}
+
+enum UserRole {
+  student,
+  teacher
 }

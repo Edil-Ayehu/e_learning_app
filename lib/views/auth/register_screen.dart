@@ -1,9 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:e_learning_app/models/user_model.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  UserRole? _selectedRole;
+
+  void _handleRegister() {
+    if (_selectedRole == null) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a role'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Navigate based on role
+    if (_selectedRole == UserRole.teacher) {
+      Get.offAllNamed(AppRoutes.teacherHome);
+    } else {
+      Get.offAllNamed(AppRoutes.home);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +161,32 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<UserRole>(
+                    decoration: InputDecoration(
+                      labelText: "Role",
+                      prefixIcon: const Icon(Icons.person_outline),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                    ),
+                    value: _selectedRole,
+                    items: UserRole.values.map((role) {
+                      return DropdownMenuItem(
+                        value: role,
+                        child: Text(role.toString().split('.').last.capitalize!),
+                      );
+                    }).toList(),
+                    onChanged: (UserRole? value) {
+                      setState(() {
+                        _selectedRole = value;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 30),
                   // Register Button
                   SizedBox(
@@ -145,7 +199,7 @@ class RegisterScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () => Get.offAllNamed(AppRoutes.home),
+                      onPressed: _handleRegister,
                       child: const Text(
                         "Register",
                         style: TextStyle(

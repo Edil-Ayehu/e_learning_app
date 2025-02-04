@@ -263,17 +263,30 @@ class CourseDetailScreen extends StatelessWidget {
           isCompleted: lesson.isCompleted,
           isLocked: isLocked,
           isUnlocked: isUnlocked,
-          onTap: isLocked
-              ? () => Get.snackbar(
-                    'Lesson Locked',
-                    'Please complete the previous lessons first',
-                    backgroundColor: Colors.red,
-                    colorText: Colors.white,
-                  )
-              : () => Get.toNamed(
-                    AppRoutes.lesson.replaceAll(':id', lesson.id),
-                    parameters: {'courseId': courseId},
-                  ),
+          onTap: () {
+            if (course.isPremium && !isUnlocked) {
+              Get.toNamed(
+                AppRoutes.payment,
+                arguments: {
+                  'courseId': courseId,
+                  'courseName': course.title,
+                  'price': course.price,
+                },
+              );
+            } else if (isLocked) {
+              Get.snackbar(
+                'Lesson Locked',
+                'Please complete the previous lessons first',
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
+            } else {
+              Get.toNamed(
+                AppRoutes.lesson.replaceAll(':id', lesson.id),
+                parameters: {'courseId': courseId},
+              );
+            }
+          },
         );
       },
     );

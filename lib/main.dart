@@ -24,6 +24,7 @@ import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
+import 'package:e_learning_app/views/teacher/teacher_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_learning_app/blocs/font/font_bloc.dart';
@@ -165,6 +166,10 @@ GetPage(
                   lessonId: Get.parameters['id'] ?? '',
                 ),
                 // transition: Transition.rightToLeft,
+              ),
+                            GetPage(
+                name: AppRoutes.teacherHome,
+                page: () => const TeacherHomeScreen(),
               ),
             ],
           );

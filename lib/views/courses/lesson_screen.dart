@@ -17,7 +17,7 @@ class LessonScreen extends StatefulWidget {
 }
 
 class _LessonScreenState extends State<LessonScreen> {
-  late VideoPlayerController _videoPlayerController;
+  VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
   bool _isLoading = true;
 
@@ -43,13 +43,10 @@ class _LessonScreenState extends State<LessonScreen> {
 
       // Check if course is premium and not purchased
       if (course.isPremium && !DummyDataService.isCourseUnlocked(courseId)) {
-        Get.snackbar(
-          'Premium Content',
-          'Please purchase this course to access its content',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-        Get.back();
+        setState(() => _isLoading = false); // Set loading to false before showing dialog
+        
+        Get.back(); // Go back to course detail screen
+        
         Get.toNamed(
           AppRoutes.payment,
           arguments: {
@@ -58,6 +55,7 @@ class _LessonScreenState extends State<LessonScreen> {
             'price': course.price,
           },
         );
+        
         return;
       }
 
@@ -66,66 +64,31 @@ class _LessonScreenState extends State<LessonScreen> {
         orElse: () => course.lessons.first,
       );
 
-      // Check if lesson is locked
-      final lessonIndex = course.lessons.indexOf(lesson);
-      final previousLessonsCompleted = course.lessons
-          .sublist(0, lessonIndex)
-          .every((lesson) => lesson.isCompleted);
+      // Initialize video only if the course is unlocked or not premium
+      _videoPlayerController = VideoPlayerController.network(lesson.videoStreamUrl);
+      await _videoPlayerController?.initialize();
 
-      if (!previousLessonsCompleted && !lesson.isPreview) {
-        Get.snackbar(
-          'Lesson Locked',
-          'Please complete the previous lessons first',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-        Get.back();
-        return;
-      }
-
-      print('Video URL: ${lesson.videoUrl}');
-
-      _videoPlayerController = VideoPlayerController.network(lesson.videoUrl);
-
-      // Initialize the video controller
-      await _videoPlayerController.initialize();
-
-      // Create and configure the Chewie Controller
       _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController
-          ..addListener(() {
-            if (_videoPlayerController.value.position >=
-                _videoPlayerController.value.duration) {
-              _markLessonAsCompleted();
-            }
-          }),
+        videoPlayerController: _videoPlayerController!,
         autoPlay: true,
         looping: false,
         aspectRatio: 16 / 9,
         errorBuilder: (context, errorMessage) {
           return Center(
             child: Text(
-              'Error: $errorMessage',
-              style: const TextStyle(color: Colors.white),
+              'Error: Unable to load video content',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Colors.red,
+                  ),
             ),
           );
         },
-        showControls: true,
-        allowFullScreen: true,
-        showOptions: false,
-        allowPlaybackSpeedChanging: false,
       );
 
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      setState(() => _isLoading = false);
     } catch (e) {
-      print('Error initializing video: $e');
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      debugPrint('Error initializing video: $e');
+      setState(() => _isLoading = false);
     }
   }
 
@@ -252,7 +215,7 @@ class _LessonScreenState extends State<LessonScreen> {
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
+    _videoPlayerController?.dispose();
     _chewieController?.dispose();
     super.dispose();
   }
@@ -261,9 +224,26 @@ class _LessonScreenState extends State<LessonScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final courseId = Get.parameters['courseId'];
-    final course =
-        courseId != null ? DummyDataService.getCourseById(courseId) : null;
-    final lesson = course?.lessons.firstWhere(
+    final course = courseId != null ? DummyDataService.getCourseById(courseId) : null;
+    final isUnlocked = courseId != null ? DummyDataService.isCourseUnlocked(courseId) : false;
+
+    if (course == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Course not found'),
+        ),
+      );
+    }
+
+    if (course.isPremium && !isUnlocked) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Please purchase this course to access the content'),
+        ),
+      );
+    }
+
+    final lesson = course.lessons.firstWhere(
       (l) => l.id == widget.lessonId,
       orElse: () => course.lessons.first,
     );

@@ -18,6 +18,7 @@ import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
+import 'package:e_learning_app/views/teacher/teacher_home_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -49,6 +50,10 @@ class AppRoutes {
   static const String analytics = '/analytics';
   static const String privacyPolicy = '/privacy-policy';
   static const String termsConditions = '/terms-conditions';
+
+  static const String teacherHome = '/teacher/home';
+static const String createCourse = '/teacher/course/create';
+static const String studentProgress = '/teacher/students';
 
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
@@ -129,6 +134,10 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const HelpSupportScreen(),
         );
+        case teacherHome:
+  return MaterialPageRoute(
+    builder: (_) => const TeacherHomeScreen(),
+  );
       case payment:
         final args = setting.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
