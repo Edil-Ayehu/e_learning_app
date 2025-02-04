@@ -580,15 +580,59 @@ class DummyDataService {
     ).toList() ?? [];
   }
 
-    static Stream<List<ChatMessage>> getChatMessages(String courseId) {
-    // Implement real-time chat messages stream
-    return Stream.value([]);
+  static Stream<List<ChatMessage>> getChatMessages(String courseId) {
+    return Stream.value(_dummyChats.values
+        .expand((messages) => messages)
+        .where((msg) => msg.courseId == courseId)
+        .toList());
   }
 
   static Stream<List<ChatMessage>> getTeacherChats(String instructorId) {
-    // Implement teacher's chat list stream
-    return Stream.value([]);
+    return Stream.value(_dummyChats[instructorId] ?? []);
   }
+
+  static Map<String, List<ChatMessage>> getTeacherChatsByCourse(String instructorId) {
+    final Map<String, List<ChatMessage>> chatsByCourse = {};
+    final messages = _dummyChats[instructorId] ?? [];
+    
+    for (var message in messages) {
+      if (!chatsByCourse.containsKey(message.courseId)) {
+        chatsByCourse[message.courseId] = [];
+      }
+      chatsByCourse[message.courseId]!.add(message);
+    }
+    
+    return chatsByCourse;
+  }
+
+  static final Map<String, List<ChatMessage>> _dummyChats = {
+    'inst_1': [
+      ChatMessage(
+        id: '1',
+        senderId: 'student_1',
+        receiverId: 'inst_1',
+        courseId: '1', // Flutter Development Bootcamp
+        message: 'Hi, I have a question about state management',
+        timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
+      ),
+      ChatMessage(
+        id: '2',
+        senderId: 'student_2',
+        receiverId: 'inst_1',
+        courseId: '1',
+        message: 'When is the next live session?',
+        timestamp: DateTime.now().subtract(const Duration(hours: 1)),
+      ),
+      ChatMessage(
+        id: '3',
+        senderId: 'student_3',
+        receiverId: 'inst_1',
+        courseId: '2', // UI/UX Design Masterclass
+        message: 'Could you review my latest design project?',
+        timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
+      ),
+    ],
+  };
 }
 
 // New classes to support teacher-specific data

@@ -15,17 +15,26 @@ class ChatListScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: StreamBuilder<List<ChatMessage>>(
-        stream: DummyDataService.getTeacherChats('inst_1'), // Replace with actual instructor ID
+        stream: DummyDataService.getTeacherChats('inst_1'),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          final chats = snapshot.data!;
+          
+          final chatsByCourse = DummyDataService.getTeacherChatsByCourse('inst_1');
+          
           return ListView.builder(
-            itemCount: chats.length,
+            itemCount: chatsByCourse.length,
             itemBuilder: (context, index) {
-              final chat = chats[index];
-              return _buildChatTile(chat);
+              final courseId = chatsByCourse.keys.elementAt(index);
+              final courseChats = chatsByCourse[courseId]!;
+              final course = DummyDataService.getCourseById(courseId);
+              
+              return ExpansionTile(
+                title: Text(course.title),
+                subtitle: Text('${courseChats.length} messages'),
+                children: courseChats.map((chat) => _buildChatTile(chat)).toList(),
+              );
             },
           );
         },
@@ -34,11 +43,27 @@ class ChatListScreen extends StatelessWidget {
   }
 
   Widget _buildChatTile(ChatMessage lastMessage) {
+    final studentProgress = DummyDataService.studentProgress['inst_1']?.firstWhere(
+      (progress) => progress.studentId == lastMessage.senderId,
+      orElse: () => StudentProgress(
+        studentId: lastMessage.senderId,
+        studentName: 'Unknown Student',
+        courseId: lastMessage.courseId,
+        courseName: 'Unknown Course',
+        progress: 0,
+        lastActive: DateTime.now(),
+        quizScores: [],
+        completedLessons: 0,
+        totalLessons: 0,
+        averageTimePerLesson: 0,
+      ),
+    );
+
     return ListTile(
       leading: const CircleAvatar(
         child: Icon(Icons.person),
       ),
-      title: Text('Student Name'), // Replace with actual student name
+      title: Text(studentProgress?.studentName ?? 'Unknown Student'),
       subtitle: Text(lastMessage.message),
       trailing: Text(
         _formatTimestamp(lastMessage.timestamp),
