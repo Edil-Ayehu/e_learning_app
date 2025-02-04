@@ -1,11 +1,13 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 
 class StudentProgressScreen extends StatelessWidget {
   const StudentProgressScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final studentProgress = DummyDataService.getStudentProgress('inst_1');
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -25,7 +27,7 @@ class StudentProgressScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildCourseProgressTab(),
+            _buildCourseProgressTab(studentProgress),
             _buildPerformanceTab(),
           ],
         ),
@@ -33,17 +35,26 @@ class StudentProgressScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCourseProgressTab() {
+  Widget _buildCourseProgressTab(List<StudentProgress> studentProgress) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: 10,
+      itemCount: studentProgress.length,
       itemBuilder: (context, index) {
-        return _buildStudentProgressCard();
+        final progress = studentProgress[index];
+        return _buildStudentProgressCard(progress);
       },
     );
   }
 
-  Widget _buildStudentProgressCard() {
+  Widget _buildStudentProgressCard(StudentProgress progress) {
+    // Get initials from student name
+    final initials = progress.studentName
+        .split(' ')
+        .map((e) => e[0])
+        .take(2)
+        .join('')
+        .toUpperCase();
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -77,10 +88,10 @@ class StudentProgressScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25),
                         color: AppColors.primary.withOpacity(0.1),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'JS',
-                          style: TextStyle(
+                          initials,
+                          style: const TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
@@ -88,21 +99,21 @@ class StudentProgressScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'John Smith',
-                            style: TextStyle(
+                            progress.studentName,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'Flutter Development Course',
-                            style: TextStyle(
+                            progress.courseName,
+                            style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 14,
                             ),
@@ -119,9 +130,9 @@ class StudentProgressScreen extends StatelessWidget {
                         color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Text(
-                        '75%',
-                        style: TextStyle(
+                      child: Text(
+                        '${(progress.progress * 100).toInt()}%',
+                        style: const TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
                         ),
@@ -133,7 +144,7 @@ class StudentProgressScreen extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
-                    value: 0.75,
+                    value: progress.progress,
                     backgroundColor: Colors.grey[200],
                     valueColor:
                         const AlwaysStoppedAnimation<Color>(AppColors.primary),
@@ -144,9 +155,16 @@ class StudentProgressScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildMetric('Completed', '15/20', Icons.check_circle),
-                    _buildMetric('Time Spent', '45h', Icons.access_time),
-                    _buildMetric('Avg. Score', '85%', Icons.analytics),
+                    _buildMetric(
+                        'Completed',
+                        '${progress.completedLessons}/${progress.totalLessons}',
+                        Icons.check_circle),
+                    _buildMetric('Time Spent',
+                        '${progress.averageTimePerLesson}h', Icons.access_time),
+                    _buildMetric(
+                        'Avg. Score',
+                        '${(progress.averageScore * 100).toInt()}%',
+                        Icons.analytics),
                   ],
                 ),
               ],
@@ -181,16 +199,33 @@ class StudentProgressScreen extends StatelessWidget {
   }
 
   Widget _buildPerformanceTab() {
+    final teacherStats = DummyDataService.getTeacherStats('inst_1');
+    final engagement = teacherStats.studentEngagement;
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: 10,
+      itemCount: engagement.courseCompletionRates.length,
       itemBuilder: (context, index) {
-        return _buildPerformanceCard();
+        final courseName =
+            engagement.courseCompletionRates.keys.elementAt(index);
+        final completionRate =
+            engagement.courseCompletionRates[courseName] ?? 0.0;
+        return _buildPerformanceCard(
+          courseName: courseName,
+          completionRate: completionRate,
+          averageTimePerLesson: engagement.averageTimePerLesson,
+          averageCompletionRate: engagement.averageCompletionRate,
+        );
       },
     );
   }
 
-  Widget _buildPerformanceCard() {
+  Widget _buildPerformanceCard({
+    required String courseName,
+    required double completionRate,
+    required int averageTimePerLesson,
+    required double averageCompletionRate,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -215,25 +250,29 @@ class StudentProgressScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.assessment, color: AppColors.primary),
-                    SizedBox(width: 8),
-                    Text(
-                      'Quiz Performance',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    const Icon(Icons.assessment, color: AppColors.primary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        courseName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildPerformanceMetric('Latest Quiz Score', 0.85),
+                _buildPerformanceMetric('Course Completion', completionRate),
                 const SizedBox(height: 12),
-                _buildPerformanceMetric('Average Quiz Score', 0.78),
+                _buildPerformanceMetric(
+                    'Average Time per Lesson', averageTimePerLesson / 60),
                 const SizedBox(height: 12),
-                _buildPerformanceMetric('Course Completion', 0.65),
+                _buildPerformanceMetric(
+                    'Overall Progress', averageCompletionRate),
               ],
             ),
           ),

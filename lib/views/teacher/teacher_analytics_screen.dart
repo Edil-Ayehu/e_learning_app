@@ -1,6 +1,7 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:e_learning_app/services/dummy_data_service.dart';
 
 class TeacherAnalyticsScreen extends StatelessWidget {
   const TeacherAnalyticsScreen({super.key});
@@ -32,6 +33,7 @@ class TeacherAnalyticsScreen extends StatelessWidget {
   }
 
   Widget _buildOverviewCards() {
+    final stats = DummyDataService.getTeacherStats('inst_1');
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -40,10 +42,10 @@ class TeacherAnalyticsScreen extends StatelessWidget {
       mainAxisSpacing: 16,
       childAspectRatio: 1.2,
       children: [
-        _buildStatCard('Total Students', '1,234', Icons.people),
-        _buildStatCard('Active Courses', '8', Icons.school),
-        _buildStatCard('Total Revenue', '\$12,345', Icons.attach_money),
-        _buildStatCard('Avg. Rating', '4.8', Icons.star),
+        _buildStatCard('Total Students', '${stats.totalStudents}', Icons.people),
+        _buildStatCard('Active Courses', '${stats.activeCourses}', Icons.school),
+        _buildStatCard('Total Revenue', '\$${stats.totalRevenue.toStringAsFixed(2)}', Icons.attach_money),
+        _buildStatCard('Avg. Rating', stats.averageRating.toString(), Icons.star),
       ],
     );
   }

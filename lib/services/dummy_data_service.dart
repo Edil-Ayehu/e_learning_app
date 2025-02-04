@@ -4,6 +4,7 @@ import 'package:e_learning_app/models/quiz.dart';
 import 'package:e_learning_app/models/question.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
 
+
 class DummyDataService {
   static final List<Course> courses = [
     Course(
@@ -495,4 +496,147 @@ class DummyDataService {
   static void addPurchasedCourse(String courseId) {
     _purchasedCourseIds.add(courseId);
   }
+
+  // Teacher-specific dummy data
+  static final Map<String, TeacherStats> teacherStats = {
+    'inst_1': TeacherStats(
+      totalStudents: 1234,
+      activeCourses: 8,
+      totalRevenue: 12345.67,
+      averageRating: 4.8,
+      monthlyEnrollments: [156, 189, 234, 278, 312, 289],
+      monthlyRevenue: [1234, 1567, 1890, 2100, 2345, 2189],
+      studentEngagement: StudentEngagement(
+        averageCompletionRate: 0.78,
+        averageTimePerLesson: 45,
+        activeStudentsThisWeek: 156,
+        courseCompletionRates: {
+          'Flutter Development Bootcamp': 0.85,
+          'Advanced Flutter': 0.72,
+          'Flutter State Management': 0.68,
+        },
+      ),
+    ),
+  };
+
+  static final Map<String, List<StudentProgress>> studentProgress = {
+    'inst_1': [
+      StudentProgress(
+        studentId: 'student_1',
+        studentName: 'John Smith',
+        courseId: '1',
+        courseName: 'Flutter Development Bootcamp',
+        progress: 0.75,
+        lastActive: DateTime.now().subtract(const Duration(hours: 2)),
+        quizScores: [85, 92, 78, 88],
+        completedLessons: 12,
+        totalLessons: 16,
+        averageTimePerLesson: 45,
+      ),
+      StudentProgress(
+        studentId: 'student_2',
+        studentName: 'Emma Wilson',
+        courseId: '1',
+        courseName: 'Flutter Development Bootcamp',
+        progress: 0.60,
+        lastActive: DateTime.now().subtract(const Duration(days: 1)),
+        quizScores: [95, 88, 82],
+        completedLessons: 9,
+        totalLessons: 16,
+        averageTimePerLesson: 38,
+      ),
+    ],
+  };
+
+  // Helper methods to get teacher-specific data
+  static TeacherStats getTeacherStats(String instructorId) {
+    return teacherStats[instructorId] ?? TeacherStats.empty();
+  }
+
+  static List<StudentProgress> getStudentProgress(String instructorId) {
+    return studentProgress[instructorId] ?? [];
+  }
+}
+
+// New classes to support teacher-specific data
+class TeacherStats {
+  final int totalStudents;
+  final int activeCourses;
+  final double totalRevenue;
+  final double averageRating;
+  final List<int> monthlyEnrollments;
+  final List<double> monthlyRevenue;
+  final StudentEngagement studentEngagement;
+
+  TeacherStats({
+    required this.totalStudents,
+    required this.activeCourses,
+    required this.totalRevenue,
+    required this.averageRating,
+    required this.monthlyEnrollments,
+    required this.monthlyRevenue,
+    required this.studentEngagement,
+  });
+
+  factory TeacherStats.empty() => TeacherStats(
+        totalStudents: 0,
+        activeCourses: 0,
+        totalRevenue: 0,
+        averageRating: 0,
+        monthlyEnrollments: [],
+        monthlyRevenue: [],
+        studentEngagement: StudentEngagement.empty(),
+      );
+}
+
+class StudentEngagement {
+  final double averageCompletionRate;
+  final int averageTimePerLesson;
+  final int activeStudentsThisWeek;
+  final Map<String, double> courseCompletionRates;
+
+  StudentEngagement({
+    required this.averageCompletionRate,
+    required this.averageTimePerLesson,
+    required this.activeStudentsThisWeek,
+    required this.courseCompletionRates,
+  });
+
+  factory StudentEngagement.empty() => StudentEngagement(
+        averageCompletionRate: 0,
+        averageTimePerLesson: 0,
+        activeStudentsThisWeek: 0,
+        courseCompletionRates: {},
+      );
+}
+
+class StudentProgress {
+  final String studentId;
+  final String studentName;
+  final String courseId;
+  final String courseName;
+  final double progress;
+  final DateTime lastActive;
+  final List<int> quizScores;
+  final int completedLessons;
+  final int totalLessons;
+  final int averageTimePerLesson;
+
+  double get averageScore {
+    if (quizScores.isEmpty) return 0.0;
+    return quizScores.reduce((a, b) => a + b) / quizScores.length / 100;
+  }
+
+  StudentProgress({
+    required this.studentId,
+    required this.studentName,
+    required this.courseId,
+    required this.courseName,
+    required this.progress,
+    required this.lastActive,
+    required this.quizScores,
+    required this.completedLessons,
+    required this.totalLessons,
+    required this.averageTimePerLesson,
+  });
 }
