@@ -13,7 +13,7 @@ class DummyDataService {
       description:
           'Master Flutter and Dart from scratch. Build real-world cross-platform apps.',
       imageUrl:
-          'https://t4.ftcdn.net/jpg/02/92/10/07/360_F_292100788_fMpSuZTQ2yG1AqOF5Hc8ywVdzYqJ0btW.jpg',
+          'https://i.ytimg.com/vi/z9kOcyk5t8s/maxresdefault.jpg',
       instructorId: 'inst_1',
       categoryId: '1', // Programming
       price: 99.99,

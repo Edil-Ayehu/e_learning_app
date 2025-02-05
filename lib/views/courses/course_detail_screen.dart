@@ -267,13 +267,12 @@ class CourseDetailScreen extends StatelessWidget {
           isUnlocked: isUnlocked,
           onTap: () {
             if (course.isPremium && !isUnlocked) {
-              Get.toNamed(
-                AppRoutes.payment,
-                arguments: {
-                  'courseId': courseId,
-                  'courseName': course.title,
-                  'price': course.price,
-                },
+              Get.snackbar(
+                'Premium Course',
+                'Please purchase this course to access all lessons',
+                backgroundColor: AppColors.primary,
+                colorText: Colors.white,
+                duration: const Duration(seconds: 3),
               );
             } else if (isLocked) {
               Get.snackbar(
