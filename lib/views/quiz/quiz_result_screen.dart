@@ -18,7 +18,8 @@ class QuizResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final percentage = (attempt.score * 100).round();
+    final totalPoints = quiz.questions.fold(0, (sum, q) => sum + q.points);
+    final percentage = ((attempt.score / totalPoints) * 100).round();
     final isPassed = percentage >= 70; // Assuming 70% is passing score
 
     return Scaffold(
@@ -116,6 +117,10 @@ class QuizResultScreen extends StatelessWidget {
   }
 
   Widget _buildStatsCard(ThemeData theme) {
+    final correctAnswers = quiz.questions.where((q) => 
+      attempt.answers[q.id] == q.correctOptionId
+    ).length;
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -142,7 +147,7 @@ class QuizResultScreen extends StatelessWidget {
           _buildStatRow(
             theme,
             'Correct Answers',
-            '${(attempt.score * quiz.questions.length).round()}/${quiz.questions.length}',
+            '$correctAnswers/${quiz.questions.length}',
             Icons.check_circle,
           ),
         ],
