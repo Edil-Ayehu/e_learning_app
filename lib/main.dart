@@ -15,6 +15,7 @@ import 'package:e_learning_app/views/courses/analytics_dashboard_screen.dart';
 import 'package:e_learning_app/views/courses/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen.dart';
+import 'package:e_learning_app/views/courses/payment_screen.dart';
 import 'package:e_learning_app/views/help%20&%20support/help_support_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/notifications/notifications_screen.dart';
@@ -100,12 +101,20 @@ class MyApp extends StatelessWidget {
                 name: AppRoutes.login,
                 page: () => const LoginScreen(),
               ),
-GetPage(
-  name: AppRoutes.home,
-  page: () => HomeScreen(
-    initialIndex: Get.arguments?['initialIndex'] as int?,
-  ),
-),
+              GetPage(
+                name: AppRoutes.payment,
+                page: () => PaymentScreen(
+                  courseId: Get.arguments['courseId'] as String,
+                  courseName: Get.arguments['courseName'] as String,
+                  price: Get.arguments['price'] as double,
+                ),
+              ),
+              GetPage(
+                name: AppRoutes.home,
+                page: () => HomeScreen(
+                  initialIndex: Get.arguments?['initialIndex'] as int?,
+                ),
+              ),
               GetPage(
                 name: AppRoutes.register,
                 page: () => const RegisterScreen(),

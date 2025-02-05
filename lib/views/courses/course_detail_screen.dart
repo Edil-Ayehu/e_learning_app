@@ -156,14 +156,16 @@ class CourseDetailScreen extends StatelessWidget {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () => Get.toNamed(
-                  AppRoutes.payment,
-                  arguments: {
-                    'courseId': courseId,
-                    'courseName': course.title,
-                    'price': course.price,
-                  },
-                ),
+                onPressed: () {
+                  Get.toNamed(
+                    AppRoutes.payment,
+                    arguments: {
+                      'courseId': courseId,
+                      'courseName': course.title,
+                      'price': course.price,
+                    },
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   padding: const EdgeInsets.all(16),
