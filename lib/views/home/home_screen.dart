@@ -14,7 +14,12 @@ import 'package:e_learning_app/services/dummy_data_service.dart';
 
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  final int? initialIndex;
+  
+  HomeScreen({
+    super.key,
+    this.initialIndex,
+  });
 
   final List<Category> categories = [
     Category(
@@ -70,7 +75,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NavigationBloc(),
+      create: (context) => NavigationBloc()..add(
+        NavigateToTab(initialIndex ?? 0)
+      ),
       child: BlocBuilder<NavigationBloc, NavigationState>(
         builder: (context, state) {
           return Scaffold(

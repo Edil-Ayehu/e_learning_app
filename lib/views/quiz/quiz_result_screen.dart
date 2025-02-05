@@ -1,4 +1,5 @@
 import 'package:e_learning_app/models/question.dart';
+import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
@@ -33,7 +34,8 @@ class QuizResultScreen extends StatelessWidget {
             backgroundColor: AppColors.primary,
             leading: IconButton(
               icon: const Icon(Icons.close, color: AppColors.accent),
-              onPressed: () => Get.offAllNamed('/quizzes'),
+              onPressed: () => Get.offAllNamed(AppRoutes.home,
+                  arguments: {'initialIndex': 2}),
             ),
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.all(16),
@@ -117,10 +119,10 @@ class QuizResultScreen extends StatelessWidget {
   }
 
   Widget _buildStatsCard(ThemeData theme) {
-    final correctAnswers = quiz.questions.where((q) => 
-      attempt.answers[q.id] == q.correctOptionId
-    ).length;
-    
+    final correctAnswers = quiz.questions
+        .where((q) => attempt.answers[q.id] == q.correctOptionId)
+        .length;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(

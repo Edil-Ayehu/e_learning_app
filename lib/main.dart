@@ -100,10 +100,12 @@ class MyApp extends StatelessWidget {
                 name: AppRoutes.login,
                 page: () => const LoginScreen(),
               ),
-              GetPage(
-                name: AppRoutes.home,
-                page: () => HomeScreen(),
-              ),
+GetPage(
+  name: AppRoutes.home,
+  page: () => HomeScreen(
+    initialIndex: Get.arguments?['initialIndex'] as int?,
+  ),
+),
               GetPage(
                 name: AppRoutes.register,
                 page: () => const RegisterScreen(),
