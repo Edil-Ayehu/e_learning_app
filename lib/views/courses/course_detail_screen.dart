@@ -179,6 +179,7 @@ class CourseDetailScreen extends StatelessWidget {
 
   Widget _buildInfoCard(BuildContext context) {
     final theme = Theme.of(context);
+    final course = DummyDataService.getCourseById(courseId);
 
     return Container(
       decoration: BoxDecoration(
@@ -194,27 +195,49 @@ class CourseDetailScreen extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
           children: [
-            _buildInfoItem(
-              context,
-              Icons.access_time,
-              '12 Hours',
-              'Duration',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildInfoItem(
+                  context,
+                  Icons.people,
+                  '${course.enrollmentCount}+',
+                  'Students',
+                ),
+                _buildInfoItem(
+                  context,
+                  Icons.star,
+                  course.rating.toString(),
+                  '${course.reviewCount} Reviews',
+                ),
+                _buildInfoItem(
+                  context,
+                  Icons.library_books,
+                  '${course.lessons.length}',
+                  'Lessons',
+                ),
+                _buildInfoItem(
+                  context,
+                  Icons.signal_cellular_alt,
+                  course.level,
+                  'Level',
+                ),
+              ],
             ),
-            _buildInfoItem(
-              context,
-              Icons.assignment,
-              '10 Modules',
-              'Lessons',
-            ),
-            _buildInfoItem(
-              context,
-              Icons.people,
-              '2.5k',
-              'Students',
-            ),
+            const SizedBox(height: 16),
+            if (course.requirements.isNotEmpty) ...[
+              _buildSectionTitle(context, 'Requirements'),
+              const SizedBox(height: 8),
+              ...course.requirements.map((requirement) => _buildRequirementItem(context, requirement)),
+              const SizedBox(height: 16),
+            ],
+            if (course.whatYouWillLearn.isNotEmpty) ...[
+              _buildSectionTitle(context, 'What you\'ll learn'),
+              const SizedBox(height: 8),
+              ...course.whatYouWillLearn.map((item) => _buildLearningItem(context, item)),
+            ],
           ],
         ),
       ),
@@ -224,28 +247,85 @@ class CourseDetailScreen extends StatelessWidget {
   Widget _buildInfoItem(
     BuildContext context,
     IconData icon,
-    String title,
-    String subtitle,
+    String value,
+    String label,
   ) {
     final theme = Theme.of(context);
 
     return Column(
       children: [
-        Icon(icon, color: theme.colorScheme.primary),
-        const SizedBox(height: 8),
+        Icon(icon, color: AppColors.primary),
+        const SizedBox(height: 4),
         Text(
-          title,
+          value,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
+            color: AppColors.primary,
           ),
         ),
         Text(
-          subtitle,
+          label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.secondary,
+            color: AppColors.secondary,
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    final theme = Theme.of(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title,
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRequirementItem(BuildContext context, String requirement) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('• ', style: TextStyle(color: AppColors.primary)),
+          Expanded(
+            child: Text(
+              requirement,
+              style: theme.textTheme.bodyMedium,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLearningItem(BuildContext context, String item) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.check_circle,
+            color: AppColors.primary,
+            size: 16,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              item,
+              style: theme.textTheme.bodyMedium,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
