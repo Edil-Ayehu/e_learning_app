@@ -1,3 +1,4 @@
+import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
@@ -16,7 +17,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingPage> _pages = [
     OnboardingPage(
-      image: 'assets/images/onboarding/onboarding1.png', // Add these images to your assets
+      image:
+          'assets/images/onboarding/onboarding1.png', // Add these images to your assets
       title: 'Learn Anywhere',
       description:
           'Access your courses anytime, anywhere. Learn at your own pace with our flexible learning platform.',
@@ -38,6 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primary,
       body: Stack(
         children: [
           // Page View
@@ -117,9 +120,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Text(
                     _currentPage == _pages.length - 1 ? 'Get Started' : 'Next',
                     style: const TextStyle(
-                      color: Color(0xFF4A55A2),
+                      color: AppColors.primary,
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -152,7 +154,7 @@ class OnboardingPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF4A55A2),
+      color: AppColors.primary,
       child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
