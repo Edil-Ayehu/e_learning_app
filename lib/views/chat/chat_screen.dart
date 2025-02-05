@@ -2,6 +2,7 @@ import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/models/chat_message.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
   final String courseId;
@@ -18,8 +19,17 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat with Instructor'),
-        elevation: 0,
+        backgroundColor: AppColors.primary,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.accent),
+          onPressed: () => Get.back(),
+        ),
+        title: const Text(
+          'Chat with Instructor',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -50,7 +60,8 @@ class ChatScreen extends StatelessWidget {
   }
 
   Widget _buildMessageBubble(BuildContext context, ChatMessage message) {
-    final isMe = message.senderId == 'current_user_id'; // Replace with actual user ID
+    final isMe =
+        message.senderId == 'current_user_id'; // Replace with actual user ID
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(

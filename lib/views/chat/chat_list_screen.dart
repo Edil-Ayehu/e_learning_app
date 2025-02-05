@@ -1,3 +1,4 @@
+import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/models/chat_message.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'package:e_learning_app/views/chat/chat_screen.dart';
@@ -11,7 +12,17 @@ class ChatListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student Messages'),
+        backgroundColor: AppColors.primary,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.accent),
+          onPressed: () => Get.back(),
+        ),
+        title: const Text(
+          'Student Messages',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         elevation: 0,
       ),
       body: StreamBuilder<List<ChatMessage>>(
@@ -20,20 +31,22 @@ class ChatListScreen extends StatelessWidget {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          
-          final chatsByCourse = DummyDataService.getTeacherChatsByCourse('inst_1');
-          
+
+          final chatsByCourse =
+              DummyDataService.getTeacherChatsByCourse('inst_1');
+
           return ListView.builder(
             itemCount: chatsByCourse.length,
             itemBuilder: (context, index) {
               final courseId = chatsByCourse.keys.elementAt(index);
               final courseChats = chatsByCourse[courseId]!;
               final course = DummyDataService.getCourseById(courseId);
-              
+
               return ExpansionTile(
                 title: Text(course.title),
                 subtitle: Text('${courseChats.length} messages'),
-                children: courseChats.map((chat) => _buildChatTile(chat)).toList(),
+                children:
+                    courseChats.map((chat) => _buildChatTile(chat)).toList(),
               );
             },
           );
@@ -43,7 +56,8 @@ class ChatListScreen extends StatelessWidget {
   }
 
   Widget _buildChatTile(ChatMessage lastMessage) {
-    final studentProgress = DummyDataService.studentProgress['inst_1']?.firstWhere(
+    final studentProgress =
+        DummyDataService.studentProgress['inst_1']?.firstWhere(
       (progress) => progress.studentId == lastMessage.senderId,
       orElse: () => StudentProgress(
         studentId: lastMessage.senderId,
@@ -70,9 +84,9 @@ class ChatListScreen extends StatelessWidget {
         style: const TextStyle(color: Colors.grey),
       ),
       onTap: () => Get.to(() => ChatScreen(
-        courseId: lastMessage.courseId,
-        instructorId: lastMessage.receiverId,
-      )),
+            courseId: lastMessage.courseId,
+            instructorId: lastMessage.receiverId,
+          )),
     );
   }
 
