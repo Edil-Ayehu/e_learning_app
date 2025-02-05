@@ -239,7 +239,7 @@ class HomeScreen extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 120,
+          height: 130,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
@@ -279,7 +279,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildCategoryCard(BuildContext context, Category category) {
     return Container(
-      width: 120,
+      width: 130,
       margin: const EdgeInsets.only(right: 16, bottom: 4),
       decoration: BoxDecoration(
         color: AppColors.accent,
