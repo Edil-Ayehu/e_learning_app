@@ -36,7 +36,6 @@ class DummyDataService {
       rating: 4.8,
       reviewCount: 245,
       enrollmentCount: 1200,
-      isPremium: true,
     ),
     Course(
       id: '2',
@@ -275,7 +274,17 @@ class DummyDataService {
 
   static List<Lesson> _createFlutterLessons() {
     return [
-      _createLesson('1', 'Introduction to Flutter', true, false),
+      Lesson(
+        id: '1',
+        title: 'Introduction to Flutter',
+        description: 'This is a detailed description for Introduction to Flutter',
+        videoUrl:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        duration: 30,
+        resources: _createDummyResources(),
+        isPreview: true,
+        isLocked: false,
+      ),
       _createLesson('2', 'Dart Programming Basics', false, false),
       _createLesson('3', 'Building UI with Widgets', false, false),
       _createLesson('4', 'State Management', false, false),
@@ -633,6 +642,38 @@ class DummyDataService {
       ),
     ],
   };
+
+  static void updateLessonStatus(String courseId, String lessonId, {bool? isCompleted, bool? isLocked}) {
+    final courseIndex = courses.indexWhere((c) => c.id == courseId);
+    if (courseIndex != -1) {
+      final course = courses[courseIndex];
+      final lessonIndex = course.lessons.indexWhere((l) => l.id == lessonId);
+      
+      if (lessonIndex != -1) {
+        var updatedLesson = course.lessons[lessonIndex].copyWith(
+          isCompleted: isCompleted ?? course.lessons[lessonIndex].isCompleted,
+          isLocked: isLocked ?? course.lessons[lessonIndex].isLocked,
+        );
+        
+        courses[courseIndex].lessons[lessonIndex] = updatedLesson;
+      }
+    }
+  }
+
+  static bool isLessonCompleted(String courseId, String lessonId) {
+    final course = getCourseById(courseId);
+    return course.lessons.firstWhere(
+      (l) => l.id == lessonId,
+      orElse: () => Lesson(
+        id: '',
+        title: '',
+        description: '',
+        videoUrl: '',
+        duration: 0,
+        resources: [],
+      ),
+    ).isCompleted;
+  }
 }
 
 // New classes to support teacher-specific data

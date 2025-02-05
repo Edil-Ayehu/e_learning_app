@@ -8,6 +8,7 @@ import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 
+
 class LessonScreen extends StatefulWidget {
   final String lessonId;
   const LessonScreen({super.key, required this.lessonId});
@@ -68,6 +69,9 @@ class _LessonScreenState extends State<LessonScreen> {
       _videoPlayerController = VideoPlayerController.network(lesson.videoStreamUrl);
       await _videoPlayerController?.initialize();
 
+      // Add video completion listener
+      _videoPlayerController?.addListener(_onVideoProgressChanged);
+
       _chewieController = ChewieController(
         videoPlayerController: _videoPlayerController!,
         autoPlay: true,
@@ -92,26 +96,49 @@ class _LessonScreenState extends State<LessonScreen> {
     }
   }
 
+  void _onVideoProgressChanged() {
+    if (_videoPlayerController != null && 
+        _videoPlayerController!.value.position >= _videoPlayerController!.value.duration) {
+      // Video has completed
+      _markLessonAsCompleted();
+      // Remove listener to prevent multiple calls
+      _videoPlayerController?.removeListener(_onVideoProgressChanged);
+    }
+  }
+
   void _markLessonAsCompleted() async {
     final courseId = Get.parameters['courseId'];
     if (courseId != null) {
       final course = DummyDataService.getCourseById(courseId);
-      final lessonIndex =
-          course.lessons.indexWhere((l) => l.id == widget.lessonId);
+      final lessonIndex = course.lessons.indexWhere((l) => l.id == widget.lessonId);
 
       if (lessonIndex != -1) {
-        course.lessons[lessonIndex] = course.lessons[lessonIndex].copyWith(
+        // Mark current lesson as completed
+        DummyDataService.updateLessonStatus(
+          courseId,
+          widget.lessonId,
           isCompleted: true,
         );
 
-        final isLastLesson = lessonIndex == course.lessons.length - 1;
-        final allLessonsCompleted =
-            DummyDataService.isCourseCompleted(courseId);
+        // Unlock next lesson if available
+        if (lessonIndex < course.lessons.length - 1) {
+          DummyDataService.updateLessonStatus(
+            courseId,
+            course.lessons[lessonIndex + 1].id,
+            isLocked: false,
+          );
+        }
+        
 
-        Get.back();
+        final isLastLesson = lessonIndex == course.lessons.length - 1;
+        final allLessonsCompleted = DummyDataService.isCourseCompleted(courseId);
+
+        Get.back(result: true); // Return with result to trigger rebuild
 
         if (isLastLesson && allLessonsCompleted) {
-          _showCertificateDialog(context, course);
+          if (mounted) {
+            _showCertificateDialog(context, course);
+          }
         } else {
           Get.snackbar(
             'Lesson Completed!',
@@ -215,6 +242,7 @@ class _LessonScreenState extends State<LessonScreen> {
 
   @override
   void dispose() {
+    _videoPlayerController?.removeListener(_onVideoProgressChanged);
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
     super.dispose();
@@ -331,7 +359,7 @@ class _LessonScreenState extends State<LessonScreen> {
             ),
         ],
       ),
-      bottomNavigationBar: _buildNavigationBar(context, course, lesson),
+      // bottomNavigationBar: _buildNavigationBar(context, course, lesson),
     );
   }
 

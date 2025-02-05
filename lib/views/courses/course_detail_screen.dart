@@ -10,7 +10,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:e_learning_app/services/offline_course_service.dart';
 import 'package:e_learning_app/views/chat/chat_screen.dart';
 
-class CourseDetailScreen extends StatelessWidget {
+class CourseDetailScreen extends StatefulWidget {
   final String courseId;
   const CourseDetailScreen({
     super.key,
@@ -18,13 +18,18 @@ class CourseDetailScreen extends StatelessWidget {
   });
 
   @override
+  State<CourseDetailScreen> createState() => _CourseDetailScreenState();
+}
+
+class _CourseDetailScreenState extends State<CourseDetailScreen> {
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final lastLesson = Get.parameters['lastLesson'];
-    final id = Get.parameters['id'] ?? courseId;
+    final id = Get.parameters['id'] ?? widget.courseId;
     final course = DummyDataService.getCourseById(id);
     final isCompleted = DummyDataService.isCourseCompleted(course.id);
-    final isUnlocked = DummyDataService.isCourseUnlocked(courseId);
+    final isUnlocked = DummyDataService.isCourseUnlocked(widget.courseId);
 
     // If coming from in-progress, scroll to last lesson
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -160,7 +165,7 @@ class CourseDetailScreen extends StatelessWidget {
                   Get.toNamed(
                     AppRoutes.payment,
                     arguments: {
-                      'courseId': courseId,
+                      'courseId': widget.courseId,
                       'courseName': course.title,
                       'price': course.price,
                     },
@@ -179,7 +184,7 @@ class CourseDetailScreen extends StatelessWidget {
 
   Widget _buildInfoCard(BuildContext context) {
     final theme = Theme.of(context);
-    final course = DummyDataService.getCourseById(courseId);
+    final course = DummyDataService.getCourseById(widget.courseId);
 
     return Container(
       decoration: BoxDecoration(
@@ -330,7 +335,7 @@ class CourseDetailScreen extends StatelessWidget {
   }
 
   Widget _buildLessonsList(BuildContext context, bool isUnlocked) {
-    final course = DummyDataService.getCourseById(courseId);
+    final course = DummyDataService.getCourseById(widget.courseId);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -338,16 +343,16 @@ class CourseDetailScreen extends StatelessWidget {
       itemCount: course.lessons.length,
       itemBuilder: (context, index) {
         final lesson = course.lessons[index];
-        final isLocked = !lesson.isPreview &&
-            !course.lessons.sublist(0, index).every((l) => l.isCompleted);
+        final isLocked = !lesson.isPreview && 
+            (index > 0 && !DummyDataService.isLessonCompleted(course.id, course.lessons[index - 1].id));
 
         return _LessonTile(
           title: lesson.title,
           duration: '${lesson.duration} min',
-          isCompleted: lesson.isCompleted,
+          isCompleted: DummyDataService.isLessonCompleted(course.id, lesson.id),
           isLocked: isLocked,
           isUnlocked: isUnlocked,
-          onTap: () {
+          onTap: () async {
             if (course.isPremium && !isUnlocked) {
               Get.snackbar(
                 'Premium Course',
@@ -359,15 +364,19 @@ class CourseDetailScreen extends StatelessWidget {
             } else if (isLocked) {
               Get.snackbar(
                 'Lesson Locked',
-                'Please complete the previous lessons first',
+                'Please complete the previous lesson first',
                 backgroundColor: Colors.red,
                 colorText: Colors.white,
               );
             } else {
-              Get.toNamed(
+              final result = await Get.toNamed(
                 AppRoutes.lesson.replaceAll(':id', lesson.id),
-                parameters: {'courseId': courseId},
+                parameters: {'courseId': widget.courseId},
               );
+              
+              if (result == true) {
+                setState(() {}); // Rebuild screen after lesson completion
+              }
             }
           },
         );
