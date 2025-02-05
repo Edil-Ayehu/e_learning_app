@@ -20,87 +20,132 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Create New Course'),
-        actions: [
-          TextButton(
-            onPressed: _submitForm,
-            child: const Text('Create'),
-          ),
-        ],
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(24),
-          children: [
-            _buildImagePicker(),
-            const SizedBox(height: 32),
-            _buildTextField(
-              'Course Title',
-              'Enter course title',
-              maxLines: 1,
-              validator: (value) {
-                if (value?.isEmpty ?? true) {
-                  return 'Please enter a title';
-                }
-                return null;
-              },
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200,
+            collapsedHeight: kToolbarHeight,
+            toolbarHeight: kToolbarHeight,
+            pinned: true,
+            backgroundColor: AppColors.primary,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.accent),
+              onPressed: () => Get.back(),
             ),
-            const SizedBox(height: 24),
-            _buildTextField(
-              'Description',
-              'Enter course description',
-              maxLines: 3,
-              validator: (value) {
-                if (value?.isEmpty ?? true) {
-                  return 'Please enter a description';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildTextField(
-                    'Price',
-                    'Enter price',
-                    prefixText: '\$',
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return 'Required';
-                      }
-                      return null;
-                    },
+            actions: [
+              TextButton(
+                onPressed: _submitForm,
+                child: Text(
+                  'Create',
+                  style: TextStyle(
+                    color: AppColors.accent,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildDropdown(),
+              ),
+              const SizedBox(width: 8),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.15,
+                bottom: 16,
+              ),
+              title: Text(
+                'Create New Course',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
+              ),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryLight],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 24),
-            _buildPremiumSwitch(),
-            const SizedBox(height: 32),
-            _buildDynamicList(
-              'Course Requirements',
-              _requirements,
-              (index) => _requirements.removeAt(index),
-              () => _requirements.add(''),
+          ),
+          SliverToBoxAdapter(
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    _buildImagePicker(),
+                    const SizedBox(height: 32),
+                    _buildTextField(
+                      'Course Title',
+                      'Enter course title',
+                      maxLines: 1,
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return 'Please enter a title';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    _buildTextField(
+                      'Description',
+                      'Enter course description',
+                      maxLines: 3,
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return 'Please enter a description';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextField(
+                            'Price',
+                            'Enter price',
+                            prefixText: '\$',
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Required';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildDropdown(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    _buildPremiumSwitch(),
+                    const SizedBox(height: 32),
+                    _buildDynamicList(
+                      'Course Requirements',
+                      _requirements,
+                      (index) => _requirements.removeAt(index),
+                      () => _requirements.add(''),
+                    ),
+                    const SizedBox(height: 32),
+                    _buildDynamicList(
+                      'What You Will Learn',
+                      _learningPoints,
+                      (index) => _learningPoints.removeAt(index),
+                      () => _learningPoints.add(''),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: 32),
-            _buildDynamicList(
-              'What You Will Learn',
-              _learningPoints,
-              (index) => _learningPoints.removeAt(index),
-              () => _learningPoints.add(''),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

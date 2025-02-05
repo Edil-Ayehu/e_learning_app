@@ -15,25 +15,69 @@ class MyCoursesScreen extends StatelessWidget {
     final teacherCourses = DummyDataService.getInstructorCourses('inst_1'); // Replace with actual instructor ID
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Courses'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => Get.toNamed(AppRoutes.createCourse),
+      backgroundColor: AppColors.lightBackground,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200,
+            collapsedHeight: kToolbarHeight,
+            toolbarHeight: kToolbarHeight,
+            pinned: true,
+            backgroundColor: AppColors.primary,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.accent),
+              onPressed: () => Get.back(),
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add, color: AppColors.accent),
+                onPressed: () => Get.toNamed(AppRoutes.createCourse),
+              ),
+              const SizedBox(width: 8),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.15,
+                bottom: 16,
+              ),
+              title: Text(
+                'My Courses',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryLight],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
+            ),
           ),
+          if (teacherCourses.isEmpty)
+            SliverFillRemaining(
+              child: _buildEmptyState(),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final course = teacherCourses[index];
+                    return _buildCourseCard(course);
+                  },
+                  childCount: teacherCourses.length,
+                ),
+              ),
+            ),
         ],
       ),
-      body: teacherCourses.isEmpty
-          ? _buildEmptyState()
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: teacherCourses.length,
-              itemBuilder: (context, index) {
-                final course = teacherCourses[index];
-                return _buildCourseCard(course);
-              },
-            ),
     );
   }
 
