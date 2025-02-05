@@ -275,7 +275,7 @@ class DummyDataService {
 
   static List<Lesson> _createFlutterLessons() {
     return [
-      _createLesson('1', 'Introduction to Flutter', true, true),
+      _createLesson('1', 'Introduction to Flutter', true, false),
       _createLesson('2', 'Dart Programming Basics', false, false),
       _createLesson('3', 'Building UI with Widgets', false, false),
       _createLesson('4', 'State Management', false, false),
@@ -306,9 +306,9 @@ class DummyDataService {
 
   static List<Lesson> _createArchitectureLessons() {
     return [
-      _createLesson('1', 'Clean Architecture Overview', true, false),
-      _createLesson('2', 'SOLID Principles', false, false),
-      _createLesson('3', 'Repository Pattern', false, false),
+      _createLesson('1', 'Clean Architecture Overview', true, true),
+      _createLesson('2', 'SOLID Principles', false, true),
+      _createLesson('3', 'Repository Pattern', false, true),
       _createLesson('4', 'Dependency Injection', false, false),
       _createLesson('5', 'Unit Testing', false, false),
     ];

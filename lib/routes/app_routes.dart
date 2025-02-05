@@ -1,3 +1,5 @@
+import 'package:e_learning_app/models/quiz.dart';
+import 'package:e_learning_app/models/quiz_attempt.dart';
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
@@ -15,6 +17,7 @@ import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_result_screen.dart';
 import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
@@ -25,6 +28,7 @@ import 'package:e_learning_app/views/teacher/student_progress_screen.dart';
 import 'package:e_learning_app/views/teacher/teacher_analytics_screen.dart';
 import 'package:e_learning_app/views/teacher/teacher_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppRoutes {
   // Auth Routes
@@ -43,6 +47,7 @@ class AppRoutes {
   // Quiz Routes
   static const String quizList = '/quizzes';
   static const String quizAttempt = '/quiz/:id';
+  static const String quizResult = '/quiz/result';
 
   // Profile Routes
   static const String profile = '/profile';
@@ -57,11 +62,11 @@ class AppRoutes {
   static const String termsConditions = '/terms-conditions';
 
   static const String teacherHome = '/teacher/home';
-static const String myCourses = '/teacher/courses';
-static const String createCourse = '/teacher/courses/create';
-static const String teacherAnalytics = '/teacher/analytics';
-static const String studentProgress = '/teacher/students';
-static const String teacherChats = '/teacher/chats';
+  static const String myCourses = '/teacher/courses';
+  static const String createCourse = '/teacher/courses/create';
+  static const String teacherAnalytics = '/teacher/analytics';
+  static const String studentProgress = '/teacher/students';
+  static const String teacherChats = '/teacher/chats';
 
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
@@ -142,10 +147,10 @@ static const String teacherChats = '/teacher/chats';
         return MaterialPageRoute(
           builder: (_) => const HelpSupportScreen(),
         );
-        case teacherHome:
-  return MaterialPageRoute(
-    builder: (_) => const TeacherHomeScreen(),
-  );
+      case teacherHome:
+        return MaterialPageRoute(
+          builder: (_) => const TeacherHomeScreen(),
+        );
       case payment:
         final args = setting.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
@@ -167,23 +172,23 @@ static const String teacherChats = '/teacher/chats';
         return MaterialPageRoute(
           builder: (_) => const TermsConditionsScreen(),
         );
-         case myCourses:
+      case myCourses:
         return MaterialPageRoute(
           builder: (_) => const MyCoursesScreen(),
         );
-         case createCourse:
+      case createCourse:
         return MaterialPageRoute(
           builder: (_) => const CreateCourseScreen(),
         );
-           case teacherAnalytics:
+      case teacherAnalytics:
         return MaterialPageRoute(
           builder: (_) => const TeacherAnalyticsScreen(),
         );
-           case studentProgress:
+      case studentProgress:
         return MaterialPageRoute(
           builder: (_) => const StudentProgressScreen(),
         );
-         case teacherChats:
+      case teacherChats:
         return MaterialPageRoute(
           builder: (_) => const ChatListScreen(),
         );

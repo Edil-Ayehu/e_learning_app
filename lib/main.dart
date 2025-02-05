@@ -3,6 +3,8 @@ import 'package:e_learning_app/blocs/profile/profile_bloc.dart';
 import 'package:e_learning_app/config/firebase_config.dart';
 import 'package:e_learning_app/core/theme/app_theme.dart';
 import 'package:e_learning_app/data/services/storage_service.dart';
+import 'package:e_learning_app/models/quiz.dart';
+import 'package:e_learning_app/models/quiz_attempt.dart';
 import 'package:e_learning_app/repository/course_repository.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
@@ -21,6 +23,7 @@ import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_result_screen.dart';
 import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
@@ -149,6 +152,13 @@ class MyApp extends StatelessWidget {
                 name: '/quiz/:id',
                 page: () => QuizAttemptScreen(
                   quizId: Get.parameters['id'] ?? '',
+                ),
+              ),
+              GetPage(
+                name: AppRoutes.quizResult,
+                page: () => QuizResultScreen(
+                  attempt: Get.arguments['attempt'] as QuizAttempt,
+                  quiz: Get.arguments['quiz'] as Quiz,
                 ),
               ),
               GetPage(

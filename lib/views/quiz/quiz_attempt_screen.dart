@@ -6,6 +6,8 @@ import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'dart:async';
 import 'package:e_learning_app/models/quiz_attempt.dart';
+import 'package:e_learning_app/views/quiz/quiz_result_screen.dart';
+import 'package:e_learning_app/routes/app_routes.dart';
 
 class QuizAttemptScreen extends StatefulWidget {
   final String quizId;
@@ -15,7 +17,6 @@ class QuizAttemptScreen extends StatefulWidget {
   State<QuizAttemptScreen> createState() => _QuizAttemptScreenState();
 }
 
-
 class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
   late final Quiz quiz;
   late final PageController _pageController;
@@ -23,6 +24,7 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
   Map<String, String> selectedAnswers = {}; // questionId: optionId
   int remainingSeconds = 0;
   Timer? _timer;
+  QuizAttempt? currentAttempt;
 
   @override
   void initState() {
@@ -85,22 +87,26 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
   void _submitQuiz() {
     _timer?.cancel();
     final score = _calculateScore();
-    final attempt = QuizAttempt(
+    currentAttempt = QuizAttempt(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       quizId: quiz.id,
-      userId: 'current_user_id', // Replace with actual user ID
+      userId: 'current_user_id',
       answers: selectedAnswers,
       score: score,
-      startedAt: DateTime.now().subtract(Duration(seconds: quiz.timeLimit * 60 - remainingSeconds)),
+      startedAt: DateTime.now()
+          .subtract(Duration(seconds: quiz.timeLimit * 60 - remainingSeconds)),
       completedAt: DateTime.now(),
       timeSpent: quiz.timeLimit * 60 - remainingSeconds,
     );
 
-    // Save attempt (implement this in DummyDataService)
-    DummyDataService.saveQuizAttempt(attempt);
+    DummyDataService.saveQuizAttempt(currentAttempt!);
 
-    // Show results dialog
-    _showResultsDialog(score);
+    Get.off(
+      () => QuizResultScreen(
+        attempt: currentAttempt!,
+        quiz: quiz,
+      ),
+    );
   }
 
   int _calculateScore() {
@@ -121,22 +127,26 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Quiz Results'),
+        title: const Text('Quiz Results'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Score: $score / $totalPoints'),
             Text('Percentage: $percentage%'),
-            Text('Time spent: ${quiz.timeLimit * 60 - remainingSeconds} seconds'),
+            Text(
+                'Time spent: ${quiz.timeLimit * 60 - remainingSeconds} seconds'),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () {
               Get.back(); // Close dialog
-              Get.back(); // Return to quiz list
+              Get.offNamed(AppRoutes.quizResult, arguments: {
+                'attempt': currentAttempt,
+                'quiz': quiz,
+              });
             },
-            child: Text('Done'),
+            child: const Text('Done'),
           ),
         ],
       ),
@@ -200,17 +210,18 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
         ],
       ),
       body: PageView.builder(
-  controller: _pageController,
-  physics: const BouncingScrollPhysics(),
-  itemCount: quiz.questions.length,
-  itemBuilder: (context, index) => _QuestionPage(
-    questionNumber: index + 1,
-    totalQuestions: quiz.questions.length,
-    question: quiz.questions[index],
-    selectedOptionId: selectedAnswers[quiz.questions[index].id],
-    onOptionSelected: (optionId) => _selectAnswer(quiz.questions[index].id, optionId),
-  ),
-),
+        controller: _pageController,
+        physics: const BouncingScrollPhysics(),
+        itemCount: quiz.questions.length,
+        itemBuilder: (context, index) => _QuestionPage(
+          questionNumber: index + 1,
+          totalQuestions: quiz.questions.length,
+          question: quiz.questions[index],
+          selectedOptionId: selectedAnswers[quiz.questions[index].id],
+          onOptionSelected: (optionId) =>
+              _selectAnswer(quiz.questions[index].id, optionId),
+        ),
+      ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -303,9 +314,25 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
 
   Future<void> _showSubmitDialog(BuildContext context) async {
     final theme = Theme.of(context);
+    final score = _calculateScore();
+    currentAttempt = QuizAttempt(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      quizId: quiz.id,
+      userId: 'current_user_id',
+      answers: selectedAnswers,
+      score: score,
+      startedAt: DateTime.now()
+          .subtract(Duration(seconds: quiz.timeLimit * 60 - remainingSeconds)),
+      completedAt: DateTime.now(),
+      timeSpent: quiz.timeLimit * 60 - remainingSeconds,
+    );
+
+    // Save attempt
+    DummyDataService.saveQuizAttempt(currentAttempt!);
 
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text('Submit Quiz'),
         content: const Text('Are you sure you want to submit your answers?'),
@@ -317,7 +344,12 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
           FilledButton(
             onPressed: () {
               Navigator.pop(context);
-              Get.back();
+              Get.off(
+                () => QuizResultScreen(
+                  attempt: currentAttempt!,
+                  quiz: quiz,
+                ),
+              );
             },
             child: const Text('Submit'),
           ),
@@ -386,23 +418,18 @@ class _QuestionPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOptionTile(
-    BuildContext context,
-    String optionId,
-    String text,
-    {required bool isSelected,
-    required VoidCallback onTap}
-  ) {
+  Widget _buildOptionTile(BuildContext context, String optionId, String text,
+      {required bool isSelected, required VoidCallback onTap}) {
     final theme = Theme.of(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary.withOpacity(0.1) : AppColors.accent,
+        color:
+            isSelected ? AppColors.primary.withOpacity(0.1) : AppColors.accent,
         borderRadius: BorderRadius.circular(16),
-        border: isSelected
-            ? Border.all(color: AppColors.primary, width: 2)
-            : null,
+        border:
+            isSelected ? Border.all(color: AppColors.primary, width: 2) : null,
       ),
       child: Material(
         color: Colors.transparent,
