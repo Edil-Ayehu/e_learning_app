@@ -7,12 +7,16 @@ import 'package:get/get.dart';
 class ChatScreen extends StatelessWidget {
   final String courseId;
   final String instructorId;
+  final bool isTeacherView;
+  final String? studentName;
   final TextEditingController _messageController = TextEditingController();
 
   ChatScreen({
     super.key,
     required this.courseId,
     required this.instructorId,
+    this.isTeacherView = false,
+    this.studentName,
   });
 
   @override
@@ -24,9 +28,11 @@ class ChatScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: AppColors.accent),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Chat with Instructor',
-          style: TextStyle(
+        title: Text(
+          isTeacherView 
+              ? 'Chat with ${studentName ?? 'Student'}'
+              : 'Chat with Instructor',
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),

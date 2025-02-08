@@ -1,5 +1,3 @@
-import 'package:e_learning_app/models/quiz.dart';
-import 'package:e_learning_app/models/quiz_attempt.dart';
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
@@ -17,7 +15,6 @@ import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
-import 'package:e_learning_app/views/quiz/quiz_result_screen.dart';
 import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
@@ -28,7 +25,6 @@ import 'package:e_learning_app/views/teacher/student_progress_screen.dart';
 import 'package:e_learning_app/views/teacher/teacher_analytics_screen.dart';
 import 'package:e_learning_app/views/teacher/teacher_home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AppRoutes {
   // Auth Routes

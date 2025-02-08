@@ -107,6 +107,8 @@ class ChatListScreen extends StatelessWidget {
       onTap: () => Get.to(() => ChatScreen(
         courseId: lastMessage.courseId,
         instructorId: lastMessage.receiverId,
+        isTeacherView: true,
+        studentName: studentProgress?.studentName,
       )),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

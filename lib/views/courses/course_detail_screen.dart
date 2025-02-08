@@ -690,9 +690,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           IconButton(
             icon: const Icon(Icons.chat),
             onPressed: () => Get.to(() => ChatScreen(
-                  courseId: course.id,
-                  instructorId: course.instructorId,
-                )),
+              courseId: course.id,
+              instructorId: course.instructorId,
+              isTeacherView: false,
+            )),
           ),
         ],
       ],
