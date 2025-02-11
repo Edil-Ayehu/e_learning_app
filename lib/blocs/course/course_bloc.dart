@@ -55,7 +55,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     Emitter<CourseState> emit,
   ) async {
     try {
-      final userId = _authBloc.state.firebaseUser?.uid;
+      final userId = _authBloc.state.userModel?.uid;
       if (userId == null) {
         emit(CourseError('User not authenticated'));
         return;
@@ -73,7 +73,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
   ) async {
     emit(CourseLoading());
     try {
-      final userId = _authBloc.state.firebaseUser?.uid;
+      final userId = _authBloc.state.userModel?.uid;
       if (userId == null) {
         emit(CourseError('User not authenticated'));
         return;

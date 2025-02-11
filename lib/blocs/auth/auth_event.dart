@@ -1,6 +1,7 @@
 import 'package:e_learning_app/models/user_model.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -10,7 +11,7 @@ abstract class AuthEvent extends Equatable {
 }
 
 class AuthStateChanged extends AuthEvent {
-  final User? user;
+  final UserModel? user;
 
   const AuthStateChanged(this.user);
 

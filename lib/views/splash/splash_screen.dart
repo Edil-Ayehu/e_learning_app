@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen>
     if (StorageService.isFirstTime()) {
       StorageService.setFirstTime(false);
       Get.offNamed(AppRoutes.onboarding);
-    } else if (authState.firebaseUser != null) {
+    } else if (authState.userModel != null) {
       Get.offNamed(AppRoutes.home);
     } else {
       Get.offNamed(AppRoutes.login);
