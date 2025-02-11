@@ -1,3 +1,4 @@
+import 'package:e_learning_app/views/widgets/common/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,63 +54,48 @@ class ForgotPasswordScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             // Reset Button
-            SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  // Show success dialog
-                  Get.dialog(
-                    AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.mark_email_read_outlined,
-                            size: 60,
-                            color: Colors.green,
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Check your email",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            "We have sent password recovery instructions to your email",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () => Get.back(),
-                            child: const Text("OK"),
-                          ),
-                        ],
-                      ),
+            CustomButton(
+              text: "Reset Password",
+              onPressed: () {
+                // Show success dialog
+                Get.dialog(
+                  AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  );
-                },
-                child: const Text(
-                  "Reset Password",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.mark_email_read_outlined,
+                          size: 60,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "Check your email",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "We have sent password recovery instructions to your email",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        const SizedBox(height: 20),
+                        CustomButton(
+                          text: "OK",
+                          onPressed: () => Get.back(),
+                          height: 45,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),

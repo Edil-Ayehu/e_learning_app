@@ -1,3 +1,4 @@
+import 'package:e_learning_app/views/widgets/common/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:get/get.dart';
@@ -113,26 +114,10 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   // Login Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () => Get.offAllNamed(AppRoutes.home),
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+CustomButton(
+  text: "Login",
+  onPressed: () => Get.offAllNamed(AppRoutes.home),
+),
                   const SizedBox(height: 20),
                   // Social Login
                   Row(
@@ -191,20 +176,17 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _socialLoginButton({
-    required IconData icon,
-    required VoidCallback onPressed,
-  }) {
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(icon, size: 30),
-      ),
-    );
-  }
+Widget _socialLoginButton({
+  required IconData icon,
+  required VoidCallback onPressed,
+}) {
+  return CustomButton(
+    icon: icon,
+    text: "",
+    onPressed: onPressed,
+    isFullWidth: false,
+    height: 50,
+    isOutlined: true,
+  );
+}
 }
