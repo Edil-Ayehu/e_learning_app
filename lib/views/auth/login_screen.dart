@@ -1,15 +1,40 @@
+import 'package:e_learning_app/core/utils/validators.dart';
 import 'package:e_learning_app/views/widgets/common/custom_button.dart';
+import 'package:e_learning_app/views/widgets/common/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleLogin() {
+    if (_formKey.currentState!.validate()) {
+      // Handle login logic here
+      Get.offAllNamed(AppRoutes.home);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -57,69 +82,53 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  // Email Field
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300,
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          label: "Email",
+                          prefixIcon: Icons.email_outlined,
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: FormValidator.validateEmail,
                         ),
-                      ),
+                        const SizedBox(height: 20),
+                        CustomTextField(
+                          label: "Password",
+                          prefixIcon: Icons.lock_outline,
+                          controller: _passwordController,
+                          obscureText: true,
+                          validator: FormValidator.validatePassword,
+                        ),
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        CustomButton(
+                          text: "Login",
+                          onPressed: _handleLogin,
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Password Field
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      suffixIcon: const Icon(Icons.visibility_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Forgot Password
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Login Button
-CustomButton(
-  text: "Login",
-  onPressed: () => Get.offAllNamed(AppRoutes.home),
-),
-                  const SizedBox(height: 20),
-                  // Social Login
                   Row(
                     children: [
                       Expanded(child: Divider(color: Colors.grey.shade300)),
@@ -131,7 +140,6 @@ CustomButton(
                     ],
                   ),
                   const SizedBox(height: 20),
-                  // Social Login Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -150,7 +158,6 @@ CustomButton(
                     ],
                   ),
                   const SizedBox(height: 20),
-                  // Register Link
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -176,17 +183,17 @@ CustomButton(
     );
   }
 
-Widget _socialLoginButton({
-  required IconData icon,
-  required VoidCallback onPressed,
-}) {
-  return CustomButton(
-    icon: icon,
-    text: "",
-    onPressed: onPressed,
-    isFullWidth: false,
-    height: 50,
-    isOutlined: true,
-  );
-}
+  Widget _socialLoginButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return CustomButton(
+      icon: icon,
+      text: "",
+      onPressed: onPressed,
+      isFullWidth: false,
+      height: 50,
+      isOutlined: true,
+    );
+  }
 }

@@ -1,6 +1,5 @@
 import 'package:e_learning_app/blocs/course/course_bloc.dart';
 import 'package:e_learning_app/blocs/profile/profile_bloc.dart';
-import 'package:e_learning_app/config/firebase_config.dart';
 import 'package:e_learning_app/core/theme/app_theme.dart';
 import 'package:e_learning_app/data/services/storage_service.dart';
 import 'package:e_learning_app/repository/course_repository.dart';
