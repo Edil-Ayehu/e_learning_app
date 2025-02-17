@@ -10,7 +10,7 @@ import 'package:e_learning_app/views/courses/analytics_dashboard_screen.dart';
 import 'package:e_learning_app/views/courses/course%20detail/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course%20list/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen/lesson_screen.dart';
-import 'package:e_learning_app/views/courses/payment_screen.dart';
+import 'package:e_learning_app/views/courses/payment_screen/payment_screen.dart';
 import 'package:e_learning_app/views/help%20&%20support/help_support_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/notifications/notifications_screen.dart';
