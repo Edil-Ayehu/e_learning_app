@@ -1,5 +1,8 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/views/courses/course_list_screen.dart';
+import 'package:e_learning_app/views/home/widgets/category_section.dart';
+import 'package:e_learning_app/views/home/widgets/home_app_bar.dart';
+import 'package:e_learning_app/views/home/widgets/search_bar_widget.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -133,57 +136,14 @@ class HomeScreen extends StatelessWidget {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
-        SliverAppBar(
-          expandedHeight: 180, // Reduced height for minimalism
-          floating: false,
-          pinned: true,
-          backgroundColor: AppColors.primary,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.analytics, color: Colors.white),
-              onPressed: () => Get.toNamed(AppRoutes.analytics),
-            ),
-          ],
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            title: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Welcome back,',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.accent.withOpacity(0.7),
-                  ),
-                ),
-                Text(
-                  'John Doe',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    color: AppColors.accent,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            background: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryLight],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
-          ),
-        ),
+        const HomeAppBar(),
         SliverPadding(
           padding: const EdgeInsets.all(20), // Consistent padding
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              _buildSearchBar(theme),
+              const SearchBarWidget(),
               const SizedBox(height: 32),
-              _buildCategorySection(theme),
+              CategorySection(categories: categories),
               const SizedBox(height: 32),
               _buildInProgressSection(context, theme),
               const SizedBox(height: 32),
@@ -195,77 +155,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchBar(ThemeData theme) {
-    return Container(
-      height: 56, // Fixed height for better proportions
-      decoration: BoxDecoration(
-        color: AppColors.accent,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Search courses...',
-          hintStyle: TextStyle(color: AppColors.secondary.withOpacity(0.7)),
-          prefixIcon: const Icon(Icons.search, color: AppColors.secondary),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: AppColors.accent,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategorySection(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Categories',
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 130,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (context, index) =>
-                _buildCategoryCard(context, categories[index]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _handleCategoryTap(BuildContext context, String categoryId) {
-    final category = categories.firstWhere((c) => c.id == categoryId);
-    Get.toNamed(
-      AppRoutes.courseList,
-      arguments: {
-        'category': categoryId,
-        'categoryName': category.name,
-      },
-      parameters: {
-        'category': categoryId,
-        'categoryName': category.name,
-      },
-    );
-  }
-
   void _handleInProgressCourseTap(
       BuildContext context, String courseId, int lastLesson) {
     Get.toNamed(
@@ -274,62 +163,6 @@ class HomeScreen extends StatelessWidget {
         'id': courseId,
         'lastLesson': lastLesson.toString(),
       },
-    );
-  }
-
-  Widget _buildCategoryCard(BuildContext context, Category category) {
-    return Container(
-      width: 130,
-      margin: const EdgeInsets.only(right: 16, bottom: 4),
-      decoration: BoxDecoration(
-        color: AppColors.accent,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell( 
-          borderRadius: BorderRadius.circular(16),
-          onTap: () => _handleCategoryTap(context, category.id),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  category.icon,
-                  size: 32,
-                  color: AppColors.primary,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  category.name,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${category.courseCount} courses',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.secondary,
-                      ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 
