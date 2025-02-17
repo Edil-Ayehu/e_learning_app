@@ -19,18 +19,21 @@ class SearchBarWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Search courses...',
-          hintStyle: TextStyle(color: AppColors.secondary.withOpacity(0.7)),
-          prefixIcon: const Icon(Icons.search, color: AppColors.secondary),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
+      child: Material(
+        color: Colors.transparent,
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: 'Search courses...',
+            hintStyle: TextStyle(color: AppColors.secondary.withOpacity(0.7)),
+            prefixIcon: const Icon(Icons.search, color: AppColors.secondary),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide.none,
+            ),
+            filled: true,
+            fillColor: AppColors.accent,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           ),
-          filled: true,
-          fillColor: AppColors.accent,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         ),
       ),
     );

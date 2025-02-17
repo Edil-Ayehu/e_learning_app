@@ -34,8 +34,9 @@ class QuizResultScreen extends StatelessWidget {
             backgroundColor: AppColors.primary,
             leading: IconButton(
               icon: const Icon(Icons.close, color: AppColors.accent),
-              onPressed: () => Get.offAllNamed(AppRoutes.home,
-                  arguments: {'initialIndex': 2}),
+              onPressed: () => Get.offAllNamed(AppRoutes.main, arguments: {
+                'initialIndex': 2
+              }), // 2 is the index for quiz tab
             ),
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.all(16),

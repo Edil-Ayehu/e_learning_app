@@ -119,40 +119,6 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
     return score;
   }
 
-  void _showResultsDialog(int score) {
-    final totalPoints = quiz.questions.fold(0, (sum, q) => sum + q.points);
-    final percentage = (score / totalPoints * 100).round();
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Quiz Results'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Score: $score / $totalPoints'),
-            Text('Percentage: $percentage%'),
-            Text(
-                'Time spent: ${quiz.timeLimit * 60 - remainingSeconds} seconds'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back(); // Close dialog
-              Get.offNamed(AppRoutes.quizResult, arguments: {
-                'attempt': currentAttempt,
-                'quiz': quiz,
-              });
-            },
-            child: const Text('Done'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -313,7 +279,6 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
   }
 
   Future<void> _showSubmitDialog(BuildContext context) async {
-    final theme = Theme.of(context);
     final score = _calculateScore();
     currentAttempt = QuizAttempt(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
