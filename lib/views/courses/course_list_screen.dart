@@ -1,11 +1,11 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
+import 'package:e_learning_app/views/courses/widgets/course_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
-
 
 class CourseListScreen extends StatelessWidget {
   final String? categoryId;
@@ -140,15 +140,14 @@ class CourseListScreen extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final course = courses[index];
-                    return _buildCourseCard(
-                      context,
-                      course.id,
-                      course.title,
-                      course.description,
-                      course.imageUrl,
-                      course.rating,
-                      '${course.lessons.length * 30} mins',
-                      course.isPremium,
+                    return CourseCard(
+                      courseId: course.id,
+                      title: course.title,
+                      subtitle: course.description,
+                      imageUrl: course.imageUrl,
+                      rating: course.rating,
+                      duration: '${course.lessons.length * 30} mins',
+                      isPremium: course.isPremium,
                     );
                   },
                   childCount: courses.length,
@@ -242,7 +241,8 @@ class CourseListScreen extends StatelessWidget {
               Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(16)),
                     child: CachedNetworkImage(
                       imageUrl: imageUrl,
                       height: 180,
@@ -269,7 +269,8 @@ class CourseListScreen extends StatelessWidget {
                       top: 12,
                       right: 12,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(20),
