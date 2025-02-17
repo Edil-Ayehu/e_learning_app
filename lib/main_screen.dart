@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_learning_app/blocs/navigation/navigation_bloc.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
-import 'package:e_learning_app/views/courses/course_list_screen.dart';
+import 'package:e_learning_app/views/courses/course%20list/course_list_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';

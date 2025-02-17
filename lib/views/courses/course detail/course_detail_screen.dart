@@ -1,11 +1,11 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
-import 'package:e_learning_app/views/courses/widgets/action_buttons.dart';
-import 'package:e_learning_app/views/courses/widgets/course_detail_app_bar.dart';
-import 'package:e_learning_app/views/courses/widgets/course_info_card.dart';
-import 'package:e_learning_app/views/courses/widgets/lesson_list.dart';
-import 'package:e_learning_app/views/courses/widgets/reviews_section.dart';
+import 'package:e_learning_app/views/courses/course%20detail/widgets/action_buttons.dart';
+import 'package:e_learning_app/views/courses/course%20detail/widgets/course_detail_app_bar.dart';
+import 'package:e_learning_app/views/courses/course%20detail/widgets/course_info_card.dart';
+import 'package:e_learning_app/views/courses/course%20detail/widgets/lesson_list.dart';
+import 'package:e_learning_app/views/courses/course%20detail/widgets/reviews_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

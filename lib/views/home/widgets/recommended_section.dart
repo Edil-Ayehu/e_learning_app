@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
-import 'package:e_learning_app/views/courses/course_list_screen.dart';
+import 'package:e_learning_app/views/courses/course%20list/course_list_screen.dart';
 
 class RecommendedSection extends StatelessWidget {
   const RecommendedSection({super.key});

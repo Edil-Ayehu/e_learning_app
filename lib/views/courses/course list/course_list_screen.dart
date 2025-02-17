@@ -1,8 +1,8 @@
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
-import 'package:e_learning_app/views/courses/widgets/course_card.dart';
-import 'package:e_learning_app/views/courses/widgets/course_filter_dialog.dart';
-import 'package:e_learning_app/views/courses/widgets/empty_state_widget.dart';
+import 'package:e_learning_app/views/courses/course%20list/widgets/course_card.dart';
+import 'package:e_learning_app/views/courses/course%20list/widgets/course_filter_dialog.dart';
+import 'package:e_learning_app/views/courses/course%20list/widgets/empty_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
