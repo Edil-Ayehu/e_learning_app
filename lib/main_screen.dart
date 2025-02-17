@@ -5,7 +5,7 @@ import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/views/courses/course%20list/course_list_screen.dart';
 import 'package:e_learning_app/views/home/home_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
-import 'package:e_learning_app/views/quiz/quiz_list_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_list/quiz_list_screen.dart';
 
 class MainScreen extends StatelessWidget {
   final int? initialIndex;

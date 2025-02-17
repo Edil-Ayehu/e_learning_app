@@ -1,80 +1,15 @@
-import 'package:e_learning_app/core/theme/app_colors.dart';
-import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:e_learning_app/core/theme/app_colors.dart';
 
-class QuizListScreen extends StatelessWidget {
-  const QuizListScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      backgroundColor: AppColors.lightBackground,
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 200,
-            pinned: true,
-            backgroundColor: AppColors.primary,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.all(16),
-              title: Text(
-                'Quizzes',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(20),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final quiz = DummyDataService.quizzes[index];
-                  return _QuizCard(
-                    title: quiz.title,
-                    description: quiz.description,
-                    questionCount: quiz.questions.length,
-                    timeLimit: quiz.timeLimit,
-                    onTap: () => Get.toNamed(
-                      '/quiz/${quiz.id}',
-                      parameters: {'id': quiz.id},
-                    ),
-                  );
-                },
-                childCount: DummyDataService.quizzes.length,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _QuizCard extends StatelessWidget {
+class QuizCard extends StatelessWidget {
   final String title;
   final String description;
   final int questionCount;
   final int timeLimit;
   final VoidCallback onTap;
 
-  const _QuizCard({
+  const QuizCard({
+    super.key,
     required this.title,
     required this.description,
     required this.questionCount,
