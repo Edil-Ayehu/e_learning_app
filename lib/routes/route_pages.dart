@@ -6,7 +6,7 @@ import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
 import 'package:e_learning_app/views/chat/chat_list_screen.dart';
-import 'package:e_learning_app/views/courses/analytics_dashboard_screen.dart';
+import 'package:e_learning_app/views/courses/analytics_dashboard/analytics_dashboard_screen.dart';
 import 'package:e_learning_app/views/courses/course%20detail/course_detail_screen.dart';
 import 'package:e_learning_app/views/courses/course%20list/course_list_screen.dart';
 import 'package:e_learning_app/views/courses/lesson_screen/lesson_screen.dart';
