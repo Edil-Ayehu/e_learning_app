@@ -1,3 +1,4 @@
+import 'package:e_learning_app/main_screen.dart';
 import 'package:e_learning_app/views/auth/forgot_password_screen.dart';
 import 'package:e_learning_app/views/auth/login_screen.dart';
 import 'package:e_learning_app/views/auth/register_screen.dart';
@@ -35,6 +36,7 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
 
   // Course Routes
+  static const String main = '/main';
   static const String home = '/home';
   static const String courseList = '/courses';
   static const String courseDetail = '/course/:id';
@@ -85,6 +87,15 @@ class AppRoutes {
       case forgotPassword:
         return MaterialPageRoute(
           builder: (_) => const ForgotPasswordScreen(),
+        );
+      case main:
+        return MaterialPageRoute(
+          builder: (_) => MainScreen(
+            initialIndex: setting.arguments is Map
+                ? (setting.arguments as Map<String, dynamic>)['initialIndex']
+                    as int?
+                : null,
+          ),
         );
       case home:
         return MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:e_learning_app/main_screen.dart';
 import 'package:e_learning_app/models/quiz.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
@@ -45,6 +46,14 @@ class AppPages {
       page: () => const LoginScreen(),
     ),
     GetPage(
+      name: AppRoutes.main,
+      page: () => MainScreen(
+        initialIndex: Get.arguments is Map<String, dynamic>
+            ? Get.arguments['initialIndex'] as int?
+            : null,
+      ),
+    ),
+    GetPage(
       name: AppRoutes.payment,
       page: () => PaymentScreen(
         courseId: Get.arguments['courseId'] as String,
@@ -54,9 +63,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.home,
-      page: () => HomeScreen(
-        initialIndex: Get.arguments?['initialIndex'] as int?,
-      ),
+      page: () => HomeScreen(),
     ),
     GetPage(
       name: AppRoutes.register,
