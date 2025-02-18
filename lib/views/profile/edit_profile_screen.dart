@@ -1,4 +1,6 @@
-import 'package:e_learning_app/core/theme/app_colors.dart';
+import 'package:e_learning_app/views/profile/widgets/edit_profile_app_bar.dart';
+import 'package:e_learning_app/views/profile/widgets/profile_picture_bottom_sheet.dart';
+import 'package:e_learning_app/views/widgets/common/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,32 +12,11 @@ class EditProfileScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: AppColors.primary,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Get.back(),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Save profile changes
-              Get.back();
-            },
-            child: Text(
-              'Save',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+      appBar: EditProfileAppBar(
+        onSave: () {
+          // Save profile changes
+          Get.back();
+        },
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -70,63 +51,8 @@ class EditProfileScreen extends StatelessWidget {
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20)),
                             ),
-                            builder: (context) => Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Change Profile Picture',
-                                    style: theme.textTheme.titleLarge?.copyWith(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  ListTile(
-                                    leading: const CircleAvatar(
-                                      backgroundColor: AppColors.primary,
-                                      child: Icon(Icons.photo_library,
-                                          color: Colors.white),
-                                    ),
-                                    title: const Text('Choose from Gallery'),
-                                    onTap: () {
-                                      // TODO: Implement gallery picker
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  const SizedBox(height: 8),
-                                  ListTile(
-                                    leading: const CircleAvatar(
-                                      backgroundColor: AppColors.primary,
-                                      child: Icon(Icons.camera_alt,
-                                          color: Colors.white),
-                                    ),
-                                    title: const Text('Take a Photo'),
-                                    onTap: () {
-                                      // TODO: Implement camera capture
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  const SizedBox(height: 8),
-                                  ListTile(
-                                    leading: const CircleAvatar(
-                                      backgroundColor: AppColors.error,
-                                      child: Icon(Icons.delete_outline,
-                                          color: Colors.white),
-                                    ),
-                                    title: Text(
-                                      'Remove Photo',
-                                      style: TextStyle(color: AppColors.error),
-                                    ),
-                                    onTap: () {
-                                      // TODO: Implement photo removal
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+                            builder: (context) =>
+                                const ProfilePictureBottomSheet(),
                           );
                         },
                       ),
@@ -136,57 +62,40 @@ class EditProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            _buildTextField(
-              theme,
-              label: 'Full Name',
-              initialValue: 'John Doe',
-              icon: Icons.person_outline,
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: CustomTextField(
+                label: 'Full Name',
+                prefixIcon: Icons.person_outline,
+                initialValue: 'John Doe',
+              ),
             ),
-            _buildTextField(
-              theme,
-              label: 'Email',
-              initialValue: 'john.doe@example.com',
-              icon: Icons.email_outlined,
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: CustomTextField(
+                label: 'Email',
+                prefixIcon: Icons.email_outlined,
+                initialValue: 'john.doe@example.com',
+              ),
             ),
-            _buildTextField(
-              theme,
-              label: 'Phone',
-              initialValue: '+1 234 567 890',
-              icon: Icons.phone_outlined,
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: CustomTextField(
+                label: 'Phone',
+                prefixIcon: Icons.phone_outlined,
+                initialValue: '+1 234 567 890',
+              ),
             ),
-            _buildTextField(
-              theme,
-              label: 'Bio',
-              initialValue: 'Passionate learner | Tech enthusiast',
-              icon: Icons.info_outline,
-              maxLines: 3,
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: CustomTextField(
+                label: 'Bio',
+                prefixIcon: Icons.info_outline,
+                initialValue: 'Passionate learner | Tech enthusiast',
+                maxLines: 3,
+              ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(
-    ThemeData theme, {
-    required String label,
-    required String initialValue,
-    required IconData icon,
-    int maxLines = 1,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: TextFormField(
-        initialValue: initialValue,
-        maxLines: maxLines,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          filled: true,
-          fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
         ),
       ),
     );
