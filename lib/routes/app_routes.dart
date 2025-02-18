@@ -16,7 +16,7 @@ import 'package:e_learning_app/views/profile/edit_profile_screen.dart';
 import 'package:e_learning_app/views/profile/profile_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt/quiz_attempt_screen.dart';
 import 'package:e_learning_app/views/quiz/quiz_list/quiz_list_screen.dart';
-import 'package:e_learning_app/views/settings/privacy_policy_screen.dart';
+import 'package:e_learning_app/views/settings/privacy_policy/privacy_policy_screen.dart';
 import 'package:e_learning_app/views/settings/settings/settings_screen.dart';
 import 'package:e_learning_app/views/settings/terms_conditions_screen.dart';
 import 'package:e_learning_app/views/splash/splash_screen.dart';
