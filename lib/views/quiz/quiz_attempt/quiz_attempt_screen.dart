@@ -1,7 +1,6 @@
-import 'package:e_learning_app/models/question.dart';
 import 'package:e_learning_app/models/quiz.dart';
+import 'package:e_learning_app/views/quiz/quiz_attempt/widget/quiz_attempt_app_bar.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt/widget/quiz_navigation_bar.dart';
-import 'package:e_learning_app/views/quiz/quiz_attempt/widget/quiz_option_tile.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt/widget/quiz_question_page.dart';
 import 'package:e_learning_app/views/quiz/quiz_attempt/widget/quiz_submit_dialog.dart';
 import 'package:flutter/material.dart';
@@ -128,55 +127,9 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        iconTheme: const IconThemeData(
-          color: AppColors.accent,
-        ),
-        title: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.accent.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.timer_outlined,
-                  color: AppColors.accent, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                formattedTime,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 8),
-            child: TextButton(
-              onPressed: () => _showSubmitDialog(context),
-              style: TextButton.styleFrom(
-                backgroundColor: AppColors.accent.withOpacity(0.1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              child: Text(
-                'Submit',
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
+      appBar: QuizAttemptAppBar(
+        formattedTime: formattedTime,
+        onSubmit: () => _showSubmitDialog(context),
       ),
       body: PageView.builder(
         controller: _pageController,
