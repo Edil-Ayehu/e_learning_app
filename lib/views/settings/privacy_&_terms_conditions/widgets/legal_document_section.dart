@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 
-class PolicySection extends StatelessWidget {
+class LegalDocumentSection extends StatelessWidget {
   final String title;
   final String content;
 
-  const PolicySection({
+  const LegalDocumentSection({
     super.key,
     required this.title,
     required this.content,
