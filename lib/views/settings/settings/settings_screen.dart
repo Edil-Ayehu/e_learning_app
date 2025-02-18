@@ -1,6 +1,8 @@
 import 'package:e_learning_app/blocs/font/font_event.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:e_learning_app/views/settings/settings/widgets/setting_section.dart';
+import 'package:e_learning_app/views/settings/settings/widgets/setting_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning_app/services/font_service.dart';
@@ -35,22 +37,10 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSection(
-                theme,
+              SettingSection(
                 title: 'App Preferences',
                 children: [
-                  // _buildSettingTile(
-                  //   theme,
-                  //   title: 'Dark Mode',
-                  //   icon: Icons.dark_mode_outlined,
-                  //   trailing: Switch(
-                  //     value: false,
-                  //     onChanged: (value) {},
-                  //     activeColor: AppColors.primary,
-                  //   ),
-                  // ),
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Download over Wi-Fi only',
                     icon: Icons.wifi_outlined,
                     trailing: Switch(
@@ -62,12 +52,10 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildSection(
-                theme,
+              SettingSection(
                 title: 'Content',
                 children: [
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Download Quality',
                     icon: Icons.high_quality_outlined,
                     trailing: DropdownButton<String>(
@@ -82,8 +70,7 @@ class SettingsScreen extends StatelessWidget {
                       underline: const SizedBox(),
                     ),
                   ),
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Auto-play Videos',
                     icon: Icons.play_circle_outline,
                     trailing: Switch(
@@ -95,18 +82,15 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildSection(
-                theme,
+              SettingSection(
                 title: 'Privacy',
                 children: [
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Privacy Policy',
                     icon: Icons.privacy_tip_outlined,
                     onTap: () => Get.toNamed(AppRoutes.privacyPolicy),
                   ),
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Terms of Service',
                     icon: Icons.description_outlined,
                     onTap: () => Get.toNamed(AppRoutes.termsConditions),
@@ -114,12 +98,10 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildSection(
-                theme,
+              SettingSection(
                 title: 'Text Settings',
                 children: [
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Font Size',
                     icon: Icons.format_size,
                     trailing: DropdownButton<String>(
@@ -147,8 +129,7 @@ class SettingsScreen extends StatelessWidget {
                       underline: const SizedBox(),
                     ),
                   ),
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Font Family',
                     icon: Icons.font_download,
                     trailing: DropdownButton<String>(
@@ -176,12 +157,10 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildSection(
-                theme,
+              SettingSection(
                 title: 'App Info',
                 children: [
-                  _buildSettingTile(
-                    theme,
+                  SettingTile(
                     title: 'Version',
                     icon: Icons.info_outline,
                     trailing: Text(
@@ -193,77 +172,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSection(
-    ThemeData theme, {
-    required String title,
-    required List<Widget> children,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.accent,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            children: children,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSettingTile(
-    ThemeData theme, {
-    required String title,
-    required IconData icon,
-    Widget? trailing,
-    VoidCallback? onTap,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.primary),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  title,
-                  style: theme.textTheme.titleMedium,
-                ),
-              ),
-              if (trailing != null) trailing,
-              if (onTap != null)
-                const Icon(
-                  Icons.chevron_right,
-                  color: AppColors.secondary,
-                ),
             ],
           ),
         ),
