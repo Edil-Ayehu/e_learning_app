@@ -9,7 +9,7 @@ import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:e_learning_app/services/dummy_data_service.dart';
 import 'dart:async';
 import 'package:e_learning_app/models/quiz_attempt.dart';
-import 'package:e_learning_app/views/quiz/quiz_result_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_result/quiz_result_screen.dart';
 
 class QuizAttemptScreen extends StatefulWidget {
   final String quizId;

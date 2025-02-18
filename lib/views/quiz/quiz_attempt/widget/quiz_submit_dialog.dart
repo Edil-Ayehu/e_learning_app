@@ -1,6 +1,6 @@
 import 'package:e_learning_app/models/quiz.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
-import 'package:e_learning_app/views/quiz/quiz_result_screen.dart';
+import 'package:e_learning_app/views/quiz/quiz_result/quiz_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
