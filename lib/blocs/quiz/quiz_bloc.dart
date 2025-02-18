@@ -4,11 +4,8 @@ import 'package:e_learning_app/blocs/quiz/quiz_state.dart';
 import 'package:e_learning_app/models/quiz.dart';
 import 'package:e_learning_app/models/quiz_attempt.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 class QuizBloc extends Bloc<QuizEvent, QuizState> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Timer? _timer;
 
   QuizBloc() : super(const QuizState()) {
@@ -25,14 +22,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   ) async {
     try {
       emit(state.copyWith(isLoading: true));
-      final snapshot = await _firestore
-          .collection('quizzes')
-          .where('isActive', isEqualTo: true)
-          .get();
-
-      final quizzes = snapshot.docs
-          .map((doc) => Quiz.fromFirestore(doc))
-          .toList();
+      // TODO: Implement quiz loading from a repository
+      final quizzes = <Quiz>[];
 
       emit(state.copyWith(
         quizzes: quizzes,
@@ -52,8 +43,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   ) async {
     try {
       emit(state.copyWith(isLoading: true));
-      final doc = await _firestore.collection('quizzes').doc(event.quizId).get();
-      final quiz = Quiz.fromFirestore(doc);
+      // TODO: Implement quiz loading from a repository
+      final quiz = state.quizzes.firstWhere((q) => q.id == event.quizId);
 
       _startTimer();
 
@@ -92,7 +83,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       final attempt = QuizAttempt(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         quizId: state.currentQuiz!.id,
-        userId: 'currentUserId', // Replace with actual user ID
+        userId: 'currentUserId', // TODO: Get from auth repository
         answers: state.userAnswers,
         score: score,
         startedAt: DateTime.now().subtract(
@@ -102,10 +93,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         timeSpent: state.currentQuiz!.timeLimit * 60 - state.remainingTime,
       );
 
-      await _firestore
-          .collection('quiz_attempts')
-          .doc(attempt.id)
-          .set(attempt.toMap());
+      // TODO: Save attempt to repository
 
       _timer?.cancel();
       emit(state.copyWith(
