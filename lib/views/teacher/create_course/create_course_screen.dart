@@ -1,3 +1,5 @@
+import 'package:e_learning_app/views/teacher/create_course/widgets/create_course_app_bar.dart';
+import 'package:e_learning_app/views/widgets/common/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/core/theme/app_colors.dart';
 import 'package:get/get.dart';
@@ -23,52 +25,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverAppBar(
-            expandedHeight: 200,
-            collapsedHeight: kToolbarHeight,
-            toolbarHeight: kToolbarHeight,
-            pinned: true,
-            backgroundColor: AppColors.primary,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.accent),
-              onPressed: () => Get.back(),
-            ),
-            actions: [
-              TextButton(
-                onPressed: _submitForm,
-                child: Text(
-                  'Create',
-                  style: TextStyle(
-                    color: AppColors.accent,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.15,
-                bottom: 16,
-              ),
-              title: Text(
-                'Create New Course',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          CreateCourseAppBar(onSubmit: _submitForm),
           SliverToBoxAdapter(
             child: Form(
               key: _formKey,
@@ -78,9 +35,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   children: [
                     _buildImagePicker(),
                     const SizedBox(height: 32),
-                    _buildTextField(
-                      'Course Title',
-                      'Enter course title',
+                    CustomTextField(
+                      label: 'Course Title',
+                      hint: 'Enter course title',
                       maxLines: 1,
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
@@ -90,9 +47,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       },
                     ),
                     const SizedBox(height: 24),
-                    _buildTextField(
-                      'Description',
-                      'Enter course description',
+                    CustomTextField(
+                      label: 'Description',
+                      hint: 'Enter course description',
                       maxLines: 3,
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
@@ -105,10 +62,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: _buildTextField(
-                            'Price',
-                            'Enter price',
-                            prefixText: '\$',
+                          child: CustomTextField(
+                            label: 'Price',
+                            hint: 'Enter price',
                             keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
@@ -165,61 +121,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField(
-    String label,
-    String hint, {
-    int maxLines = 1,
-    String? prefixText,
-    TextInputType? keyboardType,
-    String? Function(String?)? validator,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          decoration: InputDecoration(
-            hintText: hint,
-            prefixText: prefixText,
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 2),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red, width: 2),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red, width: 2),
-            ),
-          ),
-          maxLines: maxLines,
-          keyboardType: keyboardType,
-          validator: validator,
-        ),
-      ],
     );
   }
 
@@ -323,27 +224,21 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Enter $title',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: AppColors.primary, width: 2),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        inputDecorationTheme: InputDecorationTheme(
+                          hintStyle: TextStyle(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                      initialValue: items[index],
-                      onChanged: (value) => items[index] = value,
+                      child: CustomTextField(
+                        label: '',
+                        hint: 'Enter $title',
+                        initialValue: items[index],
+                        onChanged: (value) => items[index] = value,
+                      ),
                     ),
                   ),
                   IconButton(
@@ -351,7 +246,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         color: Colors.grey[600]),
                     onPressed: () {
                       setState(() {
-                        onRemove(index);
+                        if (items.length > 1) {
+                          onRemove(index);
+                        }
                       });
                     },
                   ),
