@@ -38,15 +38,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       error: null,
     ));
 
-    // Navigate based on user role
-    if (event.user?.role == UserRole.teacher) {
-      Get.offAllNamed(AppRoutes.teacherHome);
-    } else {
-      Get.offAllNamed(AppRoutes.main);
-    }
+    // // Navigate based on user role
+    // if (event.user?.role == UserRole.teacher) {
+    //   Get.offAllNamed(AppRoutes.teacherHome);
+    // } else {
+    //   Get.offAllNamed(AppRoutes.main);
+    // }
   } else {
     emit(const AuthState());
-    Get.offAllNamed(AppRoutes.login);
+    // Get.offAllNamed(AppRoutes.login);
   }
   }
 
@@ -67,13 +67,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       userModel: user,
       error: null,
     ));
-
-    // Navigate based on user role
-    if (user.role == UserRole.teacher) {
-      Get.offAllNamed(AppRoutes.teacherHome);
-    } else {
-      Get.offAllNamed(AppRoutes.main);
-    }
 
     } catch (e) {
       emit(state.copyWith(error: e.toString(), isLoading: false));

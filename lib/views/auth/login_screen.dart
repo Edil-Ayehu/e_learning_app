@@ -2,6 +2,7 @@ import 'package:e_learning_app/blocs/auth/auth_bloc.dart';
 import 'package:e_learning_app/blocs/auth/auth_event.dart';
 import 'package:e_learning_app/blocs/auth/auth_state.dart';
 import 'package:e_learning_app/core/utils/validators.dart';
+import 'package:e_learning_app/models/user_model.dart';
 import 'package:e_learning_app/views/widgets/common/custom_button.dart';
 import 'package:e_learning_app/views/widgets/common/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Colors.red,
           ),
         );
+      } else if (state.userModel != null) {
+      // Navigate based on user role
+      if (state.userModel!.role == UserRole.teacher) {
+        Get.offAllNamed(AppRoutes.teacherHome);
+      } else {
+        Get.offAllNamed(AppRoutes.main);
       }
+    }
     },
     child: Scaffold(
       backgroundColor: Colors.white,
