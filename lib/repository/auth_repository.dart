@@ -128,16 +128,30 @@ class AuthRepository {
 
   String _handleAuthException(FirebaseAuthException e) {
     switch (e.code) {
-      case 'weak-password':
-        return 'The password provided is too weak.';
-      case 'email-already-in-use':
-        return 'The account already exists for that email.';
-      case 'user-not-found':
-        return 'No user found for that email.';
-      case 'wrong-password':
-        return 'Wrong password provided.';
-      default:
-        return 'An error occurred. Please try again.';
+    case 'weak-password':
+      return 'Password should be at least 6 characters long';
+    case 'email-already-in-use':
+      return 'An account already exists with this email';
+    case 'user-not-found':
+      return 'No account found with this email';
+    case 'wrong-password':
+      return 'Incorrect password';
+    case 'invalid-email':
+      return 'Please enter a valid email address';
+    case 'user-disabled':
+      return 'This account has been disabled';
+    case 'operation-not-allowed':
+      return 'Email & Password sign-in is not enabled';
+    case 'too-many-requests':
+      return 'Too many attempts. Please try again later';
+    case 'network-request-failed':
+      return 'Network error. Please check your connection';
+    case 'invalid-credential':
+      return 'Invalid login credentials';
+    case 'account-exists-with-different-credential':
+      return 'An account already exists with a different sign-in method';
+    default:
+      return e.message ?? 'An unexpected error occurred';
     }
   }
 }
