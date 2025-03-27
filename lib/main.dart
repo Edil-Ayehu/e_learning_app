@@ -1,5 +1,6 @@
 import 'package:e_learning_app/blocs/course/course_bloc.dart';
 import 'package:e_learning_app/blocs/profile/profile_bloc.dart';
+import 'package:e_learning_app/config/firebase_config.dart';
 import 'package:e_learning_app/core/theme/app_theme.dart';
 import 'package:e_learning_app/data/services/storage_service.dart';
 import 'package:e_learning_app/repository/course_repository.dart';
@@ -12,11 +13,12 @@ import 'package:e_learning_app/blocs/font/font_state.dart';
 import 'package:e_learning_app/blocs/auth/auth_bloc.dart';
 import 'package:e_learning_app/blocs/quiz/quiz_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await FirebaseConfig.init();
-  // await GetStorage.init();
+  await FirebaseConfig.init();
+  await GetStorage.init();
   await StorageService.init();
 
   runApp(const MyApp());

@@ -147,21 +147,21 @@ class EditProfileScreen extends StatelessWidget {
                       ],
                     ),
                     padding: const EdgeInsets.all(20),
-                    child: Column(
+                    child: const Column(
                       children: [
-                        const CustomTextField(
+                        CustomTextField(
                           label: 'Full Name',
                           prefixIcon: Icons.person_outline,
                           initialValue: 'John Doe',
                         ),
-                        const SizedBox(height: 16),
-                        const CustomTextField(
+                        SizedBox(height: 16),
+                        CustomTextField(
                           label: 'Email',
                           prefixIcon: Icons.email_outlined,
                           initialValue: 'john.doe@example.com',
                         ),
-                        const SizedBox(height: 16),
-                        const CustomTextField(
+                        SizedBox(height: 16),
+                        CustomTextField(
                           label: 'Phone',
                           prefixIcon: Icons.phone_outlined,
                           initialValue: '+1 234 567 890',

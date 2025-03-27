@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String uid;
@@ -7,7 +6,7 @@ class UserModel {
   final String? photoUrl;
   final DateTime createdAt;
   final DateTime lastLoginAt;
-  final UserRole role; 
+  final UserRole role;
 
   UserModel({
     required this.uid,
