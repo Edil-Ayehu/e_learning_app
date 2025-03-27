@@ -1,3 +1,4 @@
+import 'package:e_learning_app/blocs/auth/auth_state.dart';
 import 'package:e_learning_app/blocs/course/course_bloc.dart';
 import 'package:e_learning_app/blocs/profile/profile_bloc.dart';
 import 'package:e_learning_app/config/firebase_config.dart';
@@ -52,18 +53,30 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ],
-      child: BlocBuilder<FontBloc, FontState>(
-        builder: (context, fontState) {
-          return GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'E-Learning App',
-            theme: AppTheme.getLightTheme(fontState),
-            themeMode: ThemeMode.light,
-            initialRoute: AppRoutes.splash,
-            onGenerateRoute: AppRoutes.onGenerateRoute,
-            getPages: AppPages.pages,
-          );
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state.error != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error!),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         },
+        child: BlocBuilder<FontBloc, FontState>(
+          builder: (context, fontState) {
+            return GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'E-Learning App',
+              theme: AppTheme.getLightTheme(fontState),
+              themeMode: ThemeMode.light,
+              initialRoute: AppRoutes.splash,
+              onGenerateRoute: AppRoutes.onGenerateRoute,
+              getPages: AppPages.pages,
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,8 +1,12 @@
+import 'package:e_learning_app/blocs/auth/auth_bloc.dart';
+import 'package:e_learning_app/blocs/auth/auth_event.dart';
+import 'package:e_learning_app/blocs/auth/auth_state.dart';
 import 'package:e_learning_app/core/utils/validators.dart';
 import 'package:e_learning_app/views/widgets/common/custom_button.dart';
 import 'package:e_learning_app/views/widgets/common/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,8 +30,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      // Handle login logic here
-      Get.offAllNamed(AppRoutes.main);
+      context.read<AuthBloc>().add(
+      LoginRequested(
+        email: _emailController.text,
+        password: _passwordController.text,
+      ),
+    );
     }
   }
 
@@ -35,7 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
+    return 
+    BlocListener<AuthBloc, AuthState>(
+    listener: (context, state) {
+      if (state.error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.error!),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    },
+    child: Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -121,9 +141,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        CustomButton(
-                          text: "Login",
-                          onPressed: _handleLogin,
+                        BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            return CustomButton(
+                              text: "Login",
+                              onPressed: _handleLogin,
+                              isLoading: state.isLoading,
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -180,6 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 

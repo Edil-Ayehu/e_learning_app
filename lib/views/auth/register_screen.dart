@@ -1,9 +1,12 @@
+import 'package:e_learning_app/blocs/auth/auth_bloc.dart';
+import 'package:e_learning_app/blocs/auth/auth_event.dart';
+import 'package:e_learning_app/blocs/auth/auth_state.dart';
 import 'package:e_learning_app/core/utils/validators.dart';
 import 'package:e_learning_app/views/widgets/common/custom_button.dart';
 import 'package:e_learning_app/views/widgets/common/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:e_learning_app/routes/app_routes.dart';
 import 'package:e_learning_app/models/user_model.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -33,12 +36,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _handleRegister() {
     if (_formKey.currentState!.validate() && _selectedRole != null) {
-      // Handle registration logic here
-      if (_selectedRole == UserRole.teacher) {
-        Get.offAllNamed(AppRoutes.teacherHome);
-      } else {
-        Get.offAllNamed(AppRoutes.main);
-      }
+      context.read<AuthBloc>().add(
+      RegisterRequested(
+        email: _emailController.text,
+        password: _passwordController.text,
+        fullName: _fullNameController.text,
+        role: _selectedRole!,
+      ),
+    );
     } else if (_selectedRole == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -49,9 +54,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    BlocListener<AuthBloc, AuthState>(
+    listener: (context, state) {
+      if (state.error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.error!),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    },
+    child: Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -184,9 +202,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 30),
                   // Register Button
-                  CustomButton(
-                    text: "Register",
-                    onPressed: _handleRegister,
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      return CustomButton(
+                        text: "Register",
+                        onPressed: _handleRegister,
+                        isLoading: state.isLoading,
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
                   // Login Link
@@ -212,6 +235,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:e_learning_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_learning_app/routes/app_routes.dart';
@@ -61,7 +62,12 @@ class _SplashScreenState extends State<SplashScreen>
       StorageService.setFirstTime(false);
       Get.offNamed(AppRoutes.onboarding);
     } else if (authState.userModel != null) {
+      // navigate based on user role
+      if (authState.userModel!.role == UserRole.teacher) {
+      Get.offNamed(AppRoutes.teacherHome);
+    } else {
       Get.offNamed(AppRoutes.main);
+    }
     } else {
       Get.offNamed(AppRoutes.login);
     }
